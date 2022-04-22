@@ -1,19 +1,19 @@
 package com.concat.projetointegrador.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Data
+@Getter
 @Builder
+@Entity
+@Table(name = "supervisor")
 @AllArgsConstructor
 @NoArgsConstructor
 public class SupervisorModel {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String lastname;
 }
