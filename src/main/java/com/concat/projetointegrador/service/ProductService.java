@@ -60,6 +60,9 @@ public class ProductService {
        productRepo.setInitialCurrent(product.getInitialCurrent());
        productRepo.setManuFacturingDate(product.getManuFacturingDate());
 
+       productRepository.save(productRepo);
 
+       ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(productRepo));
+       return productDTO;
     }
 }
