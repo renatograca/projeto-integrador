@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class SupervisorService {
     private SupervisorRepository supervisorRepository;
     public SupervisorModel create(SupervisorModel supervisor) {
+        if (supervisor.getName().length() < 3) throw new RuntimeException();
         return supervisorRepository.save(supervisor);
     }
 }
