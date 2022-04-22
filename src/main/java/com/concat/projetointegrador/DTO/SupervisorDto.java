@@ -12,10 +12,10 @@ public class SupervisorDto {
     private String name;
     private String lastname;
 
-    public SupervisorModel map(SupervisorDto supervisorDto) {
+    public static SupervisorModel map(SupervisorDto supervisorDto) {
         return SupervisorModel.builder().name(supervisorDto.getName()).lastname(supervisorDto.getLastname()).build();
     }
-    public SupervisorDto map(SupervisorModel supervisorModel) {
+    public static SupervisorDto map(SupervisorModel supervisorModel) {
         return new SupervisorDto(supervisorModel.getName(), supervisorModel.getLastname());
     }
 }
