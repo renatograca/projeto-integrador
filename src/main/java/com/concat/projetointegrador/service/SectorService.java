@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SectorService {
@@ -23,5 +24,9 @@ public class SectorService {
 
     public List<Sector> findAll() {
         return repository.findAll();
+    }
+
+    public Optional<Sector> findById(Long id) {
+        return repository.findById(id);
     }
 }
