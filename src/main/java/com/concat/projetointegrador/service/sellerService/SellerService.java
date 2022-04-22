@@ -2,11 +2,11 @@ package com.concat.projetointegrador.service.sellerService;
 
 import com.concat.projetointegrador.model.sellerModel.Seller;
 import com.concat.projetointegrador.repository.sellerRepository.SellerRepository;
-import com.concat.projetointegrador.service.sellerService.ISellerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -33,13 +33,21 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public Seller getSellerByID(Long id) {
-        return null;
+    public Optional<Seller> getSellerByID(Long id) {
+
+        Optional<Seller> seller = sellerRepository.findById(id);
+
+        return seller;
+
     }
 
     @Override
     public Seller updateSeller(Seller seller) {
-        return null;
+
+        Seller updatedSeller = sellerRepository.save(seller);
+
+        return updatedSeller;
+
     }
 
     @Override

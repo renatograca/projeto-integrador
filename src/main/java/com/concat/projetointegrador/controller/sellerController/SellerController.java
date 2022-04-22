@@ -5,14 +5,12 @@ import com.concat.projetointegrador.service.sellerService.SellerService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -41,5 +39,25 @@ public class SellerController {
         return ResponseEntity.ok(sellers);
 
     }
+
+    @GetMapping("/api/seller/{id}")
+        public ResponseEntity<Optional<Seller>> getSellerByID(@PathVariable Long id) {
+
+            Optional<Seller> seller = sellerService.getSellerByID(id);
+
+            return ResponseEntity.ok(seller);
+
+    }
+
+    @PutMapping("/api/seller/{id}")
+        public ResponseEntity<Seller> updateSellerByID(@PathVariable Long id, @RequestBody Seller seller) {
+
+            seller.setId(id);
+            Seller updatedSeller = sellerService.updateSeller(seller);
+
+            return ResponseEntity.ok(updatedSeller);
+
+    }
+
 
 }
