@@ -1,7 +1,8 @@
-package com.concat.projetointegrador.service;
+package com.concat.projetointegrador.service.sellerService;
 
-import com.concat.projetointegrador.model.Seller;
-import com.concat.projetointegrador.repository.SellerRepository;
+import com.concat.projetointegrador.model.sellerModel.Seller;
+import com.concat.projetointegrador.repository.sellerRepository.SellerRepository;
+import com.concat.projetointegrador.service.sellerService.ISellerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class SellerService implements ISellerService{
+public class SellerService implements ISellerService {
 
     private SellerRepository sellerRepository;
 

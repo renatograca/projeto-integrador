@@ -1,6 +1,6 @@
-package com.concat.projetointegrador.service;
+package com.concat.projetointegrador.service.sellerService;
 
-import com.concat.projetointegrador.model.Seller;
+import com.concat.projetointegrador.model.sellerModel.Seller;
 
 import java.util.List;
 
