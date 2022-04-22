@@ -17,5 +17,6 @@ public class Sector {
     private Long warehouseId;
     @Column(nullable = false)
     private Integer capacity;
+    private Boolean active = true;
 
 }
