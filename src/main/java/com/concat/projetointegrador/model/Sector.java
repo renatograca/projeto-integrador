@@ -13,7 +13,7 @@ public class Sector {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private Long warehouseId;
     @Column(nullable = false)
     private Integer capacity;
