@@ -42,4 +42,19 @@ public class SectorController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(sector.get());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> update(
+            @PathVariable(value = "id") Long id,
+            @RequestBody @Valid SectorDTO sectorDTO
+    ) {
+        Optional<Sector> sectorOptional = service.findById(id);
+        if (sectorOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sector not found! Either enter with another ID or create a new sector!");
+        }
+
+        Sector sector = sectorOptional.get();
+        sector.setCapacity(sectorDTO.getCapacity());
+        return ResponseEntity.status(HttpStatus.OK).body(service.save(sector));
+    }
 }
