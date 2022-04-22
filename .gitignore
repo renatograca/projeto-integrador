@@ -1,0 +1,110 @@
+Last login: Thu Apr 21 00:20:18 on ttys000
+➜  ~ ll
+total 851088
+drwx------@  3 abuscariolli  ML\Domain Users    96B Apr 11 12:06 Applications
+drwx------+ 39 abuscariolli  ML\Domain Users   1.2K Apr 20 17:58 Desktop
+drwx------+  4 abuscariolli  ML\Domain Users   128B Apr 21 23:16 Documents
+drwx------+ 14 abuscariolli  ML\Domain Users   448B Apr 22 11:53 Downloads
+drwxr-xr-x  10 abuscariolli  ML\Domain Users   320B Apr 22 12:51 IdeaProjects
+drwx------@ 78 abuscariolli  ML\Domain Users   2.4K Apr 16 20:29 Library
+drwx------   4 abuscariolli  ML\Domain Users   128B Apr 11 12:31 Movies
+drwx------+  3 abuscariolli  ML\Domain Users    96B Apr 11 11:58 Music
+drwx------+  4 abuscariolli  ML\Domain Users   128B Apr 11 11:58 Pictures
+drwxr-xr-x   3 abuscariolli  ML\Domain Users    96B Apr 11 14:44 Postman
+drwxr-xr-x+  4 abuscariolli  ML\Domain Users   128B Apr 11 11:58 Public
+drwxr-xr-x  12 abuscariolli  ML\Domain Users   384B Mar 28 12:17 elasticsearch-7.17.2
+-rw-r--r--   1 abuscariolli  ML\Domain Users   297M Mar 31 10:59 elasticsearch-7.17.2-linux-x86_64.tar.gz
+-rw-r--r--   1 abuscariolli  ML\Domain Users   171B Mar 31 10:59 elasticsearch-7.17.2-linux-x86_64.tar.gz.sha512
+-rw-r--r--   1 abuscariolli  ML\Domain Users   118M Apr 11 14:42 vbox.dmg
+➜  ~ cd IdeaProjects
+➜  IdeaProjects ll
+total 0
+drwxr-xr-x  12 abuscariolli  ML\Domain Users   384B Apr 13 20:44 crud-jpa
+drwxr-xr-x  12 abuscariolli  ML\Domain Users   384B Apr 16 20:35 h2-database
+drwxr-xr-x   6 abuscariolli  ML\Domain Users   192B Apr 17 20:26 junit-course
+drwxr-xr-x   6 abuscariolli  ML\Domain Users   192B Apr 19 19:47 mockito-course
+drwxr-xr-x  12 abuscariolli  ML\Domain Users   384B Apr 16 21:56 parking-control
+drwxr-xr-x  11 abuscariolli  ML\Domain Users   352B Apr 22 12:55 projeto-integrador
+drwxr-xr-x  12 abuscariolli  ML\Domain Users   384B Apr 14 12:33 spring-review
+➜  IdeaProjects cd projeto-integrador
+➜  projeto-integrador git init
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint:
+hint: 	git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m <name>
+Initialized empty Git repository in /Users/abuscariolli/IdeaProjects/projeto-integrador/.git/
+➜  projeto-integrador git:(master) ✗ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitignore
+	.mvn/
+	mvnw
+	mvnw.cmd
+	pom.xml
+	src/
+
+nothing added to commit but untracked files present (use "git add" to track)
+➜  projeto-integrador git:(master) ✗ clear
+HELP.md
+➜  projeto-integrador git:(master) ✗ git remote add origin git@github.com:buskari/projeto-integrador.git
+➜  projeto-integrador git:(master) ✗ git remote -v
+origin	git@github.com:buskari/projeto-integrador.git (fetch)
+origin	git@github.com:buskari/projeto-integrador.git (push)
+➜  projeto-integrador git:(master) ✗ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitignore
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+~
+~
+~
+~
+~
+~
+-- INSERT --
