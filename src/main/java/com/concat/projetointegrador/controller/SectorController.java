@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/sector")
@@ -31,5 +32,14 @@ public class SectorController {
     @GetMapping
     public ResponseEntity<List<Sector>> getAll() {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> findOne(@PathVariable Long id) {
+        Optional<Sector> sector = service.findById(id);
+        if (sector.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sector not found!");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(sector.get());
     }
 }
