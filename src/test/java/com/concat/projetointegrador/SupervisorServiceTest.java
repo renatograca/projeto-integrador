@@ -3,10 +3,8 @@ package com.concat.projetointegrador;
 import com.concat.projetointegrador.model.SupervisorModel;
 import com.concat.projetointegrador.repository.SupervisorRepository;
 import com.concat.projetointegrador.service.SupervisorService;
-import net.bytebuddy.implementation.bind.annotation.Super;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class SupervisorServiceTest {
@@ -23,6 +21,6 @@ public class SupervisorServiceTest {
     }
 
     private SupervisorModel createSupervisor() {
-        return new SupervisorModel("super123", "Renato", "Graca");
+        return new SupervisorModel(123L, "Renato", "Graca");
     }
 }
