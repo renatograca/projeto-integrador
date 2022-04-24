@@ -3,7 +3,6 @@ package com.concat.projetointegrador.controller.sellerController;
 import com.concat.projetointegrador.model.sellerModel.Seller;
 import com.concat.projetointegrador.service.sellerService.SellerService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -59,5 +58,13 @@ public class SellerController {
 
     }
 
+    @DeleteMapping("/api/seller/{id}")
+        public ResponseEntity<Void> deleteSellerByID(@PathVariable Long id) {
+
+            sellerService.deleteSellerByID(id);
+
+            return ResponseEntity.noContent().build();
+
+    }
 
 }

@@ -53,5 +53,7 @@ public class SellerService implements ISellerService {
     @Override
     public void deleteSellerByID(Long id) {
 
+        sellerRepository.deleteById(id);
+
     }
 }
