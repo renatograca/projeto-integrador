@@ -2,6 +2,7 @@ package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.model.Sector;
 import com.concat.projetointegrador.repository.ISectorRepository;
+
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,6 +28,10 @@ public class SectorService {
     }
 
     public Optional<Sector> findById(Long id) {
+        Optional<Sector> sector = repository.findById(id);
+        if (sector.isEmpty()) {
+            throw new RuntimeException("Sector not found");
+        }
         return repository.findByIdAndActiveTrue(id);
     }
 

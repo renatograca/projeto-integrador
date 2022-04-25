@@ -37,11 +37,7 @@ public class SectorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findOne(@PathVariable Long id) {
-        Optional<Sector> sector = service.findById(id);
-        if (sector.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sector not found!");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(sector.get());
+        return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
 
     @PutMapping("/{id}")
