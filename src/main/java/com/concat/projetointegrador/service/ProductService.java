@@ -28,7 +28,7 @@ public class ProductService {
             ProductDTO productDTO = ProductDTO.convertToProductDTO(product.orElse(new Product()));
             return productDTO;
         } else {
-            throw new RuntimeException();
+            throw new EntityNotFound("O produto não foi encontrado!!");
         }
 
     }
@@ -45,7 +45,7 @@ public class ProductService {
 
         Optional<Product> productOpt = productRepository.findByName(product.getName());
         if (productOpt.isPresent()) {
-            throw new RuntimeException();
+            throw new EntityNotFound("Esse produto já existe!"); // criar uma classe de erro especifica
         } else {
             ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
             return productDTO;
@@ -78,8 +78,9 @@ public class ProductService {
             return productDTO;
 
         } else {
-            throw new RuntimeException();
+            throw new EntityNotFound("O produto não existe!!");
         }
 
     }
+
 }
