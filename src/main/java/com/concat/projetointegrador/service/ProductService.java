@@ -51,13 +51,13 @@ public class ProductService {
 
        productRepo.setCategory(product.getCategory());
        productRepo.setDueDate(product.getDueDate());
-       productRepo.setInitialCurrent(product.getInitialCurrent());
+       productRepo.setCurrentQuality(product.getCurrentQuality());
        productRepo.setCurrentTemperature(product.getCurrentTemperature());
        productRepo.setName(product.getName());
        productRepo.setManuFacturingTime(product.getManuFacturingTime());
        productRepo.setInitialQuality(product.getInitialQuality());
        productRepo.setSize(product.getSize());
-       productRepo.setInitialCurrent(product.getInitialCurrent());
+       productRepo.setInitialTemperature(product.getInitialTemperature());
        productRepo.setManuFacturingDate(product.getManuFacturingDate());
 
        productRepository.save(productRepo);
