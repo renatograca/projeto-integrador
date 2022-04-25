@@ -4,6 +4,7 @@ import com.concat.projetointegrador.dto.ProductDTO;
 import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.ProductRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ProductService {
 
-    @Autowired
+
     private ProductRepository productRepository;
 
     public ProductDTO findById(Long id) {
@@ -54,11 +56,11 @@ public class ProductService {
        productRepo.setCurrentQuality(product.getCurrentQuality());
        productRepo.setCurrentTemperature(product.getCurrentTemperature());
        productRepo.setName(product.getName());
-       productRepo.setManuFacturingTime(product.getManuFacturingTime());
+       productRepo.setManufacturingTime(product.getManufacturingTime());
        productRepo.setInitialQuality(product.getInitialQuality());
        productRepo.setSize(product.getSize());
        productRepo.setInitialTemperature(product.getInitialTemperature());
-       productRepo.setManuFacturingDate(product.getManuFacturingDate());
+       productRepo.setManufacturingDate(product.getManufacturingDate());
 
        productRepository.save(productRepo);
 
