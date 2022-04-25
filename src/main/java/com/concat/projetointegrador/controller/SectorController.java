@@ -8,8 +8,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,10 +27,16 @@ public class SectorController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveSector(@RequestBody @Valid SectorDTO sectorDTO) {
+    public ResponseEntity<Object> saveSector(@RequestBody @Valid SectorDTO sectorDTO, UriComponentsBuilder uriBuilder) {
         Sector sector = new Sector();
         BeanUtils.copyProperties(sectorDTO, sector);
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(sector));
+
+        URI uri = uriBuilder
+                .path("/supervisor/{id}")
+                .buildAndExpand(sector.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(service.save(sector));
     }
 
     @GetMapping
