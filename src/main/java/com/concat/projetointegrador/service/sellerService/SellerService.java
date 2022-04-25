@@ -15,7 +15,7 @@ public class SellerService implements ISellerService {
     private SellerRepository sellerRepository;
 
     @Override
-    public Seller createSeller(Seller seller) {
+    public Seller create(Seller seller) {
 
         Seller newSeller = sellerRepository.save(seller);
 
@@ -24,7 +24,7 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public List<Seller> getSellers() {
+    public List<Seller> findAll() {
 
         List<Seller> sellers = sellerRepository.findAll();
 
@@ -33,7 +33,7 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public Optional<Seller> getSellerByID(Long id) {
+    public Optional<Seller> findByID(Long id) {
 
         Optional<Seller> seller = sellerRepository.findById(id);
 
@@ -42,7 +42,7 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public Seller updateSeller(Seller seller) {
+    public Seller update(Seller seller) {
 
         Seller updatedSeller = sellerRepository.save(seller);
 
@@ -51,7 +51,7 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public void deleteSellerByID(Long id) {
+    public void deleteByID(Long id) {
 
         sellerRepository.deleteById(id);
 

@@ -7,10 +7,10 @@ import java.util.Optional;
 
 public interface ISellerService {
 
-    public Seller createSeller(Seller seller);
-    public List<Seller> getSellers();
-    public Optional<Seller> getSellerByID(Long id);
-    public Seller updateSeller(Seller seller);
-    public void deleteSellerByID(Long id);
+    public Seller create(Seller seller);
+    public List<Seller> findAll();
+    public Optional<Seller> findByID(Long id);
+    public Seller update(Seller seller);
+    public void deleteByID(Long id);
 
 }
