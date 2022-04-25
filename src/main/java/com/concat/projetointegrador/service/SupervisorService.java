@@ -26,7 +26,7 @@ public class SupervisorService {
     }
 
     public SupervisorModel findById(Long id) {
-        return supervisorRepository.findById(id).orElse(new SupervisorModel());
+        return supervisorRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrado!"));
     }
 
     public SupervisorModel update(Long id, SupervisorDTO supervisor) {
