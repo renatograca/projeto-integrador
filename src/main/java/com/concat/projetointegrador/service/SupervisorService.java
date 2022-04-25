@@ -1,6 +1,6 @@
 package com.concat.projetointegrador.service;
 
-import com.concat.projetointegrador.DTO.SupervisorDto;
+import com.concat.projetointegrador.dto.SupervisorDTO;
 import com.concat.projetointegrador.model.SupervisorModel;
 import com.concat.projetointegrador.repository.SupervisorRepository;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class SupervisorService {
         return supervisorRepository.findById(id).orElse(new SupervisorModel());
     }
 
-    public SupervisorModel update(Long id, SupervisorDto supervisor) {
+    public SupervisorModel update(Long id, SupervisorDTO supervisor) {
         SupervisorModel supervisorModel = supervisorRepository.findById(id).orElse(new SupervisorModel());
         supervisorModel.setName(supervisor.getName());
         supervisorModel.setLastname(supervisor.getLastname());

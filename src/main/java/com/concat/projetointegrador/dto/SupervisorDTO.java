@@ -1,4 +1,4 @@
-package com.concat.projetointegrador.DTO;
+package com.concat.projetointegrador.dto;
 
 import com.concat.projetointegrador.model.SupervisorModel;
 import lombok.AllArgsConstructor;
@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SupervisorDto {
+public class SupervisorDTO {
     private String name;
     private String lastname;
 
-    public static SupervisorModel map(SupervisorDto supervisorDto) {
+    public static SupervisorModel map(SupervisorDTO supervisorDto) {
         return SupervisorModel.builder().name(supervisorDto.getName()).lastname(supervisorDto.getLastname()).build();
     }
-    public static SupervisorDto map(SupervisorModel supervisorModel) {
-        return new SupervisorDto(supervisorModel.getName(), supervisorModel.getLastname());
+    public static SupervisorDTO map(SupervisorModel supervisorModel) {
+        return new SupervisorDTO(supervisorModel.getName(), supervisorModel.getLastname());
     }
 }
