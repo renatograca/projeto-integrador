@@ -3,8 +3,10 @@ package com.concat.projetointegrador.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
+@Setter
 @Builder
 @Entity
 @Table(name = "supervisor")
@@ -12,8 +14,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class SupervisorModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull(message = "'name' não pode ser nullo")
     private String name;
+    @NotNull(message = "'lastname' não pode ser nullo")
     private String lastname;
 }

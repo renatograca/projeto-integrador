@@ -6,10 +6,7 @@ import com.concat.projetointegrador.service.SupervisorService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -17,11 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/supervisor")
 public class SupervisorController {
     @Autowired
     private SupervisorService supervisorService;
 
-    @PostMapping("/supervisor")
+    @PostMapping
     public ResponseEntity<SupervisorDto> create(@RequestBody SupervisorDto supervisorDto, UriComponentsBuilder uriBuilder) {
         SupervisorModel supervisor = SupervisorModel.builder().name(supervisorDto.getName()).lastname(supervisorDto.getLastname()).build();
         SupervisorModel newSupervisor = supervisorService.create(supervisor);
@@ -33,12 +31,28 @@ public class SupervisorController {
         return ResponseEntity.created(uri).body(supervisorReturn);
     }
 
-    @GetMapping("/supervisor")
+    @GetMapping
     public ResponseEntity<List<SupervisorDto>> list() {
         List<SupervisorModel> supervisorModels = supervisorService.list();
         List<SupervisorDto> supervisorDtos = new ArrayList<>();
 
         supervisorModels.forEach(e -> supervisorDtos.add(SupervisorDto.map(e)));
         return ResponseEntity.ok(supervisorDtos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SupervisorDto> getSupervisor(@PathVariable Long id) {
+        SupervisorDto supervisorDto = SupervisorDto.map(supervisorService.getSupervisor(id));
+        return ResponseEntity.ok(supervisorDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SupervisorDto> update(@PathVariable Long id, @RequestBody SupervisorDto supervisor, UriComponentsBuilder uriBuilder) {
+        SupervisorDto supervisorDto = SupervisorDto.map(supervisorService.update(id, supervisor));
+        URI uri = uriBuilder
+                .path("/supervisor/{id}")
+                .buildAndExpand(id)
+                .toUri();
+        return ResponseEntity.created(uri).body(supervisorDto);
     }
 }
