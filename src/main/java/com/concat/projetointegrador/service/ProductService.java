@@ -19,7 +19,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public ProductDTO findById(String id) {
+    public ProductDTO findById(Long id) {
         
         Optional<Product> product = productRepository.findById(id);
         ProductDTO productDTO = ProductDTO.convertToProductDTO(product.orElse(new Product()));
@@ -37,16 +37,16 @@ public class ProductService {
 
     public ProductDTO save(Product product) {
         
-        ProductDTO productDTO = ProductDTO.convertToProductDTO( productRepository.save(product));
+        ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
         return productDTO;
     }
 
-    public void delete(String id) {
+    public void delete(Long id) {
         productRepository.deleteById(id);
     }
 
 
-    public ProductDTO update(Product product, String id) {
+    public ProductDTO update(Product product, Long id) {
         Product productRepo = productRepository.findById(id).orElse(new Product());
 
        productRepo.setCategory(product.getCategory());

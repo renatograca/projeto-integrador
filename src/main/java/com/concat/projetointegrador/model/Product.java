@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -20,7 +22,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private String name;
     private Float currentTemperature;
     private Float initialTemperature;
@@ -29,11 +31,10 @@ public class Product {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate manuFacturingDate;
     @JsonFormat(pattern = "HH:mm:ss")
-    private LocalDate manuFacturingTime;
+    private LocalTime manuFacturingTime;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
     private Integer size;
     private Category category;
-
 
 }
