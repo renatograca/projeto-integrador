@@ -29,8 +29,8 @@ public class ProductController {
     }
 
     @PostMapping ("/products/new")
-    public ResponseEntity<ProductDTO> save(@RequestBody Product product){
-        return new ResponseEntity<>(productService.save(product),HttpStatus.CREATED);
+    public ResponseEntity<ProductDTO> create(@RequestBody Product product){
+        return new ResponseEntity<>(productService.create(product),HttpStatus.CREATED);
     }
 
     @DeleteMapping ("/products/{id}")
@@ -43,4 +43,6 @@ public class ProductController {
     public ResponseEntity <ProductDTO> update (@RequestBody Product product, @PathVariable Long id){
         return ResponseEntity.ok(productService.update(product, id));
     }
+
+
 }
