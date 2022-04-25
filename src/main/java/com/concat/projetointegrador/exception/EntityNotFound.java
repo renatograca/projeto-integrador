@@ -1,8 +1,10 @@
-package com.concat.projetointegrador.exceptions;
+package com.concat.projetointegrador.exception;
 
 public class EntityNotFound extends RuntimeException {
 
-    public EntityNotFound() {
+    private static final long serialVersionUID = 1L;
+
+	public EntityNotFound() {
     }
 
     public EntityNotFound(String message) {
