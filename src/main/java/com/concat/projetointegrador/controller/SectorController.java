@@ -2,6 +2,7 @@ package com.concat.projetointegrador.controller;
 
 import com.concat.projetointegrador.dto.SectorDTO;
 import com.concat.projetointegrador.model.Sector;
+import com.concat.projetointegrador.repository.ISectorRepository;
 import com.concat.projetointegrador.service.SectorService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class SectorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Sector>> getAll() {
+    public ResponseEntity<List<Sector>> findAll() {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
 
@@ -56,5 +57,10 @@ public class SectorController {
         Sector sector = sectorOptional.get();
         sector.setCapacity(sectorDTO.getCapacity());
         return ResponseEntity.status(HttpStatus.OK).body(service.save(sector));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
     }
 }
