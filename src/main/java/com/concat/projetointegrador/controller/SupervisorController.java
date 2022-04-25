@@ -32,7 +32,7 @@ public class SupervisorController {
 
     @GetMapping
     public ResponseEntity<List<SupervisorDTO>> findAll() {
-        List<SupervisorModel> supervisorModels = supervisorService.list();
+        List<SupervisorModel> supervisorModels = supervisorService.findAll();
         List<SupervisorDTO> supervisorDtos = new ArrayList<>();
 
         supervisorModels.forEach(e -> supervisorDtos.add(SupervisorDTO.map(e)));
@@ -41,17 +41,13 @@ public class SupervisorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SupervisorDTO> findById(@PathVariable Long id) {
-        SupervisorDTO supervisorDto = SupervisorDTO.map(supervisorService.getSupervisor(id));
+        SupervisorDTO supervisorDto = SupervisorDTO.map(supervisorService.findById(id));
         return ResponseEntity.ok(supervisorDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SupervisorDTO> update(@PathVariable Long id, @RequestBody SupervisorDTO supervisor, UriComponentsBuilder uriBuilder) {
         SupervisorDTO supervisorDto = SupervisorDTO.map(supervisorService.update(id, supervisor));
-        
-               
-               
-               
         return ResponseEntity.ok(supervisorDto);
     }
 }
