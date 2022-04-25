@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class WarehouseController {
 
@@ -20,7 +22,7 @@ public class WarehouseController {
     }
 
     @GetMapping( "/warehouse")
-    public ResponseEntity<WarehouseDTO> findAll() {
+    public ResponseEntity<List<WarehouseDTO>> findAll() {
         return ResponseEntity.ok(warehouseService.findAll());
     }
 

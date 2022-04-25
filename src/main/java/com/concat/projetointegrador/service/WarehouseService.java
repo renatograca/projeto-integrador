@@ -3,6 +3,7 @@ package com.concat.projetointegrador.service;
 import com.concat.projetointegrador.DTO.WarehouseDTO;
 import com.concat.projetointegrador.model.WarehouseModel;
 import com.concat.projetointegrador.repository.WarehouseRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class WarehouseService {
     private WarehouseRepository warehouseRepository;
 
@@ -24,15 +26,15 @@ public class WarehouseService {
         return warehouseDTO;
     }
 
-    public WarehouseDTO findAll() {
+    public List<WarehouseDTO> findAll() {
         List<WarehouseModel> listWarehouse = warehouseRepository.findAll();
 
-        if(listWarehouse.isEmpty() || null != listWarehouse) {
+        if(listWarehouse.isEmpty() || null == listWarehouse) {
             throw new RuntimeException("Não existem warehouse registados!");
         }
 
         List<WarehouseDTO> listWarehouseDTO = WarehouseDTO.convertToListWarehouse(listWarehouse);
-        return (WarehouseDTO) listWarehouseDTO;
+        return listWarehouseDTO;
     }
 
     @Transactional
