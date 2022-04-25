@@ -23,10 +23,21 @@ public class SectorService {
     }
 
     public List<Sector> findAll() {
-        return repository.findAll();
+        return repository.findAllByActiveTrue();
     }
 
     public Optional<Sector> findById(Long id) {
-        return repository.findById(id);
+        return repository.findByIdAndActiveTrue(id);
+    }
+
+    public Boolean delete(Long id) {
+        Optional<Sector> sectorOptional = findById(id);
+        if (sectorOptional.isEmpty()) {
+            return false;
+        }
+
+        sectorOptional.get().setActive(false);
+        repository.save(sectorOptional.get());
+        return true;
     }
 }
