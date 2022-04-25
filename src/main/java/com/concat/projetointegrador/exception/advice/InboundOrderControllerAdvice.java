@@ -26,9 +26,7 @@ public class InboundOrderControllerAdvice {
 	public ResponseEntity<ErrorDTO> handleValidationExceptions(MethodArgumentNotValidException e) {
 		List<ObjectError> erros = e.getBindingResult().getAllErrors();
 		List<String> results = new ArrayList<String>();
-		erros.forEach(x -> {
-			results.add(x.getDefaultMessage());
-		});
+		erros.forEach(x -> results.add(x.getDefaultMessage()));
 		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.toString(), results.toString());
 		return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
 	}
