@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/sector")
+@RequestMapping("/sector")
 public class SectorController {
 
     private final SectorService service;
