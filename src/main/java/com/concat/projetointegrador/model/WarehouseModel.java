@@ -27,5 +27,4 @@ public class WarehouseModel {
 
     @NotNull(message = "'regiao' não pode ser nulo!")
     private String regiao;
-
 }
