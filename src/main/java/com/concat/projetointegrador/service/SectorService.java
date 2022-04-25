@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SectorService {
@@ -27,22 +26,13 @@ public class SectorService {
         return repository.findAllByActiveTrue();
     }
 
-    public Optional<Sector> findById(Long id) {
-        Optional<Sector> sector = repository.findById(id);
-        if (sector.isEmpty()) {
-            throw new RuntimeException("Sector not found");
-        }
-        return repository.findByIdAndActiveTrue(id);
+    public Sector findById(Long id) {
+        return repository.findByIdAndActiveTrue(id).orElseThrow(() -> new RuntimeException("Setor não encontrado! Tente outro ID ou crie um novo Setor!"));
     }
 
-    public Boolean delete(Long id) {
-        Optional<Sector> sectorOptional = findById(id);
-        if (sectorOptional.isEmpty()) {
-            return false;
-        }
-
-        sectorOptional.get().setActive(false);
-        repository.save(sectorOptional.get());
-        return true;
+    public void delete(Long id) {
+        Sector sector = findById(id);
+        sector.setActive(false);
+        repository.save(sector);
     }
 }
