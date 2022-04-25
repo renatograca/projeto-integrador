@@ -24,7 +24,7 @@ public class InboundOrderService {
     }
 
     private InboundOrder getInboundOrderById(Long id) {
-        Optional<InboundOrder> opt = repository.findById(id);
+        Optional<InboundOrder> opt = repository.findAllByIdAndActiveTrue(id);
         if(opt.isEmpty()){
             throw new EntityNotFound("Ordem de entrada não encontrada!");
         }
@@ -54,7 +54,7 @@ public class InboundOrderService {
     }
 
 	public InboundOrder findAllByIdAndActiveTrue(Long id) {
-		return repository.findAllByIdAndActiveTrue(id);
+		return this.getInboundOrderById(id);
 	}
 
 }
