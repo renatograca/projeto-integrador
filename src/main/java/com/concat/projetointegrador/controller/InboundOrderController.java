@@ -50,7 +50,7 @@ public class InboundOrderController {
     }
 	
 	@DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
     	service.delete(id);
 		return ResponseEntity.accepted().build();
     }
