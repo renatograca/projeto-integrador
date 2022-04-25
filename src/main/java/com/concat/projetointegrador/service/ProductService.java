@@ -22,25 +22,35 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public ProductDTO findById(Long id) {
-        
+
         Optional<Product> product = productRepository.findById(id);
-        ProductDTO productDTO = ProductDTO.convertToProductDTO(product.orElse(new Product()));
-        return productDTO;
-        
+        if(product.isPresent()){
+            ProductDTO productDTO = ProductDTO.convertToProductDTO(product.orElse(new Product()));
+            return productDTO;
+        } else {
+            throw new RuntimeException();
+        }
+
     }
 
     public List<ProductDTO> findAll() {
         List<Product> listProduct = productRepository.findAll();
-        
+
         List<ProductDTO> listDTO = ProductDTO.convertToListProduct(listProduct);
         return listDTO;
     }
 
 
-    public ProductDTO save(Product product) {
-        
-        ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
-        return productDTO;
+    public ProductDTO create(Product product) {
+
+        Optional<Product> productOpt = productRepository.findByName(product.getName());
+        if (productOpt.isPresent()) {
+            throw new RuntimeException();
+        } else {
+            ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
+            return productDTO;
+        }
+
     }
 
     public void delete(Long id) {
@@ -49,22 +59,27 @@ public class ProductService {
 
 
     public ProductDTO update(Product product, Long id) {
-        Product productRepo = productRepository.findById(id).orElse(new Product());
 
-       productRepo.setCategory(product.getCategory());
-       productRepo.setDueDate(product.getDueDate());
-       productRepo.setCurrentQuality(product.getCurrentQuality());
-       productRepo.setCurrentTemperature(product.getCurrentTemperature());
-       productRepo.setName(product.getName());
-       productRepo.setManufacturingTime(product.getManufacturingTime());
-       productRepo.setInitialQuality(product.getInitialQuality());
-       productRepo.setSize(product.getSize());
-       productRepo.setInitialTemperature(product.getInitialTemperature());
-       productRepo.setManufacturingDate(product.getManufacturingDate());
+        Optional<Product> productRepo = productRepository.findById(id);
+        if (productRepo.isPresent()) {
 
-       productRepository.save(productRepo);
+            productRepo.get().setCategory(product.getCategory());
+            productRepo.get().setDueDate(product.getDueDate());
+            productRepo.get().setCurrentQuality(product.getCurrentQuality());
+            productRepo.get().setCurrentTemperature(product.getCurrentTemperature());
+            productRepo.get().setName(product.getName());
+            productRepo.get().setManufacturingTime(product.getManufacturingTime());
+            productRepo.get().setInitialQuality(product.getInitialQuality());
+            productRepo.get().setSize(product.getSize());
+            productRepo.get().setInitialTemperature(product.getInitialTemperature());
+            productRepo.get().setManufacturingDate(product.getManufacturingDate());
 
-       ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(productRepo));
-       return productDTO;
+            ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(productRepo.get()));
+            return productDTO;
+
+        } else {
+            throw new RuntimeException();
+        }
+
     }
 }
