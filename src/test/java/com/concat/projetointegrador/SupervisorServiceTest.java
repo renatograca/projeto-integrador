@@ -13,7 +13,7 @@ import java.util.List;
 public class SupervisorServiceTest {
 
     @Test
-    public void createASupervisorWhenNameLengthBiggerThree() {
+    public void shouldCreateASupervisorWhenNameLengthBiggerThree() {
         SupervisorRepository supervisorRepository = Mockito.mock(SupervisorRepository.class);
         SupervisorService supervisorService = new SupervisorService(supervisorRepository);
 
@@ -24,7 +24,7 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    public void returnListOfSupervisor() {
+    public void shouldReturnListOfSupervisor() {
         SupervisorRepository supervisorRepository = Mockito.mock(SupervisorRepository.class);
         SupervisorService supervisorService = new SupervisorService(supervisorRepository);
 

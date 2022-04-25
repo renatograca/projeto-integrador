@@ -21,11 +21,11 @@ public class SupervisorService {
         return supervisorRepository.save(supervisor);
     }
 
-    public List<SupervisorModel> list() {
+    public List<SupervisorModel> findAll() {
         return supervisorRepository.findAll();
     }
 
-    public SupervisorModel getSupervisor(Long id) {
+    public SupervisorModel findById(Long id) {
         return supervisorRepository.findById(id).orElse(new SupervisorModel());
     }
 

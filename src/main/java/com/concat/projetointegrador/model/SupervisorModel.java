@@ -16,8 +16,8 @@ public class SupervisorModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull(message = "'name' não pode ser nullo")
+    @NotNull(message = "'name' não pode ser nulo")
     private String name;
-    @NotNull(message = "'lastname' não pode ser nullo")
+    @NotNull(message = "'lastname' não pode ser nulo")
     private String lastname;
 }
