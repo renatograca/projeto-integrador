@@ -47,7 +47,11 @@ public class InboundOrderController {
     	InboundOrder order = service.update(id, InboundOrderDTO.map(dto));
 		return ResponseEntity.ok(order);
     }
-
-
+	
+	@PutMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
+    	service.delete(id);
+		return ResponseEntity.accepted().build();
+    }
 
 }
