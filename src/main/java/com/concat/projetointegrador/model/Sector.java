@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TB_SECTOR")
 public class Sector {
+    //TODO add nullable = false em warehouseId
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
