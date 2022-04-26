@@ -1,7 +1,7 @@
 package com.concat.projetointegrador.controller.sellerController;
 
-import com.concat.projetointegrador.model.sellerModel.Seller;
-import com.concat.projetointegrador.service.sellerService.SellerService;
+import com.concat.projetointegrador.model.Seller;
+import com.concat.projetointegrador.service.SellerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

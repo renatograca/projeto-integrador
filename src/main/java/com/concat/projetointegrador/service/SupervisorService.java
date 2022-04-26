@@ -1,7 +1,7 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.dto.SupervisorDTO;
-import com.concat.projetointegrador.model.SupervisorModel;
+import com.concat.projetointegrador.model.Supervisor;
 import com.concat.projetointegrador.repository.SupervisorRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +16,21 @@ public class SupervisorService {
         this.supervisorRepository = supervisorRepository;
     }
 
-    public SupervisorModel create(SupervisorModel supervisor) {
+    public Supervisor create(Supervisor supervisor) {
         if (supervisor.getName().length() < 3) throw new RuntimeException();
         return supervisorRepository.save(supervisor);
     }
 
-    public List<SupervisorModel> findAll() {
+    public List<Supervisor> findAll() {
         return supervisorRepository.findAll();
     }
 
-    public SupervisorModel findById(Long id) {
+    public Supervisor findById(Long id) {
         return supervisorRepository.findById(id).orElseThrow(() -> new RuntimeException("Não foi encontrado!"));
     }
 
-    public SupervisorModel update(Long id, SupervisorDTO supervisor) {
-        SupervisorModel supervisorModel = supervisorRepository.findById(id).orElse(new SupervisorModel());
+    public Supervisor update(Long id, SupervisorDTO supervisor) {
+        Supervisor supervisorModel = supervisorRepository.findById(id).orElse(new Supervisor());
         supervisorModel.setName(supervisor.getName());
         supervisorModel.setLastname(supervisor.getLastname());
         return supervisorRepository.save(supervisorModel);

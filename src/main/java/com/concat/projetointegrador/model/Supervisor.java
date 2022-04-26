@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "supervisor")
 @AllArgsConstructor
 @NoArgsConstructor
-public class SupervisorModel {
+public class Supervisor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,6 +1,6 @@
-package com.concat.projetointegrador.DTO;
+package com.concat.projetointegrador.dto;
 
-import com.concat.projetointegrador.model.WarehouseModel;
+import com.concat.projetointegrador.model.Warehouse;
 import lombok.*;
 
 import java.util.List;
@@ -18,14 +18,14 @@ public class WarehouseDTO {
     private String name;
     private String regiao;
 
-    public static WarehouseDTO convertToWarehouseDTO(WarehouseModel warehouseModel) {
+    public static WarehouseDTO convertToWarehouseDTO(Warehouse warehouse) {
         return WarehouseDTO.builder()
-                .id(warehouseModel.getId())
-                .regiao(warehouseModel.getRegiao())
-                .name(warehouseModel.getName()).build();
+                .id(warehouse.getId())
+                .regiao(warehouse.getRegiao())
+                .name(warehouse.getName()).build();
     }
 
-    public static List<WarehouseDTO> convertToListWarehouse(List<WarehouseModel> listWarehouse) {
+    public static List<WarehouseDTO> convertToListWarehouse(List<Warehouse> listWarehouse) {
         return listWarehouse.stream()
                 .map(warehouse -> new WarehouseDTO(
                         warehouse.getId(),
@@ -34,8 +34,8 @@ public class WarehouseDTO {
                 .collect(Collectors.toList());
     }
 
-    public static WarehouseModel map(WarehouseDTO warehouseDTO) {
-        return WarehouseModel.builder()
+    public static Warehouse map(WarehouseDTO warehouseDTO) {
+        return Warehouse.builder()
                 .id(warehouseDTO.getId())
                 .regiao(warehouseDTO.getRegiao())
                 .name(warehouseDTO.getName()).build();

@@ -1,7 +1,8 @@
 package com.concat.projetointegrador.service;
 
-import com.concat.projetointegrador.DTO.WarehouseDTO;
-import com.concat.projetointegrador.model.WarehouseModel;
+import com.concat.projetointegrador.dto.WarehouseDTO;
+import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.Warehouse;
 import com.concat.projetointegrador.repository.WarehouseRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,49 +17,45 @@ public class WarehouseService {
     private WarehouseRepository warehouseRepository;
 
     public WarehouseDTO findById(Long id) {
-        Optional<WarehouseModel> warehouse = warehouseRepository.findById(id);
+        Optional<Warehouse> warehouse = warehouseRepository.findById(id);
 
         if(warehouse.isEmpty()) {
-            throw new RuntimeException("Warehouse não encontrado!");
+            throw new RuntimeException("Armazém não encontrado!");
         }
 
-        WarehouseDTO warehouseDTO = WarehouseDTO.convertToWarehouseDTO(warehouse.get());
-        return warehouseDTO;
+        return WarehouseDTO.convertToWarehouseDTO(warehouse.get());
     }
 
     public List<WarehouseDTO> findAll() {
-        List<WarehouseModel> listWarehouse = warehouseRepository.findAll();
+        List<Warehouse> listWarehouse = warehouseRepository.findAll();
 
-        if(listWarehouse.isEmpty() || null == listWarehouse) {
-            throw new RuntimeException("Não existem warehouse registados!");
+        if(listWarehouse.isEmpty()) {
+            throw new RuntimeException("Não existem armazéns registados!");
         }
 
-        List<WarehouseDTO> listWarehouseDTO = WarehouseDTO.convertToListWarehouse(listWarehouse);
-        return listWarehouseDTO;
+        return WarehouseDTO.convertToListWarehouse(listWarehouse);
     }
 
     @Transactional
-    public WarehouseDTO create(WarehouseModel warehouseModel) {
-            Optional<WarehouseModel> warehouse = warehouseRepository.findByName(warehouseModel.getName());
+    public WarehouseDTO create(Warehouse warehouseModel) {
+            Optional<Warehouse> warehouse = warehouseRepository.findByName(warehouseModel.getName());
 
         if(warehouse.isPresent()){
-            throw new RuntimeException("Esse warehouse já esta cadastrado!");
+            throw new RuntimeException("Esse armazém já esta cadastrado!");
         }
 
-        WarehouseDTO warehouseDTO = WarehouseDTO.convertToWarehouseDTO(warehouseRepository.save(warehouseModel));
-        return warehouseDTO;
+        return WarehouseDTO.convertToWarehouseDTO(warehouseRepository.save(warehouseModel));
     }
 
-    public WarehouseDTO update(WarehouseModel warehouseModel, Long id) {
-        WarehouseModel warehouse = warehouseRepository.findById(id).orElse(new WarehouseModel());
+    public WarehouseDTO update(Warehouse warehouseModel, Long id) {
+        Warehouse warehouse = warehouseRepository.findById(id).orElseThrow(() -> new EntityNotFound("Este armazém não existe!"));
 
         warehouse.setName(warehouseModel.getName());
         warehouse.setRegiao(warehouseModel.getRegiao());
 
         warehouseRepository.save(warehouse);
 
-        WarehouseDTO warehouseDTO = WarehouseDTO.convertToWarehouseDTO(warehouseRepository.save(warehouse));
-        return warehouseDTO;
+        return WarehouseDTO.convertToWarehouseDTO(warehouseRepository.save(warehouse));
     }
 
     public void delete(Long id) {

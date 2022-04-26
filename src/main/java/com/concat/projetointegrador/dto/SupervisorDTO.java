@@ -1,6 +1,6 @@
 package com.concat.projetointegrador.dto;
 
-import com.concat.projetointegrador.model.SupervisorModel;
+import com.concat.projetointegrador.model.Supervisor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,10 +12,10 @@ public class SupervisorDTO {
     private String name;
     private String lastname;
 
-    public static SupervisorModel map(SupervisorDTO supervisorDto) {
-        return SupervisorModel.builder().name(supervisorDto.getName()).lastname(supervisorDto.getLastname()).build();
+    public static Supervisor map(SupervisorDTO supervisorDto) {
+        return Supervisor.builder().name(supervisorDto.getName()).lastname(supervisorDto.getLastname()).build();
     }
-    public static SupervisorDTO map(SupervisorModel supervisorModel) {
-        return new SupervisorDTO(supervisorModel.getName(), supervisorModel.getLastname());
+    public static SupervisorDTO map(Supervisor supervisor) {
+        return new SupervisorDTO(supervisor.getName(), supervisor.getLastname());
     }
 }

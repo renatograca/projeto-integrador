@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WarehouseModel {
+public class Warehouse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

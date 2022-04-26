@@ -1,22 +1,21 @@
 package com.concat.projetointegrador.exception;
 
+import lombok.*;
+
 import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
+@Getter @Setter
 @AllArgsConstructor
-@Data
+@Builder
 public class ErrorDTO {
 
-	private String code;
-	private String menssage;
-	private LocalDateTime dateTime = LocalDateTime.now();
-	
-	public ErrorDTO(String code, String message) {
-		this.code = code;
-		this.menssage = message;
-				
-	}
-	
+    private String code;
+    private String message;
+    private LocalDateTime dateTime = LocalDateTime.now();
+
+    public ErrorDTO(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
 }

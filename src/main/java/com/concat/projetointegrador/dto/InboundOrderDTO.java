@@ -1,4 +1,4 @@
-package com.concat.projetointegrador.model.dto;
+package com.concat.projetointegrador.dto;
 
 import java.time.LocalDate;
 
@@ -15,7 +15,7 @@ import lombok.Data;
 public class InboundOrderDTO {
 
     private Long orderNumber;
-	
+
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private final LocalDate orderDate = LocalDate.now();
 

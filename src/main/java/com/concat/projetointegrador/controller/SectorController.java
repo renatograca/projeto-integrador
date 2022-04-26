@@ -3,6 +3,7 @@ package com.concat.projetointegrador.controller;
 import com.concat.projetointegrador.dto.SectorDTO;
 import com.concat.projetointegrador.model.Sector;
 import com.concat.projetointegrador.service.SectorService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,7 @@ import java.util.List;
 @RequestMapping("/sector")
 public class SectorController {
 
-    private final SectorService service;
-
+    private SectorService service;
 
     @PostMapping
     public ResponseEntity<Object> saveSector(@RequestBody @Valid SectorDTO sectorDTO, UriComponentsBuilder uriBuilder) {

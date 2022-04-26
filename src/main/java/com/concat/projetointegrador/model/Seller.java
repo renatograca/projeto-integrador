@@ -1,4 +1,4 @@
-package com.concat.projetointegrador.model.sellerModel;
+package com.concat.projetointegrador.model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
 package com.concat.projetointegrador.controller;
 
-import com.concat.projetointegrador.DTO.WarehouseDTO;
-import com.concat.projetointegrador.model.WarehouseModel;
+import com.concat.projetointegrador.dto.WarehouseDTO;
+import com.concat.projetointegrador.model.Warehouse;
 import com.concat.projetointegrador.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,13 +27,13 @@ public class WarehouseController {
     }
 
     @PostMapping("/warehouse")
-    public ResponseEntity<WarehouseDTO> create(@RequestBody WarehouseModel warehouseModel) {
-        return new ResponseEntity<>(warehouseService.create(warehouseModel),HttpStatus.CREATED);
+    public ResponseEntity<WarehouseDTO> create(@RequestBody Warehouse warehouse) {
+        return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);
     }
 
     @PutMapping("/warehouse/{id}")
-    public ResponseEntity<WarehouseDTO> update(@RequestBody WarehouseModel warehouseModel, @PathVariable Long id) {
-        return ResponseEntity.ok(warehouseService.update(warehouseModel, id));
+    public ResponseEntity<WarehouseDTO> update(@RequestBody Warehouse warehouse, @PathVariable Long id) {
+        return ResponseEntity.ok(warehouseService.update(warehouse, id));
     }
 
     @DeleteMapping("/warehouse/{id}")

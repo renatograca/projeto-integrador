@@ -1,6 +1,6 @@
 package com.concat.projetointegrador;
 
-import com.concat.projetointegrador.model.SupervisorModel;
+import com.concat.projetointegrador.model.Supervisor;
 import com.concat.projetointegrador.repository.SupervisorRepository;
 import com.concat.projetointegrador.service.SupervisorService;
 import org.junit.jupiter.api.Assertions;
@@ -17,8 +17,8 @@ public class SupervisorServiceTest {
         SupervisorRepository supervisorRepository = Mockito.mock(SupervisorRepository.class);
         SupervisorService supervisorService = new SupervisorService(supervisorRepository);
 
-        Mockito.when(supervisorRepository.save(Mockito.any(SupervisorModel.class))).thenReturn(createSupervisor());
-        SupervisorModel newSupervisor = supervisorService.create(createSupervisor());
+        Mockito.when(supervisorRepository.save(Mockito.any(Supervisor.class))).thenReturn(createSupervisor());
+        Supervisor newSupervisor = supervisorService.create(createSupervisor());
 
         Assertions.assertTrue(newSupervisor.getName().length() > 3);
     }
@@ -28,27 +28,27 @@ public class SupervisorServiceTest {
         SupervisorRepository supervisorRepository = Mockito.mock(SupervisorRepository.class);
         SupervisorService supervisorService = new SupervisorService(supervisorRepository);
 
-        List<SupervisorModel> supervisorModelList = new ArrayList<>();
-        supervisorModelList.addAll(
+        List<Supervisor> supervisorList = new ArrayList<>();
+        supervisorList.addAll(
                 List.of(
-                new SupervisorModel(1L, "Joao", "Coutinho"),
-                new SupervisorModel(2L, "Juliana", "Brito"),
-                new SupervisorModel(3L, "Andris", "Ceglys"),
-                new SupervisorModel(4L, "Mellissa", "A"),
-                new SupervisorModel(5L, "V", "Faria"),
-                new SupervisorModel(6L, "Geovana", "Silva")
+                new Supervisor(1L, "Joao", "Coutinho"),
+                new Supervisor(2L, "Juliana", "Brito"),
+                new Supervisor(3L, "Andris", "Ceglys"),
+                new Supervisor(4L, "Mellissa", "A"),
+                new Supervisor(5L, "V", "Faria"),
+                new Supervisor(6L, "Geovana", "Silva")
                 )
         );
-        Mockito.when(supervisorRepository.findAll()).thenReturn(supervisorModelList);
+        Mockito.when(supervisorRepository.findAll()).thenReturn(supervisorList);
 
 
-        List<SupervisorModel> supervisorModels = supervisorService.findAll();
+        List<Supervisor> supervisors = supervisorService.findAll();
 
-        Assertions.assertEquals(supervisorModelList, supervisorModels);
+        Assertions.assertEquals(supervisorList, supervisors);
 
     }
 
-    private SupervisorModel createSupervisor() {
-        return new SupervisorModel(123L, "Renato", "Graca");
+    private Supervisor createSupervisor() {
+        return new Supervisor(123L, "Renato", "Graca");
     }
 }

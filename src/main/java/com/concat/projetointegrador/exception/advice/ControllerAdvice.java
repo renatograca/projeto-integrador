@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.exception.advice;
 
+import com.concat.projetointegrador.exception.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;

@@ -3,6 +3,8 @@ package com.concat.projetointegrador.controller;
 import java.net.URI;
 import java.util.Collection;
 
+import com.concat.projetointegrador.dto.SectorDTO;
+import com.concat.projetointegrador.dto.InboundOrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.concat.projetointegrador.model.InboundOrder;
-import com.concat.projetointegrador.model.dto.InboundOrderDTO;
 import com.concat.projetointegrador.service.InboundOrderService;
 
 @RestController
