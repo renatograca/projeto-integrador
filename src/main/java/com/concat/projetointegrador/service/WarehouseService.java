@@ -16,13 +16,13 @@ public class WarehouseService {
     private WarehouseRepository warehouseRepository;
 
     public WarehouseDTO findById(Long id) {
-        Optional<WarehouseModel> byId = warehouseRepository.findById(id);
+        Optional<WarehouseModel> warehouse = warehouseRepository.findById(id);
 
-        if(byId.isEmpty()) {
+        if(warehouse.isEmpty()) {
             throw new RuntimeException("Warehouse não encontrado!");
         }
 
-        WarehouseDTO warehouseDTO = WarehouseDTO.convertToWarehouseDTO(byId.orElse(new WarehouseModel()));
+        WarehouseDTO warehouseDTO = WarehouseDTO.convertToWarehouseDTO(warehouse.get());
         return warehouseDTO;
     }
 
