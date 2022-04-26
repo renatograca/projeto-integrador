@@ -6,6 +6,7 @@ import java.util.List;
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
 import com.concat.projetointegrador.model.Sector;
+import com.concat.projetointegrador.service.SectorService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -24,26 +25,29 @@ public class InboundOrderDTO {
 
     private boolean active;
 
-    private Sector sector;
+    private SectorRequestDTO sector;
 
     private List<BatchStock> batchStock;
 
     public static InboundOrderDTO map (InboundOrder order) {
+        SectorRequestDTO sectorRequestDTO = new SectorRequestDTO(order.getSector().getId(),
+                order.getSector().getWarehouse().getId());
         return InboundOrderDTO
                 .builder()
                 .orderNumber(order.getId())
                 .active(order.isActive())
-                .sector(order.getSector())
+                .sector(sectorRequestDTO)
                 .batchStock(order.getBatchStock())
                 .build();
     }
 
-    public static InboundOrder map (InboundOrderDTO dto) {
+    public static InboundOrder map (InboundOrderDTO dto, Sector sector) {
+
         return InboundOrder
                 .builder()
                 .id(dto.getOrderNumber())
                 .active(dto.isActive())
-                .sector(dto.getSector())
+                .sector(sector)
                 .batchStock(dto.getBatchStock())
                 .build();
     }
