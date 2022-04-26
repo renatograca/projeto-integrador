@@ -24,7 +24,7 @@ public class ProductService {
     public ProductDTO findById(Long id) {
         
         Optional<Product> product = productRepository.findById(id);
-        ProductDTO productDTO = ProductDTO.convertToProductDTO(product.orElse(new Product()));
+        ProductDTO productDTO = ProductDTO.convertToProductDTO(product.get());
         return productDTO;
         
     }
