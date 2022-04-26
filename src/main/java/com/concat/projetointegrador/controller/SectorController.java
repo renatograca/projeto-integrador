@@ -20,9 +20,6 @@ public class SectorController {
 
     private final SectorService service;
 
-    public SectorController(SectorService service) {
-        this.service = service;
-    }
 
     @PostMapping
     public ResponseEntity<Object> saveSector(@RequestBody @Valid SectorDTO sectorDTO, UriComponentsBuilder uriBuilder) {
