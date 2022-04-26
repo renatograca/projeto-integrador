@@ -2,8 +2,10 @@ package com.concat.projetointegrador.controller;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import com.concat.projetointegrador.dto.InboundOrderDTO;
+import com.concat.projetointegrador.service.BatchStockService;
 import com.concat.projetointegrador.service.ProductService;
 import com.concat.projetointegrador.service.SectorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class InboundOrderController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private BatchStockService batchStockService;
+
     @GetMapping
     public Collection<InboundOrder> findAllByActiveTrue() {
         return orderService.findAllByActiveTrue();
@@ -46,14 +51,16 @@ public class InboundOrderController {
 
     @PostMapping
     public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {
-        InboundOrder order = orderService.create(InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode())));
+        InboundOrder order = orderService.create(InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()),
+                dto.getBatchStock().stream().map(batchStockDTO -> batchStockService.findById(batchStockDTO.getId())).collect(Collectors.toList())));
         URI uri = uriBuilder.path("/fresh-products/inboundorder/{id}").buildAndExpand(order.getId()).toUri();
         return ResponseEntity.created(uri).body(order);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<InboundOrder> update(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
-        InboundOrder order = orderService.update(id, InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode())));
+        InboundOrder order = orderService.create(InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()),
+                dto.getBatchStock().stream().map(batchStockDTO -> batchStockService.findById(batchStockDTO.getId())).collect(Collectors.toList())));
         return ResponseEntity.ok(order);
     }
 

@@ -2,6 +2,7 @@ package com.concat.projetointegrador.dto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
@@ -15,7 +16,6 @@ import lombok.Data;
 
 @Data
 @Builder
-@JsonIgnoreProperties(value={ "orderNumber", "active", "orderDate" }, allowSetters= true)
 public class InboundOrderDTO {
 
     private Long orderNumber;
@@ -26,7 +26,7 @@ public class InboundOrderDTO {
 
     private SectorRequestDTO sector;
 
-    private List<BatchStock> batchStock;
+    private List<BatchStockDTO> batchStock;
 
     public static InboundOrderDTO map (InboundOrder order) {
         SectorRequestDTO sectorRequestDTO = new SectorRequestDTO(order.getSector().getId(),
@@ -36,18 +36,18 @@ public class InboundOrderDTO {
                 .orderNumber(order.getId())
                 .active(order.isActive())
                 .sector(sectorRequestDTO)
-                .batchStock(order.getBatchStock())
+                .batchStock(order.getBatchStock().stream().map(batchStock1 -> BatchStockDTO.map(batchStock1)).collect(Collectors.toList()))
                 .build();
     }
 
-    public static InboundOrder map (InboundOrderDTO dto, Sector sector) {
+    public static InboundOrder map (InboundOrderDTO dto, Sector sector, List<BatchStock> batchStocks) {
 
         return InboundOrder
                 .builder()
                 .id(dto.getOrderNumber())
                 .active(dto.isActive())
                 .sector(sector)
-                .batchStock(dto.getBatchStock())
+                .batchStock(batchStocks)
                 .build();
     }
 
