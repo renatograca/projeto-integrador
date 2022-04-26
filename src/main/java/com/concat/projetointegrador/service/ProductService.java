@@ -1,16 +1,11 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.dto.ProductDTO;
-import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.ProductRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
