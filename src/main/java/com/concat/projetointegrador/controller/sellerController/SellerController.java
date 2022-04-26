@@ -59,7 +59,7 @@ public class SellerController {
 
     }
 
-    @DeleteMapping("/api/seller/{id}")
+    @DeleteMapping("/seller/{id}")
         public ResponseEntity<Void> deleteByID(@PathVariable Long id) {
 
             sellerService.deleteByID(id);
