@@ -14,10 +14,16 @@ public class Sector {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
-    private Long warehouseId;
+
+//    @Column(unique = true, nullable = false)
+    @ManyToOne
+    private Warehouse warehouse;
+
     @Column(nullable = false)
     private Integer capacity;
     private Boolean active = true;
+
+    @OneToOne
+    private Supervisor supervisor;
 
 }

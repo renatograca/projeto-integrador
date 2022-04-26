@@ -41,8 +41,8 @@ public class InboundOrderService {
 			dbOrder.setBatchStock(order.getBatchStock());
 		}
 		
-		if (order.getSection() != null) {
-			dbOrder.setSection(order.getSection());
+		if (order.getSector() != null) {
+			dbOrder.setSector(order.getSector());
 		}
 
 		return repository.save(dbOrder);
