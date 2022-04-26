@@ -41,7 +41,7 @@ public class ProductService {
 
         Optional<Product> productOpt = productRepository.findByName(product.getName());
         if (productOpt.isPresent()) {
-            throw new EntityNotFound("Esse produto já existe!"); // criar uma classe de erro especifica
+            throw new EntityNotFound("Esse produto já existe!"); // criar uma classe de erro especificaa
         } else {
             ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
             return productDTO;
