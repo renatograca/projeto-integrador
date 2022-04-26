@@ -42,7 +42,7 @@ public class SupervisorServiceTest {
         Mockito.when(supervisorRepository.findAll()).thenReturn(supervisorModelList);
 
 
-        List<SupervisorModel> supervisorModels = supervisorService.list();
+        List<SupervisorModel> supervisorModels = supervisorService.findAll();
 
         Assertions.assertEquals(supervisorModelList, supervisorModels);
 
