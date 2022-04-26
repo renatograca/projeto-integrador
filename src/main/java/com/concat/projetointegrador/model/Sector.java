@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Getter @Setter
 @Entity
-@Table(name = "TB_SECTOR")
+@Table(name = "sector")
 public class Sector {
     //TODO add nullable = false em warehouseId
 
