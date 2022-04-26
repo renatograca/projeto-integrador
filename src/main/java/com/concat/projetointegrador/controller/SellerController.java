@@ -1,4 +1,4 @@
-package com.concat.projetointegrador.controller.sellerController;
+package com.concat.projetointegrador.controller;
 
 import com.concat.projetointegrador.model.Seller;
 import com.concat.projetointegrador.service.SellerService;

@@ -21,7 +21,7 @@ public class InboundOrderDTO {
 
     private boolean active;
 
-    //todo trocar tipo
+    //todo trocar  tipo
     private String section;
 
     //todo trocar tipo
