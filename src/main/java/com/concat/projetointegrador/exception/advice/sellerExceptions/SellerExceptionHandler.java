@@ -1,4 +1,4 @@
-package com.concat.projetointegrador.controller.sellerExceptions;
+package com.concat.projetointegrador.exception.advice.sellerExceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +28,5 @@ public class SellerExceptionHandler {
         return ResponseEntity.badRequest().body(ex.getMessage());
 
     }
+
 }

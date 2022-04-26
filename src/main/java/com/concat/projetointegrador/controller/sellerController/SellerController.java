@@ -1,6 +1,5 @@
 package com.concat.projetointegrador.controller.sellerController;
 
-import com.concat.projetointegrador.controller.sellerExceptions.NoSellerException;
 import com.concat.projetointegrador.model.sellerModel.Seller;
 import com.concat.projetointegrador.service.sellerService.SellerService;
 import lombok.AllArgsConstructor;
@@ -42,31 +41,21 @@ public class SellerController {
     }
 
     @GetMapping("/api/seller/{id}")
-        public ResponseEntity<Optional<Seller>> findByID(@PathVariable Long id) {
+        public ResponseEntity<Optional<Seller>> findByID(@PathVariable Long id) {//validar se é numero
 
-            Optional<Seller> seller = sellerService.findByID(id);
+                Optional<Seller> seller = sellerService.findByID(id);
 
-            return ResponseEntity.ok(seller);
+                return ResponseEntity.ok(seller);
 
     }
 
     @PutMapping("/api/seller/{id}")
-        public ResponseEntity<Seller> updateByID(@PathVariable Long id, @RequestBody Seller seller) {
+        public ResponseEntity<Seller> updateByID(@PathVariable Long id, @RequestBody @Valid Seller seller) {
 
-        Optional<Seller> doesTheSellerExist = sellerService.findByID(id);
+            seller.setId(id);
+            Seller updatedSeller = sellerService.update(seller, id);
 
-            if(doesTheSellerExist.isEmpty()){
-
-                throw new NoSellerException("Seller não existe.");
-
-            } else {
-
-                seller.setId(id);
-                Seller updatedSeller = sellerService.update(seller);
-
-                return ResponseEntity.ok(updatedSeller);
-
-            }
+            return ResponseEntity.ok(updatedSeller);
 
     }
 

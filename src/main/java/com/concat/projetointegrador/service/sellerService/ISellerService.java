@@ -10,7 +10,7 @@ public interface ISellerService {
     public Seller create(Seller seller);
     public List<Seller> findAll();
     public Optional<Seller> findByID(Long id);
-    public Seller update(Seller seller);
+    public Seller update(Seller seller, Long id);
     public void deleteByID(Long id);
 
 }

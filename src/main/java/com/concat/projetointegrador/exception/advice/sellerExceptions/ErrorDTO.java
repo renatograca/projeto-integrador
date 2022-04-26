@@ -1,4 +1,4 @@
-package com.concat.projetointegrador.controller.sellerExceptions;
+package com.concat.projetointegrador.exception.advice.sellerExceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
