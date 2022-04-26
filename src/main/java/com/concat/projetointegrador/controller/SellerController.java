@@ -19,53 +19,35 @@ public class SellerController {
     private final SellerService sellerService;
 
     @PostMapping("/seller")
-        public ResponseEntity<Seller> create(@RequestBody @Valid Seller seller, UriComponentsBuilder uriComponentsBuilder) {
-
+    public ResponseEntity<Seller> create(@RequestBody @Valid Seller seller, UriComponentsBuilder uriComponentsBuilder) {
         Seller newSeller = sellerService.create(seller);
-
-        URI uri = uriComponentsBuilder.path("/api/seller/{id}")
+        URI uri = uriComponentsBuilder.path("/seller/{id}")
                 .buildAndExpand(newSeller.getId())
                 .toUri();
-
         return ResponseEntity.created(uri).body(newSeller);
-
     }
 
-    @GetMapping("/api/sellers")
-        public ResponseEntity<List<Seller>> findAll() {
-
+    @GetMapping("/sellers")
+    public ResponseEntity<List<Seller>> findAll() {
         List<Seller> sellers = sellerService.findAll();
-
         return ResponseEntity.ok(sellers);
-
     }
 
     @GetMapping("/seller/{id}")
-        public ResponseEntity<Optional<Seller>> findByID(@PathVariable Long id) {//validar se é numero
-
-                Optional<Seller> seller = sellerService.findByID(id);
-
-                return ResponseEntity.ok(seller);
-
+    public ResponseEntity<Optional<Seller>> findByID(@PathVariable Long id) {//validar se é numero
+        Optional<Seller> seller = sellerService.findByID(id);
+        return ResponseEntity.ok(seller);
     }
 
-    @PutMapping("/api/seller/{id}")
-        public ResponseEntity<Seller> updateByID(@PathVariable Long id, @RequestBody @Valid Seller seller) {
-
-            seller.setId(id);
-            Seller updatedSeller = sellerService.update(seller, id);
-
-            return ResponseEntity.ok(updatedSeller);
-
+    @PutMapping("/seller/{id}")
+    public ResponseEntity<Seller> update(@PathVariable Long id, @RequestBody @Valid Seller seller) {
+        Seller updatedSeller = sellerService.update(seller, id);
+        return ResponseEntity.ok(updatedSeller);
     }
 
     @DeleteMapping("/seller/{id}")
-        public ResponseEntity<Void> deleteByID(@PathVariable Long id) {
-
-            sellerService.deleteByID(id);
-
-            return ResponseEntity.noContent().build();
-
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        sellerService.delete(id);
+        return ResponseEntity.noContent().build();
     }
-
 }

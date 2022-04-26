@@ -4,6 +4,7 @@ import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,22 +17,20 @@ import java.util.stream.Collectors;
 public class ProductDTO {
 
     private String name;
-    private LocalDate dueDate;
-    private Integer size;
+    private Integer volume;
+    private BigDecimal price;
     private Category category;
 
     public static ProductDTO convertToProductDTO(Product product){
-
-        return ProductDTO.builder().category(product.getCategory()).dueDate(product.getDueDate())
-                .name(product.getName()).size(product.getSize()).build();
-
+        return ProductDTO.builder()
+                .category(product.getCategory())
+                .name(product.getName())
+                .price(product.getPrice())
+                .volume(product.getVolume()).build();
     }
 
     public static List<ProductDTO> convertToListProduct (List<Product> listProduct){
-
-        return listProduct.stream().map(product -> new ProductDTO(product.getName(), product.getDueDate(),
-                product.getSize(), product.getCategory())).collect(Collectors.toList());
-
+        return listProduct.stream().map(product -> new ProductDTO(product.getName(), product.getVolume(),
+                product.getPrice(), product.getCategory())).collect(Collectors.toList());
     }
-
 }

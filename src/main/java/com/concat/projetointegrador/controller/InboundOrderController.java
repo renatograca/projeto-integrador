@@ -24,36 +24,35 @@ import com.concat.projetointegrador.service.InboundOrderService;
 @RequestMapping("/fresh-products/inboundorder")
 public class InboundOrderController {
 
-	@Autowired
-	private InboundOrderService service;
+    @Autowired
+    private InboundOrderService service;
 
-	@GetMapping
-	public Collection<InboundOrder> findAllByActiveTrue() {
-		return service.findAllByActiveTrue();
-	}
+    @GetMapping
+    public Collection<InboundOrder> findAllByActiveTrue() {
+        return service.findAllByActiveTrue();
+    }
 
-	@GetMapping("/{id}")
-	public InboundOrder findAllByIdAndActiveTrue(@PathVariable Long id) {
-		return service.findAllByIdAndActiveTrue(id);
-	}
+    @GetMapping("/{id}")
+    public InboundOrder findAllByIdAndActiveTrue(@PathVariable Long id) {
+        return service.findAllByIdAndActiveTrue(id);
+    }
 
-	@PostMapping
-    public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder){
-    	InboundOrder order = service.create(InboundOrderDTO.map(dto));
-    	URI uri = uriBuilder.path("/fresh-products/inboundorder/{id}").buildAndExpand(order.getId()).toUri();
+    @PostMapping
+    public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {
+        InboundOrder order = service.create(InboundOrderDTO.map(dto));
+        URI uri = uriBuilder.path("/fresh-products/inboundorder/{id}").buildAndExpand(order.getId()).toUri();
         return ResponseEntity.created(uri).body(order);
     }
 
-	@PutMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<InboundOrder> update(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
-    	InboundOrder order = service.update(id, InboundOrderDTO.map(dto));
-		return ResponseEntity.ok(order);
-    }
-	
-	@DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-    	service.delete(id);
-		return ResponseEntity.accepted().build();
+        InboundOrder order = service.update(id, InboundOrderDTO.map(dto));
+        return ResponseEntity.ok(order);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.accepted().build();
+    }
 }
