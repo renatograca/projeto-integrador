@@ -55,7 +55,7 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public Seller update(Seller seller, Long id) {
+    public Seller updateByID(Seller seller, Long id) {
 
         Optional<Seller> doesTheSellerExist = sellerRepository.findById(id);
 
@@ -64,6 +64,8 @@ public class SellerService implements ISellerService {
             throw new NoSellerException("Seller não existe.");
 
         }
+
+        seller.setId(id);
 
         Seller updatedSeller = sellerRepository.save(seller);
 

@@ -31,7 +31,7 @@ public class SellerController {
 
     }
 
-    @GetMapping("/api/sellers")
+    @GetMapping("sellers")
         public ResponseEntity<List<Seller>> findAll() {
 
         List<Seller> sellers = sellerService.findAll();
@@ -49,11 +49,10 @@ public class SellerController {
 
     }
 
-    @PutMapping("/api/seller/{id}")
+    @PutMapping("/seller/{id}")
         public ResponseEntity<Seller> updateByID(@PathVariable Long id, @RequestBody @Valid Seller seller) {
 
-            seller.setId(id);
-            Seller updatedSeller = sellerService.update(seller, id);
+            Seller updatedSeller = sellerService.updateByID(seller, id);
 
             return ResponseEntity.ok(updatedSeller);
 
