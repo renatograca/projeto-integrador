@@ -1,8 +1,11 @@
 package com.concat.projetointegrador.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
+import com.concat.projetointegrador.model.Sector;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -21,18 +24,16 @@ public class InboundOrderDTO {
 
     private boolean active;
 
-    //todo trocar  tipo
-    private String section;
+    private Sector sector;
 
-    //todo trocar tipo
-    private String batchStock;
+    private List<BatchStock> batchStock;
 
     public static InboundOrderDTO map (InboundOrder order) {
         return InboundOrderDTO
                 .builder()
                 .orderNumber(order.getId())
                 .active(order.isActive())
-                .section(order.getSection())
+                .sector(order.getSector())
                 .batchStock(order.getBatchStock())
                 .build();
     }
@@ -42,7 +43,7 @@ public class InboundOrderDTO {
                 .builder()
                 .id(dto.getOrderNumber())
                 .active(dto.isActive())
-                .section(dto.getSection())
+                .sector(dto.getSector())
                 .batchStock(dto.getBatchStock())
                 .build();
     }

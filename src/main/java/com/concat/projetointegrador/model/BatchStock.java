@@ -1,6 +1,7 @@
 package com.concat.projetointegrador.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -50,6 +51,10 @@ public class BatchStock {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
-    @OneToMany
-    private List<Product> product;
+    @OneToOne
+    private Product product;
+
+    @ManyToOne
+    @JsonIgnore
+    private InboundOrder inboundOrder;
 }

@@ -1,11 +1,10 @@
 package com.concat.projetointegrador.model;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,12 +26,9 @@ public class InboundOrder {
     
     private boolean active;
 
-    //todo trocar tipo
-    private String section;
+    @ManyToOne
+    private Sector sector;
 
-    //todo trocar tipo
-    private String batchStock;
-
-
-
+    @OneToMany(mappedBy = "inboundOrder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<BatchStock> batchStock;
 }
