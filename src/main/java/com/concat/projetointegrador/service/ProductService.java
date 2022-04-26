@@ -25,7 +25,7 @@ public class ProductService {
 
         Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
-            ProductDTO productDTO = ProductDTO.convertToProductDTO(product.orElse(new Product()));
+            ProductDTO productDTO = ProductDTO.convertToProductDTO(product.get());
             return productDTO;
         } else {
             throw new EntityNotFound("O produto não foi encontrado!!");
