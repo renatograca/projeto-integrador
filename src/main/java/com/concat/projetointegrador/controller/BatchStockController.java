@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/batchstock")
-public class BatchStoockController {
+public class BatchStockController {
 
     @Autowired
     private BatchStockService batchStockService;

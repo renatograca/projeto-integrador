@@ -3,6 +3,8 @@ package com.concat.projetointegrador.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import com.concat.projetointegrador.model.BatchStock;
+import com.concat.projetointegrador.model.Warehouse;
 import org.springframework.stereotype.Service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
@@ -14,6 +16,8 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class InboundOrderService {
+
+	private WarehouseService warehouseService;
 
 	private InboundOrderRepository repository;
 
@@ -30,7 +34,21 @@ public class InboundOrderService {
 	}
 
 	public InboundOrder create(InboundOrder order) {
-		order.setActive(true);
+
+		warehouseService.findById(order.getSector().getWarehouse().getId());
+		Integer total = 0;
+		for (BatchStock batchStock : order.getBatchStock()) {
+
+			total += batchStock.getProduct().getVolume();
+			if (!batchStock.getProduct().getCategory().equals(order.getSector().getCategory())) {
+				throw new RuntimeException("A categoria de todos os produtos deve ser igual ao do setor!");
+			}
+		}
+		if (total > order.getSector().getCapacity()) {
+			throw new RuntimeException("Capacidade total já atingida!");
+		}
+
+	// TODO autenticação supervisor
 		return repository.save(order);
 	}
 

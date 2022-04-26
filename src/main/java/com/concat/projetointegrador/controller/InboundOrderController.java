@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Collection;
 
 import com.concat.projetointegrador.dto.InboundOrderDTO;
+import com.concat.projetointegrador.service.ProductService;
 import com.concat.projetointegrador.service.SectorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,9 @@ public class InboundOrderController {
 
     @Autowired
     private SectorService sectorService;
+
+    @Autowired
+    private ProductService productService;
 
     @GetMapping
     public Collection<InboundOrder> findAllByActiveTrue() {

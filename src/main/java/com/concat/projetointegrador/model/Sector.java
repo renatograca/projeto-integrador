@@ -26,4 +26,7 @@ public class Sector {
     @OneToOne
     private Supervisor supervisor;
 
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
 }

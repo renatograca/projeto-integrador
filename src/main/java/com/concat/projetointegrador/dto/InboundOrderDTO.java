@@ -20,7 +20,6 @@ public class InboundOrderDTO {
 
     private Long orderNumber;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private final LocalDate orderDate = LocalDate.now();
 
     private boolean active;
