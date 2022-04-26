@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/sector")
 public class SectorController {
