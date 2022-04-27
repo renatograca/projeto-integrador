@@ -1,7 +1,7 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.model.Sector;
-import com.concat.projetointegrador.repository.ISectorRepository;
+import com.concat.projetointegrador.repository.SectorRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 public class SectorService {
 
-    private final ISectorRepository repository;
+    private final SectorRepository repository;
 
-    public SectorService(ISectorRepository repository) {
+    public SectorService(SectorRepository repository) {
         this.repository = repository;
     }
 
@@ -23,16 +23,14 @@ public class SectorService {
     }
 
     public List<Sector> findAll() {
-        return repository.findAllByActiveTrue();
+        return repository.findAll();
     }
 
     public Sector findById(Long id) {
-        return repository.findByIdAndActiveTrue(id).orElseThrow(() -> new RuntimeException("Setor não encontrado! Tente outro ID ou crie um novo Setor!"));
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Setor não encontrado! Tente outro ID ou crie um novo Setor!"));
     }
 
     public void delete(Long id) {
-        Sector sector = findById(id);
-        sector.setActive(false);
-        repository.save(sector);
+        repository.deleteById(id);
     }
 }

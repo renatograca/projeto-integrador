@@ -4,12 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
 import com.concat.projetointegrador.model.Sector;
-import com.concat.projetointegrador.service.SectorService;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +18,6 @@ public class InboundOrderDTO {
 
     private final LocalDate orderDate = LocalDate.now();
 
-    private boolean active;
-
     private SectorRequestDTO sector;
 
     private List<BatchStockDTO> batchStock;
@@ -34,20 +28,20 @@ public class InboundOrderDTO {
         return InboundOrderDTO
                 .builder()
                 .orderNumber(order.getId())
-                .active(order.isActive())
                 .sector(sectorRequestDTO)
-                .batchStock(order.getBatchStock().stream().map(batchStock1 -> BatchStockDTO.map(batchStock1)).collect(Collectors.toList()))
+                .batchStock(order.getBatchStock()
+                		.stream()
+                		.map(batchStock1 -> 
+                			BatchStockDTO
+                			.map(batchStock1))
+                			.collect(Collectors.toList()))
                 .build();
     }
 
-    public static InboundOrder map (InboundOrderDTO dto, Sector sector, List<BatchStock> batchStocks) {
-
+    public static InboundOrder map (InboundOrderDTO dto, Sector sector) {
         return InboundOrder
                 .builder()
-                .id(dto.getOrderNumber())
-                .active(dto.isActive())
                 .sector(sector)
-                .batchStock(batchStocks)
                 .build();
     }
 
