@@ -26,7 +26,11 @@ public class Buyer {
     @Pattern(regexp = "^[a-zA-Z]{1,}(?: [a-zA-Z]+){0,2}$", message = "nome deve ser composto de letras")
     private String name;
 
-    @NotNull(message = "lastName não pode ser null")
-    @Size(min = 1, max = 20, message = "LastName deve possuir de 1 a 20 caracteres.")
+    @NotNull(message = "lastName não pode ser nulo")
+    @Size(min = 1, max = 20, message = "lastName deve possuir de 1 a 20 caracteres")
     private String lastName;
+
+    @NotNull(message = "cpf não pode ser nulo")
+    @Size(min = 11, max = 11, message = "cpf deve possuir 11 caracteres")
+    private Integer cpf;
 }
