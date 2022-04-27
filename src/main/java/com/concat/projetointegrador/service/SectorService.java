@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.service;
 
+import com.concat.projetointegrador.dto.SectorRequestDTO;
 import com.concat.projetointegrador.model.Sector;
 import com.concat.projetointegrador.repository.SectorRepository;
 
@@ -32,5 +33,9 @@ public class SectorService {
 
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    public Sector findByProductId(Long id) {
+        return findById(id);
     }
 }

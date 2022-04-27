@@ -38,4 +38,8 @@ public class BatchStockService {
     public void delete(Long id) {
         batchStockRepository.deleteById(id);
     }
+
+	public List<BatchStock> findByProductId(Long id) {
+		return batchStockRepository.findByProductId(id);
+	}
 }

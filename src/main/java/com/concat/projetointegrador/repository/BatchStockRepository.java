@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface BatchStockRepository extends JpaRepository<BatchStock, Long> {
 
 	List<BatchStock> findAllByInboundOrderSectorId(Long id);
+
+	List<BatchStock> findByProductId(Long id);
 }

@@ -1,16 +1,24 @@
 package com.concat.projetointegrador.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.concat.projetointegrador.model.Sector;
+import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class SectorRequestDTO {
 
     private Long sectorCode;
     private Long warehouseCode;
+
+    public static SectorRequestDTO map(Sector sector) {
+        return SectorRequestDTO
+                .builder()
+                .sectorCode(sector.getId())
+                .warehouseCode(sector.getWarehouse().getId())
+                .build();
+    }
 }
+
