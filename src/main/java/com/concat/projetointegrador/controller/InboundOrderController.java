@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.concat.projetointegrador.model.Sector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,19 +50,17 @@ public class InboundOrderController {
 
     @PostMapping
     public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {
-    	
-    	InboundOrder inboundOrder = InboundOrderDTO.map(
-    			dto, 
-    			sectorService.findById(dto.getSector().getSectorCode())
-    	);
+		Sector sector = sectorService.findById(dto.getSector().getSectorCode());
+
+		InboundOrder inboundOrder = InboundOrderDTO.map(dto, sector);
     	
     	List<BatchStock> list = dto.getBatchStock()
     			.stream()
     			.map(
 					e-> 
 			    	BatchStock.builder()
-			    		.category(e.getCategory())
-			    		.currentQuantity(e.getCurrentQuantity())
+			    		.category(sector.getCategory())
+			    		.currentQuantity(e.getInitialQuantity())
 			    		.dueDate(e.getDueDate())
 			    		.initialQuantity(e.getInitialQuantity())
 			    		.manufacturingDate(e.getManufacturingDate())
@@ -86,7 +85,6 @@ public class InboundOrderController {
     			.map(
 					e-> 
 			    	BatchStock.builder()
-			    		.category(e.getCategory())
 			    		.currentQuantity(e.getCurrentQuantity())
 			    		.dueDate(e.getDueDate())
 			    		.initialQuantity(e.getInitialQuantity())

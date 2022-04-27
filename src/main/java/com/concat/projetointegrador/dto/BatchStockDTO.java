@@ -22,8 +22,6 @@ import lombok.Setter;
 @Builder
 public class BatchStockDTO {
 
-    private Long id;
-    private Category category;
     private Integer initialQuantity;
     private Integer currentQuantity;
 
@@ -41,7 +39,6 @@ public class BatchStockDTO {
     public static BatchStockDTO map(BatchStock batchStock) {
         BatchStockDTO batchStockDTO = new BatchStockDTO();
         BeanUtils.copyProperties(batchStock, batchStockDTO);
-        batchStockDTO.setId(batchStock.getId());
         return batchStockDTO;
     }
 }
