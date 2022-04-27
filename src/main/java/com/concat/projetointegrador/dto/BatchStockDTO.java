@@ -23,6 +23,7 @@ import lombok.Setter;
 public class BatchStockDTO {
 
     private Integer initialQuantity;
+    private Integer currentQuantity;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate manufacturingDate;

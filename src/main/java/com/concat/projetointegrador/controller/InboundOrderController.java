@@ -85,7 +85,6 @@ public class InboundOrderController {
     			.map(
 					e-> 
 			    	BatchStock.builder()
-			    		.category(e.getCategory())
 			    		.currentQuantity(e.getCurrentQuantity())
 			    		.dueDate(e.getDueDate())
 			    		.initialQuantity(e.getInitialQuantity())
