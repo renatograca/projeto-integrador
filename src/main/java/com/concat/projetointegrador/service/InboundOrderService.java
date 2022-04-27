@@ -92,7 +92,7 @@ public class InboundOrderService {
 		repository.deleteById(id);
 	}
 
-	public InboundOrder findAllByIdAndActiveTrue(Long id) {
+	public InboundOrder findById(Long id) {
 		return this.getInboundOrderById(id);
 	}
 

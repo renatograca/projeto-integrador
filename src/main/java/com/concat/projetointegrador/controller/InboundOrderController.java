@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,13 +44,16 @@ public class InboundOrderController {
 
     @GetMapping("/{id}")
     public InboundOrder findAllByIdAndActiveTrue(@PathVariable Long id) {
-        return orderService.findAllByIdAndActiveTrue(id);
+        return orderService.findById(id);
     }
 
     @PostMapping
     public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {
     	
-    	InboundOrder inboundOrder = InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()));
+    	InboundOrder inboundOrder = InboundOrderDTO.map(
+    			dto, 
+    			sectorService.findById(dto.getSector().getSectorCode())
+    	);
     	
     	List<BatchStock> list = dto.getBatchStock()
     			.stream()
@@ -75,12 +79,27 @@ public class InboundOrderController {
         return ResponseEntity.created(uri).body(order);
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<InboundOrder> update(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
-//        InboundOrder order = orderService.create(InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()),
-//                dto.getBatchStock().stream().map(batchStockDTO -> batchStockService.findById(batchStockDTO.getId())).collect(Collectors.toList())));
-//        return ResponseEntity.ok(order);
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<InboundOrder> update(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
+    	List<BatchStock> list = dto.getBatchStock()
+    			.stream()
+    			.map(
+					e-> 
+			    	BatchStock.builder()
+			    		.category(e.getCategory())
+			    		.currentQuantity(e.getCurrentQuantity())
+			    		.dueDate(e.getDueDate())
+			    		.initialQuantity(e.getInitialQuantity())
+			    		.manufacturingDate(e.getManufacturingDate())
+			    		.manufacturingTime(e.getManufacturingTime())
+			    		.product(productService.findById(e.getProductId()))
+			    		.build()
+				).collect(Collectors.toList());
+    	InboundOrder inboundOrder = InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()), list);
+    	inboundOrder = orderService.update(id, inboundOrder);
+    	
+    	return ResponseEntity.ok(inboundOrder);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

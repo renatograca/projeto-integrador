@@ -1,14 +1,15 @@
 package com.concat.projetointegrador.service;
 
-import com.concat.projetointegrador.dto.ProductDTO;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.repository.BatchStockRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor

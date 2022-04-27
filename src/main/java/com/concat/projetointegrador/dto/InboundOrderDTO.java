@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
 import com.concat.projetointegrador.model.Sector;
 
@@ -42,6 +43,14 @@ public class InboundOrderDTO {
         return InboundOrder
                 .builder()
                 .sector(sector)
+                .build();
+    }
+    
+    public static InboundOrder map (InboundOrderDTO dto, Sector sector, List<BatchStock> batchStock) {
+        return InboundOrder
+                .builder()
+                .sector(sector)
+                .batchStock(batchStock)
                 .build();
     }
 
