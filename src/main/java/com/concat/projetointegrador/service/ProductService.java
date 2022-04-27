@@ -16,11 +16,10 @@ public class ProductService {
 
     private ProductRepository productRepository;
 
-    public ProductDTO findById(Long id) {
+    public Product findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
-            ProductDTO productDTO = ProductDTO.convertToProductDTO(product.get());
-            return productDTO;
+            return product.get();
         } else {
             throw new EntityNotFound("O produto não foi encontrado!!");
         }
@@ -28,7 +27,7 @@ public class ProductService {
 
     public List<ProductDTO> findAll() {
         List<Product> listProduct = productRepository.findAll();
-        List<ProductDTO> listDTO = ProductDTO.convertToListProduct(listProduct);
+        List<ProductDTO> listDTO = ProductDTO.convertToListProductDTO(listProduct);
         return listDTO;
     }
 

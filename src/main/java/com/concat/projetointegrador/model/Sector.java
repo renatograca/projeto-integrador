@@ -21,9 +21,11 @@ public class Sector {
 
     @Column(nullable = false)
     private Integer capacity;
-    private Boolean active = true;
 
     @OneToOne
     private Supervisor supervisor;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
 }

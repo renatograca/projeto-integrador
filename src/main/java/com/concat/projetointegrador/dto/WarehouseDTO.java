@@ -21,7 +21,7 @@ public class WarehouseDTO {
     public static WarehouseDTO convertToWarehouseDTO(Warehouse warehouse) {
         return WarehouseDTO.builder()
                 .id(warehouse.getId())
-                .regiao(warehouse.getRegiao())
+                .regiao(warehouse.getRegion())
                 .name(warehouse.getName()).build();
     }
 
@@ -30,14 +30,14 @@ public class WarehouseDTO {
                 .map(warehouse -> new WarehouseDTO(
                         warehouse.getId(),
                         warehouse.getName(),
-                        warehouse.getRegiao()))
+                        warehouse.getRegion()))
                 .collect(Collectors.toList());
     }
 
     public static Warehouse map(WarehouseDTO warehouseDTO) {
         return Warehouse.builder()
                 .id(warehouseDTO.getId())
-                .regiao(warehouseDTO.getRegiao())
+                .region(warehouseDTO.getRegiao())
                 .name(warehouseDTO.getName()).build();
     }
 }

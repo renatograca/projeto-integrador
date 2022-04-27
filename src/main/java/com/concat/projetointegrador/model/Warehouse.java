@@ -22,9 +22,9 @@ public class Warehouse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "'name' não pode ser nulo!")
+    @NotNull(message = "'nome' não pode ser nulo!")
     private String name;
 
     @NotNull(message = "'regiao' não pode ser nulo!")
-    private String regiao;
+    private String region;
 }

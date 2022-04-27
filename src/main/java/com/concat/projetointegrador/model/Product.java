@@ -1,12 +1,22 @@
 package com.concat.projetointegrador.model;
 
-import lombok.*;
+import java.math.BigDecimal;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -21,19 +31,15 @@ public class Product {
     private Long id;
 
     @NotNull(message = "o nome não pode ser nulo")
-    @NotEmpty (message = "o nome não pode ser vazio")
     @Size(min = 3, max = 30, message = "o nome deve ter entre 3 à 30 caracteres")
     private String name;
 
-    @NotEmpty(message = "o volume não pode ser vazio")
     @NotNull(message = "o volume não pode ser nulo")
     private Integer volume;
 
-    @NotEmpty(message = "o preço não pode ser vazio")
     @NotNull(message = "o preço não pode ser nulo")
     private BigDecimal price;
 
-    @NotEmpty(message = "a categoria não pode ser vazia")
     @NotNull(message = "a categoria não pode ser nula")
     @Enumerated(EnumType.STRING)
     private Category category;

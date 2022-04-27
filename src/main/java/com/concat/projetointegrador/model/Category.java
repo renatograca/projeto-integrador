@@ -1,9 +1,9 @@
 package com.concat.projetointegrador.model;
 
 public enum Category {
-    FRESCO(0),
-    REFRIGERADO(1),
-    CONGELADO(2);
+    FRESCOS(0),
+    REFRIGERADOS(1),
+    CONGELADOS(2);
 
     Category(int i) {
     }

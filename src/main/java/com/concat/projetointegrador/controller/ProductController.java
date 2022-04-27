@@ -14,34 +14,33 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+	@Autowired
+	private ProductService productService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.findById(id));
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
+		return ResponseEntity.ok(ProductDTO.convertToProductDTO(productService.findById(id)));
+	}
 
-    }
+	@GetMapping
+	public ResponseEntity<List<ProductDTO>> findAll() {
+		return ResponseEntity.ok(productService.findAll());
 
-    @GetMapping
-    public ResponseEntity<List<ProductDTO>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+	}
 
-    }
+	@PostMapping
+	public ResponseEntity<ProductDTO> create(@RequestBody Product product) {
+		return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
+	}
 
-    @PostMapping
-    public ResponseEntity<ProductDTO> create(@RequestBody Product product) {
-        return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		productService.delete(id);
+		return ResponseEntity.noContent().build();
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        productService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> update(@RequestBody Product product, @PathVariable Long id) {
-        return ResponseEntity.ok(productService.update(product, id));
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<ProductDTO> update(@RequestBody Product product, @PathVariable Long id) {
+		return ResponseEntity.ok(productService.update(product, id));
+	}
 }

@@ -1,28 +1,49 @@
 package com.concat.projetointegrador.service;
 
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
+import com.concat.projetointegrador.service.validator.SectorCapacityValidate;
+import com.concat.projetointegrador.service.validator.SectorCategoryMatchValidate;
+import com.concat.projetointegrador.service.validator.Validator;
 import org.springframework.stereotype.Service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
+import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.InboundOrderRepository;
 
 import lombok.AllArgsConstructor;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class InboundOrderService {
 
-	private InboundOrderRepository repository;
+	private WarehouseService warehouseService;
 
-	public Collection<InboundOrder> findAllByActiveTrue() {
-		return repository.findAllByActiveTrue();
+	private InboundOrderRepository repository;
+	
+	private BatchStockRepository batchStockRepository;
+
+	private List<Validator> validators;
+
+	public void initializeValidators(InboundOrder order) {
+		this.validators = Arrays.asList(
+				new SectorCapacityValidate(order, batchStockRepository),
+				new SectorCategoryMatchValidate(order)
+		);
+	}
+	public List<InboundOrder> findAllByActiveTrue() {
+		return repository.findAll();
 	}
 
 	private InboundOrder getInboundOrderById(Long id) {
-		Optional<InboundOrder> opt = repository.findAllByIdAndActiveTrue(id);
+		Optional<InboundOrder> opt = repository.findById(id);
 		if (opt.isEmpty()) {
 			throw new EntityNotFound("Ordem de entrada não encontrada!");
 		}
@@ -30,8 +51,23 @@ public class InboundOrderService {
 	}
 
 	public InboundOrder create(InboundOrder order) {
-		order.setActive(true);
-		return repository.save(order);
+		warehouseService.findById(order.getSector().getWarehouse().getId());
+
+		initializeValidators(order);
+		validators.forEach(Validator::validate);
+
+		InboundOrder newInboundOrder = repository.save(order);
+		order.getBatchStock().forEach(e-> {
+				e.setInboundOrder(newInboundOrder);
+		});
+
+		List<BatchStock> newBatchStocks = batchStockRepository.saveAll(newInboundOrder.getBatchStock());
+
+		newInboundOrder.setBatchStock(newBatchStocks);
+		repository.save(newInboundOrder);
+		
+	// TODO autenticação supervisor
+		return newInboundOrder;
 	}
 
 	public InboundOrder update(Long id, InboundOrder order) {
@@ -49,12 +85,10 @@ public class InboundOrderService {
 	}
 
 	public void delete(Long id) {
-		InboundOrder inboundOrder = getInboundOrderById(id);
-		inboundOrder.setActive(false);
-		repository.save(inboundOrder);
+		repository.deleteById(id);
 	}
 
-	public InboundOrder findAllByIdAndActiveTrue(Long id) {
+	public InboundOrder findById(Long id) {
 		return this.getInboundOrderById(id);
 	}
 
