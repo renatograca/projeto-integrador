@@ -1,6 +1,7 @@
 package com.concat.projetointegrador.controller;
 
 import com.concat.projetointegrador.dto.ProductDTO;
+import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> findAll() {
         return ResponseEntity.ok(productService.findAll());
 
+    }
+
+    @GetMapping("{category}")
+    public ResponseEntity<List<ProductDTO>> findByCategory(@PathVariable Category category) {
+        return ResponseEntity.ok(productService.findByCategory(category));
     }
 
     @PostMapping

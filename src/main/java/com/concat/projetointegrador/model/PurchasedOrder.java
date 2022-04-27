@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +24,6 @@ public class PurchasedOrder {
     private String status;
     @ManyToOne
     private Buyer buyer;
+    @OneToMany(mappedBy = "purchasedOrder")
+    private List<Cart> cart;
 }

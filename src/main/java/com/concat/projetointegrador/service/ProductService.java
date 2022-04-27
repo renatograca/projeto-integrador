@@ -2,9 +2,11 @@ package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.dto.ProductDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.ProductRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +30,11 @@ public class ProductService {
 
     public List<ProductDTO> findAll() {
         List<Product> listProduct = productRepository.findAll();
+
+        if(listProduct.isEmpty()) {
+            throw new EntityNotFound("Não existem produtos cadastrados.");
+        }
+
         List<ProductDTO> listDTO = ProductDTO.convertToListProduct(listProduct);
         return listDTO;
     }
@@ -59,5 +66,11 @@ public class ProductService {
         } else {
             throw new EntityNotFound("O produto não existe!!");
         }
+    }
+
+    public List<ProductDTO> findByCategory(Category category) {
+        List<Product> products = productRepository.findByCategory(category);
+        List<ProductDTO> productsDTO = ProductDTO.convertToListProduct(products);
+        return productsDTO;
     }
 }
