@@ -15,8 +15,6 @@ import lombok.Data;
 @Builder
 public class InboundOrderDTO {
 
-    private Long orderNumber;
-
     private final LocalDate orderDate = LocalDate.now();
 
     private SectorRequestDTO sector;
