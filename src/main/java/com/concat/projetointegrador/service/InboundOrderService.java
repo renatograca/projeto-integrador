@@ -1,10 +1,15 @@
 package com.concat.projetointegrador.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.concat.projetointegrador.service.validator.ValidateCategoryMatch;
+import com.concat.projetointegrador.service.validator.ValidateSectorCapacity;
+import com.concat.projetointegrador.service.validator.Validator;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
@@ -21,10 +26,16 @@ import lombok.AllArgsConstructor;
 public class InboundOrderService {
 
 	private WarehouseService warehouseService;
-
 	private InboundOrderRepository repository;
-	
 	private BatchStockRepository batchStockRepository;
+	private List<Validator> validators;
+
+	public void initializeValidators(InboundOrder order) {
+		this.validators = Arrays.asList(
+				new ValidateSectorCapacity(order, batchStockRepository),
+				new ValidateCategoryMatch(order)
+		);
+	}
 
 	public List<InboundOrder> findAllByActiveTrue() {
 		return repository.findAll();
@@ -35,31 +46,17 @@ public class InboundOrderService {
 		if (opt.isEmpty()) {
 			throw new EntityNotFound("Ordem de entrada não encontrada!");
 		}
+
 		return opt.get();
 	}
 
 	public InboundOrder create(InboundOrder order) {
+
 		warehouseService.findById(order.getSector().getWarehouse().getId());
-		
-		List<BatchStock> batchStocksBySector = batchStockRepository.findAllByInboundOrderSectorId(order.getSector().getId());
-		Integer volume = batchStocksBySector
-				.stream()
-				.reduce(0,(acc, e) -> acc + (e.getProduct().getVolume() * e.getCurrentQuantity()), Integer::sum);
-		
-		Integer newBatchVolume = 0;
-		for (BatchStock batchStock : order.getBatchStock()) {
-			newBatchVolume += batchStock.getProduct().getVolume() * batchStock.getInitialQuantity();
-			if (!batchStock.getProduct().getCategory().equals(order.getSector().getCategory())) {
-				throw new RuntimeException("A categoria de todos os produtos deve ser igual ao do setor!");
-			}
-		}
-		
-		boolean volumeSmallerThanNewBatch = newBatchVolume > order.getSector().getCapacity() - volume;
-		boolean newVolumeSmallerThanIntialCapacity = volume > order.getSector().getCapacity();
-		if (volumeSmallerThanNewBatch || newVolumeSmallerThanIntialCapacity) {
-			throw new RuntimeException("Capacidade total já atingida!");
-		}
-		
+
+		initializeValidators(order);
+		validators.forEach(Validator::validate);
+
 		InboundOrder newInboundOrder = repository.save(order);
 		order.getBatchStock().forEach(e-> {
 				e.setInboundOrder(newInboundOrder);
