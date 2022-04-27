@@ -26,13 +26,10 @@ public class InboundOrderDTO {
                 order.getSector().getWarehouse().getId());
         return InboundOrderDTO
                 .builder()
-                .orderNumber(order.getId())
                 .sector(sectorRequestDTO)
                 .batchStock(order.getBatchStock()
                 		.stream()
-                		.map(batchStock1 -> 
-                			BatchStockDTO
-                			.map(batchStock1))
+                		.map(BatchStockDTO::map)
                 			.collect(Collectors.toList()))
                 .build();
     }
