@@ -20,7 +20,7 @@ public class SupervisorController {
 
     @PostMapping
     public ResponseEntity<SupervisorDTO> create(@RequestBody SupervisorDTO supervisorDto, UriComponentsBuilder uriBuilder) {
-        Supervisor supervisor = Supervisor.builder().name(supervisorDto.getName()).lastname(supervisorDto.getLastname()).build();
+        Supervisor supervisor = Supervisor.builder().name(supervisorDto.getName()).lastName(supervisorDto.getLastname()).build();
         Supervisor newSupervisor = supervisorService.create(supervisor);
         SupervisorDTO supervisorReturn = SupervisorDTO.map(newSupervisor);
         URI uri = uriBuilder

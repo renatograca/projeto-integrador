@@ -13,9 +13,9 @@ public class SupervisorDTO {
     private String lastname;
 
     public static Supervisor map(SupervisorDTO supervisorDto) {
-        return Supervisor.builder().name(supervisorDto.getName()).lastname(supervisorDto.getLastname()).build();
+        return Supervisor.builder().name(supervisorDto.getName()).lastName(supervisorDto.getLastname()).build();
     }
     public static SupervisorDTO map(Supervisor supervisor) {
-        return new SupervisorDTO(supervisor.getName(), supervisor.getLastname());
+        return new SupervisorDTO(supervisor.getName(), supervisor.getLastName());
     }
 }
