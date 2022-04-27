@@ -37,4 +37,14 @@ public class BatchStockService {
     public void delete(Long id) {
         batchStockRepository.deleteById(id);
     }
+
+    public void findByProductId(Long id, Integer quantity) {
+        Optional<BatchStock> doesTheBatchStockExist = batchStockRepository.findByProductId(id);
+        if(!doesTheBatchStockExist.isPresent()) {
+            throw new EntityNotFound("Este produto não existe");
+        }
+        if(doesTheBatchStockExist.get().getCurrentQuantity() < quantity) {
+            throw new EntityNotFound("Estoque insuficiente");
+        }
+    }
 }
