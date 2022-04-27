@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class PurchasedOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +21,6 @@ public class Order {
 
     @NotNull(message = "o status não pode ser nulo")
     private String status;
-
     @ManyToOne
     private Buyer buyer;
 }

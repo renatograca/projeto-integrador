@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -24,4 +25,8 @@ public class Buyer {
     @NotNull(message = "o nome não pode ser nulo")
     @Pattern(regexp = "^[a-zA-Z]{1,}(?: [a-zA-Z]+){0,2}$", message = "nome deve ser composto de letras")
     private String name;
+
+    @NotNull(message = "lastName não pode ser null")
+    @Size(min = 1, max = 20, message = "LastName deve possuir de 1 a 20 caracteres.")
+    private String lastName;
 }
