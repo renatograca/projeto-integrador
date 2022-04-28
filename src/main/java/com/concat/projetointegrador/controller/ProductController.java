@@ -44,7 +44,7 @@ public class ProductController {
 
 		Product product = productService.findById(id);
 
-		List<BatchStock> batchStock = batchStockService.findByProductId(product.getId(), orderBy);
+		List<BatchStock> batchStock = batchStockService.findAllByProductId(product.getId(), orderBy);
 
 		ProductResponseDTO build = ProductResponseDTO
 				.builder()

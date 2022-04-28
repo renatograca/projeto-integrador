@@ -54,8 +54,8 @@ public class BatchStockService {
         }
         return doesTheBatchStockExist.get();
     }
-	public List<BatchStock> findByProductId(Long id, String orderBy) {
-        List<BatchStock> batchStocks = batchStockRepository.findByProductId(id);
+	public List<BatchStock> findAllByProductId(Long id, String orderBy) {
+        List<BatchStock> batchStocks = batchStockRepository.findAllByProductId(id);
         batchStocks = batchStocks
                     .stream()
                     .filter(batchStock
