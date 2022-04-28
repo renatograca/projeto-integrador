@@ -1,5 +1,9 @@
 package com.concat.projetointegrador.controller;
 
+import com.concat.projetointegrador.dto.ProductDTO;
+import com.concat.projetointegrador.model.Category;
+import com.concat.projetointegrador.model.Product;
+import com.concat.projetointegrador.service.ProductService;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +44,7 @@ public class ProductController {
 
 		Product product = productService.findById(id);
 
-		List<BatchStock> batchStock = batchStockService.findByProductId(product.getId(), orderBy);
+		List<BatchStock> batchStock = batchStockService.findAllByProductId(product.getId(), orderBy);
 
 		ProductResponseDTO build = ProductResponseDTO
 				.builder()
@@ -68,10 +72,15 @@ public class ProductController {
 
 	}
 
-	@PostMapping
-	public ResponseEntity<ProductDTO> create(@RequestBody Product product) {
-		return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
-	}
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ProductDTO>> findByCategory(@PathVariable Category category) {
+        return ResponseEntity.ok(productService.findByCategory(category));
+    }
+
+    @PostMapping
+    public ResponseEntity<ProductDTO> create(@RequestBody Product product) {
+        return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
+    }
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {

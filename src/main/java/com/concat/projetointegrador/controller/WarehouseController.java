@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class WarehouseController {
     }
 
     @PostMapping("/warehouse")
-    public ResponseEntity<WarehouseDTO> create(@RequestBody Warehouse warehouse) {
+    public ResponseEntity<WarehouseDTO> create(@RequestBody @Valid Warehouse warehouse) {
         return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);
     }
 

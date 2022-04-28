@@ -34,7 +34,7 @@ public class ProductDTO {
                 .volume(product.getVolume()).build();
     }
 
-    public static List<ProductDTO> convertToListProductDTO (List<Product> listProduct){
+    public static List<ProductDTO> convertToListProductDTO(List<Product> listProduct){
         return listProduct.stream().map(product -> new ProductDTO(product.getName(), product.getVolume(),
                 product.getPrice(), product.getCategory())).collect(Collectors.toList());
     }

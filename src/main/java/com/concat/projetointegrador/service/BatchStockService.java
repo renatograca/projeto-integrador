@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.BatchStock;
+import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.BatchStockRepository;
 
 import lombok.AllArgsConstructor;
@@ -43,8 +44,18 @@ public class BatchStockService {
         batchStockRepository.deleteById(id);
     }
 
-	public List<BatchStock> findByProductId(Long id, String orderBy) {
-        List<BatchStock> batchStocks = batchStockRepository.findByProductId(id);
+    public BatchStock findByProductId(Long id, Integer quantity) {
+        Optional<BatchStock> doesTheBatchStockExist = batchStockRepository.findByProductId(id);
+        if(!doesTheBatchStockExist.isPresent()) {
+            throw new EntityNotFound("Este produto não existe");
+        }
+        if(doesTheBatchStockExist.get().getCurrentQuantity() < quantity) {
+            throw new EntityNotFound("Estoque insuficiente");
+        }
+        return doesTheBatchStockExist.get();
+    }
+	public List<BatchStock> findAllByProductId(Long id, String orderBy) {
+        List<BatchStock> batchStocks = batchStockRepository.findAllByProductId(id);
         batchStocks = batchStocks
                     .stream()
                     .filter(batchStock

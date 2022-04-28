@@ -27,21 +27,21 @@ public class SellerService {
         return sellers;
     }
 
-    public Optional<Seller> findByID(Long id) {
+    public Seller findByID(Long id) {
         Optional<Seller> seller = sellerRepository.findById(id);
-        if (seller.isEmpty()) {
-            throw new EntityNotFound("Vendedor não existe.");
+        if (seller.isPresent()) {
+        return seller.get();
         }
-        return seller;
+            throw new EntityNotFound("Vendedor não existe.");
     }
 
     public Seller update(Seller seller, Long id) {
         Optional<Seller> doesTheSellerExist = sellerRepository.findById(id);
-        if (doesTheSellerExist.isEmpty()) {
-            throw new EntityNotFound("Vendedor não existe.");
+        if (doesTheSellerExist.isPresent()) {
+            seller.setId(id);
+            return sellerRepository.save(seller);
         }
-        seller.setId(id);
-        return sellerRepository.save(seller);
+        throw new EntityNotFound("Vendedor não existe.");
     }
 
     public void delete(Long id) {
