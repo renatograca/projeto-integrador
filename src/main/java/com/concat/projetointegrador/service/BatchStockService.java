@@ -44,28 +44,23 @@ public class BatchStockService {
         batchStockRepository.deleteById(id);
     }
 
-    public BatchStock findByProductId(Long id, Integer quantity) {
-        Optional<BatchStock> doesTheBatchStockExist = batchStockRepository.findByProductId(id);
-        if(!doesTheBatchStockExist.isPresent()) {
+    public List<BatchStock> findByProductId(Long id, Integer quantity) {
+        List<BatchStock> doesTheBatchStockExist = getBatchStocks(id);
+
+        if(!doesTheBatchStockExist.isEmpty()) {
             throw new EntityNotFound("Este produto não existe");
         }
-        if(doesTheBatchStockExist.get().getCurrentQuantity() < quantity) {
+
+        Integer produtcQuantityTotal= doesTheBatchStockExist.stream().reduce(0, (acc, e) -> acc + e.getCurrentQuantity(), Integer::sum);
+
+        if(produtcQuantityTotal < quantity) {
             throw new EntityNotFound("Estoque insuficiente");
         }
-        return doesTheBatchStockExist.get();
+        return doesTheBatchStockExist;
     }
+
 	public List<BatchStock> findAllByProductId(Long id, String orderBy) {
-        List<BatchStock> batchStocks = batchStockRepository.findAllByProductId(id);
-        batchStocks = batchStocks
-                    .stream()
-                    .filter(batchStock
-                                    -> (ChronoUnit.WEEKS.between(
-                                    LocalDate.now(),
-                                    batchStock.getDueDate()
-                            ) >= 3) && (
-                                    batchStock.getCurrentQuantity() > 0
-                            )
-                    ).collect(Collectors.toList());
+        List<BatchStock> batchStocks = getBatchStocks(id);
 
         if (batchStocks.isEmpty()) {
             throw new EntityNotFound("Não foi encontrado nenhum lote para esse produto!");
@@ -94,4 +89,19 @@ public class BatchStockService {
 
         return batchStocks;
 	}
+
+    private List<BatchStock> getBatchStocks(Long id) {
+        List<BatchStock> batchStocks = batchStockRepository.findAllByProductId(id);
+        batchStocks = batchStocks
+                    .stream()
+                    .filter(batchStock
+                                    -> (ChronoUnit.WEEKS.between(
+                                    LocalDate.now(),
+                                    batchStock.getDueDate()
+                            ) >= 3) && (
+                                    batchStock.getCurrentQuantity() > 0
+                            )
+                    ).collect(Collectors.toList());
+        return batchStocks;
+    }
 }

@@ -12,9 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,11 +32,10 @@ public class PurchasedOrderService {
         purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
         for (Cart cart : purchasedOrder.getCart()) {
 
-            BatchStock batchStock = batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity());
-            carts.add(Cart.builder().products(batchStock.getProduct()).quantity(cart.getQuantity()).purchasedOrder(purchasedOrder).build());
-            total = total.add(batchStock.getProduct().getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
-
-
+            List<BatchStock> batchStock = batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity());
+            total = total.add(batchStock.get(0).getProduct().getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
+            carts.add(Cart.builder().products(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
+                    .purchasedOrder(purchasedOrder).build());
         }
         carts = cartRepository.saveAll(carts);
         purchasedOrder.setCart(carts);
@@ -64,12 +61,34 @@ public class PurchasedOrderService {
         if (!purchasedOrder.get().getStatus().equals("aberto")) {
             throw new RuntimeException("Este pedido já está finalizado");
         }
-        purchasedOrder.get().getCart().stream().forEach(cart -> batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity()));
+
+        Map<Long, Integer> map = new HashMap<>();
+
+        for (Cart cart : purchasedOrder.get().getCart()) {
+            List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
+            Integer productQuantityTotal = batchStocks.stream().
+                    reduce(0, (acc, e) -> acc + e.getCurrentQuantity(), Integer::sum);
+
+            if (productQuantityTotal < cart.getQuantity()) {
+                throw new RuntimeException("A quantidade do produto não é suficiente");
+            }
+
+            for (BatchStock batchStock : batchStocks) {
+                cart.getQuantity() - batchStock.getCurrentQuantity()
+            }
+        }
+
+            for (Cart cart : purchasedOrder.get().getCart()) {
+                List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
+                i
+            }
+
+            purchasedOrder.get().getCart().stream().forEach(e -> batchStockService.findByProductId(e.getProducts()
+                    .getId(), e.getQuantity()));
 
         purchasedOrder.get().setStatus("finalizado");
         return purchasedOrderRepository.save(purchasedOrder.get());
 
 
     }
-
 }
