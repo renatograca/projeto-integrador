@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,5 +25,6 @@ public class Cart {
     private Product products;
 
     @ManyToOne
+    @JsonIgnore
     private PurchasedOrder purchasedOrder;
 }

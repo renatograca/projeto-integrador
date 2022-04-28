@@ -6,9 +6,7 @@ import com.concat.projetointegrador.service.PurchasedOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PurchaseOrderController {
@@ -19,5 +17,10 @@ public class PurchaseOrderController {
     @PostMapping("/purchasedOrder")
     public ResponseEntity<PurchasedOrderDTO> create(@RequestBody PurchasedOrder purchasedOrder) {
         return new ResponseEntity<>(purchaseOrderService.create(purchasedOrder), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/purchasedOrder")
+    public ResponseEntity<PurchasedOrder> findById(@RequestParam Long id) {
+        return ResponseEntity.ok(purchaseOrderService.findById(id));
     }
 }

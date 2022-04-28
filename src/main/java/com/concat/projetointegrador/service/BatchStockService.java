@@ -3,6 +3,7 @@ package com.concat.projetointegrador.service;
 import com.concat.projetointegrador.dto.ProductDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.BatchStock;
+import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.BatchStockRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class BatchStockService {
         batchStockRepository.deleteById(id);
     }
 
-    public void findByProductId(Long id, Integer quantity) {
+    public BatchStock findByProductId(Long id, Integer quantity) {
         Optional<BatchStock> doesTheBatchStockExist = batchStockRepository.findByProductId(id);
         if(!doesTheBatchStockExist.isPresent()) {
             throw new EntityNotFound("Este produto não existe");
@@ -46,5 +47,6 @@ public class BatchStockService {
         if(doesTheBatchStockExist.get().getCurrentQuantity() < quantity) {
             throw new EntityNotFound("Estoque insuficiente");
         }
+        return doesTheBatchStockExist.get();
     }
 }

@@ -1,16 +1,19 @@
 package com.concat.projetointegrador.dto;
 
+import com.concat.projetointegrador.model.Cart;
 import com.concat.projetointegrador.model.Product;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartDTO {
+public class CartResponseDTO {
 
-    private Product product;
+    private List<CartDTO> carts;
 
-    private Integer quantity;
+
 }
