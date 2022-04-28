@@ -47,7 +47,7 @@ public class BatchStockService {
     public List<BatchStock> findByProductId(Long id, Integer quantity) {
         List<BatchStock> doesTheBatchStockExist = getBatchStocks(id);
 
-        if(!doesTheBatchStockExist.isEmpty()) {
+        if(doesTheBatchStockExist.isEmpty()) {
             throw new EntityNotFound("Este produto não existe");
         }
 

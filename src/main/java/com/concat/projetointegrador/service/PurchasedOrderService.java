@@ -1,11 +1,11 @@
 package com.concat.projetointegrador.service;
 
-import com.concat.projetointegrador.dto.CartDTO;
 import com.concat.projetointegrador.dto.PurchasedOrderDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.Cart;
 import com.concat.projetointegrador.model.PurchasedOrder;
+import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.CartRepository;
 import com.concat.projetointegrador.repository.PurchasedOrderRepository;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,11 +24,11 @@ public class PurchasedOrderService {
     private CartRepository cartRepository;
     private BuyerService buyerService;
 
+
     public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) {
         buyerService.findById(purchasedOrder.getBuyer().getId());
         List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
-        purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
         for (Cart cart : purchasedOrder.getCart()) {
 
             List<BatchStock> batchStock = batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity());
@@ -37,6 +36,7 @@ public class PurchasedOrderService {
             carts.add(Cart.builder().products(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
                     .purchasedOrder(purchasedOrder).build());
         }
+        purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
         carts = cartRepository.saveAll(carts);
         purchasedOrder.setCart(carts);
         PurchasedOrderDTO purchasedOrderDTO = PurchasedOrderDTO.builder().price(total).build();
@@ -62,9 +62,32 @@ public class PurchasedOrderService {
             throw new RuntimeException("Este pedido já está finalizado");
         }
 
-        Map<Long, Integer> map = new HashMap<>();
 
-        for (Cart cart : purchasedOrder.get().getCart()) {
+
+        validateQuantityInBatchStock(purchasedOrder.get());
+
+        purchasedOrder.get().getCart().forEach(cart -> {
+            List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
+            batchStocks.forEach(batchStock -> {
+                if(batchStock.getCurrentQuantity() >= cart.getQuantity()) {
+                    batchStock.setCurrentQuantity(batchStock.getCurrentQuantity() - cart.getQuantity());
+                    cart.setQuantity(0);
+                } else {
+                    cart.setQuantity(cart.getQuantity() - batchStock.getCurrentQuantity());
+                    batchStock.setCurrentQuantity(0);
+                }
+                batchStockService.create(batchStock);
+            });
+        });
+
+
+        purchasedOrder.get().setStatus("finalizado");
+        return purchasedOrderRepository.save(purchasedOrder.get());
+
+    }
+
+    private void validateQuantityInBatchStock(PurchasedOrder purchasedOrder) {
+        for (Cart cart : purchasedOrder.getCart()) {
             List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
             Integer productQuantityTotal = batchStocks.stream().
                     reduce(0, (acc, e) -> acc + e.getCurrentQuantity(), Integer::sum);
@@ -73,22 +96,6 @@ public class PurchasedOrderService {
                 throw new RuntimeException("A quantidade do produto não é suficiente");
             }
 
-            for (BatchStock batchStock : batchStocks) {
-                cart.getQuantity() - batchStock.getCurrentQuantity()
-            }
         }
-
-            for (Cart cart : purchasedOrder.get().getCart()) {
-                List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
-                i
-            }
-
-            purchasedOrder.get().getCart().stream().forEach(e -> batchStockService.findByProductId(e.getProducts()
-                    .getId(), e.getQuantity()));
-
-        purchasedOrder.get().setStatus("finalizado");
-        return purchasedOrderRepository.save(purchasedOrder.get());
-
-
     }
 }

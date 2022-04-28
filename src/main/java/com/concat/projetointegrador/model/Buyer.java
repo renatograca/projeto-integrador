@@ -29,8 +29,8 @@ public class Buyer {
     @NotNull(message = "lastName não pode ser nulo")
     @Size(min = 1, max = 20, message = "lastName deve possuir de 1 a 20 caracteres")
     private String lastName;
-
-    @NotNull(message = "cpf não pode ser nulo")
-    @Size(min = 11, max = 11, message = "cpf deve possuir 11 caracteres")
+//        TODO
+//    @NotNull(message = "cpf não pode ser nulo")
+//    @Size(min = 11, max = 11, message = "cpf deve possuir 11 caracteres")
     private Long cpf;
 }
