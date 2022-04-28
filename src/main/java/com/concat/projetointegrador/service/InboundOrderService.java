@@ -32,7 +32,7 @@ public class InboundOrderService {
 
 	private List<Validator> validators;
 
-	public void initializeValidators(InboundOrder order) {
+	private void initializeValidators(InboundOrder order) {
 		this.validators = Arrays.asList(
 				new SectorCapacityValidate(order, batchStockRepository),
 				new SectorCategoryMatchValidate(order)
@@ -57,9 +57,7 @@ public class InboundOrderService {
 		validators.forEach(Validator::validate);
 
 		InboundOrder newInboundOrder = repository.save(order);
-		order.getBatchStock().forEach(e-> {
-				e.setInboundOrder(newInboundOrder);
-		});
+		order.getBatchStock().forEach(e-> e.setInboundOrder(newInboundOrder));
 
 		List<BatchStock> newBatchStocks = batchStockRepository.saveAll(newInboundOrder.getBatchStock());
 
