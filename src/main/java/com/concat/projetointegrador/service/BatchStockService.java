@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.concat.projetointegrador.dto.BatchStockFilterDTO;
 import org.springframework.stereotype.Service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
@@ -29,15 +30,19 @@ public class BatchStockService {
     }
 
     public List<BatchStock> findAll() {
-        List<BatchStock> listBatchStock = batchStockRepository.findAll();
-        return listBatchStock;
+        return batchStockRepository.findAll();
     }
 
-    public List<BatchStock> filterBatchStocksThatExpireInXDays(int numberOfDays) {
+    public List<BatchStockFilterDTO> filterBatchStocksThatExpireInXDays(int numberOfDays) {
         LocalDate expireTilDate = LocalDate.now().plusDays(numberOfDays);
-        return findAll()
+        List<BatchStock> batchStockList = findAll()
                 .stream()
                 .filter(batchStock -> expireTilDate.isAfter(batchStock.getDueDate()))
+                .collect(Collectors.toList());
+
+        return batchStockList
+                .stream()
+                .map(BatchStockFilterDTO::convertToDTO)
                 .collect(Collectors.toList());
     }
 

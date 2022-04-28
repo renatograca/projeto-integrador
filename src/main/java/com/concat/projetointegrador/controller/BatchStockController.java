@@ -37,12 +37,7 @@ public class BatchStockController {
     public ResponseEntity<List<BatchStockFilterDTO>> filter(
             @RequestParam int days
     ) {
-        List<BatchStock> batchStockList = batchStockService.filterBatchStocksThatExpireInXDays(days);
-        List<BatchStockFilterDTO> batchStockFilterDTOList = batchStockList
-                .stream()
-                .map(BatchStockFilterDTO::convertToDTO)
-                .collect(Collectors.toList());
-
+        List<BatchStockFilterDTO> batchStockFilterDTOList = batchStockService.filterBatchStocksThatExpireInXDays(days);
         return ResponseEntity.status(HttpStatus.OK).body(batchStockFilterDTOList);
     }
 
