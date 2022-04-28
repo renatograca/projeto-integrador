@@ -1,7 +1,11 @@
 package com.concat.projetointegrador.service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -39,7 +43,44 @@ public class BatchStockService {
         batchStockRepository.deleteById(id);
     }
 
-	public List<BatchStock> findByProductId(Long id) {
-		return batchStockRepository.findByProductId(id);
+	public List<BatchStock> findByProductId(Long id, String orderBy) {
+        List<BatchStock> batchStocks = batchStockRepository.findByProductId(id);
+        batchStocks = batchStocks
+                    .stream()
+                    .filter(batchStock
+                                    -> (ChronoUnit.WEEKS.between(
+                                    LocalDate.now(),
+                                    batchStock.getDueDate()
+                            ) >= 3) && (
+                                    batchStock.getCurrentQuantity() > 0
+                            )
+                    ).collect(Collectors.toList());
+
+        if (batchStocks.isEmpty()) {
+            throw new EntityNotFound("Não foi encontrado nenhum lote para esse produto!");
+        }
+        if(orderBy == null) {
+            orderBy = "";
+        }
+
+        switch (orderBy) {
+            case "L":
+                return batchStocks
+                        .stream()
+                        .sorted(Comparator.comparing(BatchStock::getId))
+                        .collect(Collectors.toList());
+            case "C":
+                return batchStocks
+                        .stream()
+                        .sorted(Comparator.comparing(BatchStock::getCurrentQuantity))
+                        .collect(Collectors.toList());
+            case "F":
+                return batchStocks
+                        .stream()
+                        .sorted(Comparator.comparing(BatchStock::getDueDate))
+                        .collect(Collectors.toList());
+        }
+
+        return batchStocks;
 	}
 }
