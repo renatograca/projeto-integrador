@@ -7,11 +7,13 @@ import java.util.Optional;
 
 import com.concat.projetointegrador.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BatchStockRepository extends JpaRepository<BatchStock, Long> {
 
-	List<BatchStock> findAllByInboundOrderSectorId(Long id);
-    Optional<List<BatchStock>> findAllByProductId(Long productId);
+    List<BatchStock> findAllByInboundOrderSectorId(Long id);
+
+    List<BatchStock> findAllByProductId(Long productId);
 }

@@ -40,6 +40,8 @@ public class BatchStockService {
     }
 
     public List<BatchStock> findAllByProductId(Long productId) {
-        return batchStockRepository.findAllByProductId(productId).orElseThrow(() -> new EntityNotFound("Não encontrado!"));
+        List<BatchStock> batchStocks = batchStockRepository.findAllByProductId(productId);
+        if(batchStocks.isEmpty()) throw new EntityNotFound("Não encontrado!");
+        return batchStocks;
     }
 }

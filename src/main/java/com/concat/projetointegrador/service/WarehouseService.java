@@ -1,15 +1,21 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.dto.WarehouseDTO;
+import com.concat.projetointegrador.dto.WarehouseQuantityProductDTO;
+import com.concat.projetointegrador.dto.WarehouseResponseForQuantityProductsDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.Warehouse;
 import com.concat.projetointegrador.repository.WarehouseRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +40,21 @@ public class WarehouseService {
         }
 
         return WarehouseDTO.convertToListWarehouse(listWarehouse);
+    }
+
+    public List<WarehouseQuantityProductDTO> findAllProductForWarehouse(List<BatchStock> batchProducts, InboundOrderService inboundOrderService) {
+        List<WarehouseQuantityProductDTO> warehouseQuantityProductDTOList = new ArrayList<>();
+        List<WarehouseQuantityProductDTO> warehouseQuantityProductDTOs = batchProducts.stream().map(batchStock -> WarehouseQuantityProductDTO.map(
+                batchStock.getCurrentQuantity(),
+                inboundOrderService.findById(batchStock.getInboundOrder().getId()).getSector().getId()
+        )).collect(Collectors.toList());
+        Map<Long, Integer> sumQuantityForWarehouse = WarehouseResponseForQuantityProductsDTO.sumQuantityForWarehouse(warehouseQuantityProductDTOs);
+
+        sumQuantityForWarehouse.forEach((k,v) -> {
+            warehouseQuantityProductDTOList.add(WarehouseQuantityProductDTO.builder().warehouseCode(k).totalQuantity(v).build());
+        });
+
+        return warehouseQuantityProductDTOList;
     }
 
     @Transactional

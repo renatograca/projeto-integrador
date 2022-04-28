@@ -2,6 +2,7 @@ package com.concat.projetointegrador.controller;
 
 import com.concat.projetointegrador.dto.WarehouseDTO;
 import com.concat.projetointegrador.dto.WarehouseQuantityProductDTO;
+import com.concat.projetointegrador.dto.WarehouseResponseForQuantityProductsDTO;
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.Warehouse;
 import com.concat.projetointegrador.service.BatchStockService;
@@ -14,7 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -42,17 +46,16 @@ public class WarehouseController {
         return ResponseEntity.ok(warehouseService.findAll());
     }
 
+
     @GetMapping("/fresh-products/warehouse")
-    public ResponseEntity<List<BatchStock>> findAllProductForWarehouse(@RequestParam(value = "querytype") Long productId) {
+    public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "querytype") Long productId) {
         List<BatchStock> batchProducts = batchStockService.findAllByProductId(productId);
+        List<WarehouseQuantityProductDTO> allProductForWarehouse = warehouseService.findAllProductForWarehouse(batchProducts, inboundOrderService);
+        WarehouseResponseForQuantityProductsDTO build = WarehouseResponseForQuantityProductsDTO.builder().productId(productId).warehouses(allProductForWarehouse).build();
 
-        Stream<WarehouseQuantityProductDTO> warehouseQuantityProductDTOs = batchProducts.stream().map(batchStock -> WarehouseQuantityProductDTO.map(
-                batchStock.getCurrentQuantity(),
-                inboundOrderService.findById(batchStock.getInboundOrder().getId()).getSector().getId()
-        ));
-
-        return ResponseEntity.ok(batchProducts);
+        return ResponseEntity.ok(build);
     }
+
     @PostMapping("/warehouse")
     public ResponseEntity<WarehouseDTO> create(@RequestBody Warehouse warehouse) {
         return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);

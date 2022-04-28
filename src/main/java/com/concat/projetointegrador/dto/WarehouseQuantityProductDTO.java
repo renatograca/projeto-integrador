@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -13,6 +15,7 @@ import lombok.Setter;
 public class WarehouseQuantityProductDTO {
     private Long warehouseCode;
     private Integer totalQuantity;
+
 
     public static WarehouseQuantityProductDTO map(Integer quantity, Long warehouseId) {
         return WarehouseQuantityProductDTO.builder().warehouseCode(warehouseId).totalQuantity(quantity).build();
