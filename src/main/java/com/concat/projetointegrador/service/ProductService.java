@@ -17,10 +17,11 @@ import java.util.Optional;
 public class ProductService {
 
     private ProductRepository productRepository;
+    private SellerService sellerService;
 
     public ProductDTO findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        if(product.isPresent()){
+        if (product.isPresent()) {
             ProductDTO productDTO = ProductDTO.convertToProductDTO(product.get());
             return productDTO;
         } else {
@@ -31,10 +32,9 @@ public class ProductService {
     public List<ProductDTO> findAll() {
         List<Product> listProduct = productRepository.findAll();
 
-        if(listProduct.isEmpty()) {
+        if (listProduct.isEmpty()) {
             throw new EntityNotFound("Não existem produtos cadastrados.");
         }
-
         List<ProductDTO> listDTO = ProductDTO.convertToListProduct(listProduct);
         return listDTO;
     }
@@ -44,10 +44,11 @@ public class ProductService {
         Optional<Product> productOpt = productRepository.findByName(product.getName());
         if (productOpt.isPresent()) {
             throw new EntityNotFound("Esse produto já existe!"); // criar uma classe de erro especificaa
-        } else {
-            ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
-            return productDTO;
         }
+        product.setSeller(sellerService.findByID(product.getSeller().getId()));
+        ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
+        return productDTO;
+
     }
 
     public void delete(Long id) {
