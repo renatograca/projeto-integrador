@@ -36,9 +36,10 @@ public class BatchStockService {
         return batchStockRepository.findAll();
     }
 
-    public List<BatchStockFilterDTO> filterBatchStocksThatExpireInXDays(
+    public List<BatchStockFilterDTO> filterBatchStocks(
             List<InboundOrder> inboundOrderList,
             int numberOfDays,
+            String category,
             Integer asc
     ) throws InvalidParameterException {
         LocalDate expireTilDate = LocalDate.now().plusDays(numberOfDays);
@@ -55,6 +56,15 @@ public class BatchStockService {
                 .map(BatchStockFilterDTO::convertToDTO)
                 .sorted(Comparator.comparing(BatchStockFilterDTO::getDueDate))
                 .collect(Collectors.toList());
+
+        if (category != null ) {
+            batchStockFilterDTOList = batchStockFilterDTOList
+                        .stream()
+                        .filter(
+                                batchStock -> batchStock.getCategory().equalsIgnoreCase(category)
+                        )
+                        .collect(Collectors.toList());
+        }
 
         if(asc != null && asc == 0) {
             return batchStockFilterDTOList

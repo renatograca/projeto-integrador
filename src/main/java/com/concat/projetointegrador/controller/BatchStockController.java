@@ -3,7 +3,6 @@ package com.concat.projetointegrador.controller;
 import com.concat.projetointegrador.dto.BatchStockFilterDTO;
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
-import com.concat.projetointegrador.model.Sector;
 import com.concat.projetointegrador.service.BatchStockService;
 import com.concat.projetointegrador.service.InboundOrderService;
 import com.concat.projetointegrador.service.SectorService;
@@ -12,10 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/batchstock")
@@ -49,12 +46,13 @@ public class BatchStockController {
     public ResponseEntity<List<BatchStockFilterDTO>> filter(
             @RequestParam int days,
             @RequestParam Long sectorId,
+            @RequestParam(required = false) String category,
             @RequestParam(required = false) Integer asc
     ) throws InvalidParameterException {
         sectorService.findById(sectorId);
         List<InboundOrder> inboundOrderList = inboundOrderService.findBySectorId(sectorId);
         List<BatchStockFilterDTO> batchStockFilterDTOList = batchStockService
-                .filterBatchStocksThatExpireInXDays(inboundOrderList,days, asc);
+                .filterBatchStocks(inboundOrderList,days, category, asc);
         return ResponseEntity.status(HttpStatus.OK).body(batchStockFilterDTOList);
     }
 
