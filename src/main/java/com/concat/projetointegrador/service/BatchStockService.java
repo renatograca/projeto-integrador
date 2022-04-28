@@ -1,6 +1,7 @@
 package com.concat.projetointegrador.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +44,9 @@ public class BatchStockService {
         return batchStockList
                 .stream()
                 .map(BatchStockFilterDTO::convertToDTO)
+                .collect(Collectors.toList())
+                .stream()
+                .sorted(Comparator.comparing(BatchStockFilterDTO::getDueDate))
                 .collect(Collectors.toList());
     }
 
