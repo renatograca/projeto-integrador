@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.service;
 
+import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.Sector;
 import com.concat.projetointegrador.repository.SectorRepository;
 
@@ -27,7 +28,7 @@ public class SectorService {
     }
 
     public Sector findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Setor não encontrado! Tente outro ID ou crie um novo Setor!"));
+        return repository.findById(id).orElseThrow(() -> new EntityNotFound("Setor não encontrado! Tente outro ID ou crie um novo Setor!"));
     }
 
     public void delete(Long id) {
