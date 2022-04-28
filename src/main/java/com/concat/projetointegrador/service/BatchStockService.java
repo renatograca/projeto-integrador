@@ -38,4 +38,8 @@ public class BatchStockService {
     public void delete(Long id) {
         batchStockRepository.deleteById(id);
     }
+
+    public List<BatchStock> findAllByProductId(Long productId) {
+        return batchStockRepository.findAllByProductId(productId).orElseThrow(() -> new EntityNotFound("Não encontrado!"));
+    }
 }
