@@ -23,4 +23,10 @@ public class PurchaseOrderController {
     public ResponseEntity<PurchasedOrder> findById(@RequestParam Long id) {
         return ResponseEntity.ok(purchaseOrderService.findById(id));
     }
+
+    @PutMapping("/purchasedOrder")
+    public ResponseEntity<PurchasedOrder> update(@RequestParam Long id) {
+        return ResponseEntity.ok(purchaseOrderService.update(id));
+    }
+
 }

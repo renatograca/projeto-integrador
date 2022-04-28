@@ -29,14 +29,16 @@ public class PurchasedOrderService {
 
     public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) {
         buyerService.findById(purchasedOrder.getBuyer().getId());
-        List<Cart> carts =  new ArrayList<>();
+        List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
         purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
-        for (Cart cart: purchasedOrder.getCart()) {
+        for (Cart cart : purchasedOrder.getCart()) {
 
             BatchStock batchStock = batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity());
             carts.add(Cart.builder().products(batchStock.getProduct()).quantity(cart.getQuantity()).purchasedOrder(purchasedOrder).build());
             total = total.add(batchStock.getProduct().getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
+
+
         }
         carts = cartRepository.saveAll(carts);
         purchasedOrder.setCart(carts);
@@ -51,5 +53,23 @@ public class PurchasedOrderService {
             return purchasedOrderOpt.get();
         }
         throw new EntityNotFound("Pedido não existe");
+
     }
+
+    public PurchasedOrder update(Long id) {
+        Optional<PurchasedOrder> purchasedOrder = purchasedOrderRepository.findById(id);
+        if (!purchasedOrder.isPresent()) {
+            throw new EntityNotFound("O pedido não existe");
+        }
+        if (!purchasedOrder.get().getStatus().equals("aberto")) {
+            throw new RuntimeException("Este pedido já está finalizado");
+        }
+        purchasedOrder.get().getCart().stream().forEach(cart -> batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity()));
+
+        purchasedOrder.get().setStatus("finalizado");
+        return purchasedOrderRepository.save(purchasedOrder.get());
+
+
+    }
+
 }
