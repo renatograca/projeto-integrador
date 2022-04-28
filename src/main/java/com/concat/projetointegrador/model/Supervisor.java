@@ -19,5 +19,5 @@ public class Supervisor {
     @NotNull(message = "'name' não pode ser nulo")
     private String name;
     @NotNull(message = "'lastname' não pode ser nulo")
-    private String lastname;
+    private String lastName;
 }

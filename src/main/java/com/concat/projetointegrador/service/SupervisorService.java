@@ -32,7 +32,7 @@ public class SupervisorService {
     public Supervisor update(Long id, SupervisorDTO supervisor) {
         Supervisor supervisorModel = supervisorRepository.findById(id).orElse(new Supervisor());
         supervisorModel.setName(supervisor.getName());
-        supervisorModel.setLastname(supervisor.getLastname());
+        supervisorModel.setLastName(supervisor.getLastname());
         return supervisorRepository.save(supervisorModel);
     }
 }

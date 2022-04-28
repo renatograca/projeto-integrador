@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class WarehouseController {
 
     @GetMapping("/fresh-products/warehouse")
     public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "querytype") Long productId) {
-        List<BatchStock> batchProducts = batchStockService.findAllByProductId(productId);
+        List<BatchStock> batchProducts = batchStockService.findAllByProductId(productId, null);
         List<WarehouseQuantityProductDTO> allProductForWarehouse = warehouseService.findAllProductForWarehouse(batchProducts, inboundOrderService);
         WarehouseResponseForQuantityProductsDTO build = WarehouseResponseForQuantityProductsDTO.builder().productId(productId).warehouses(allProductForWarehouse).build();
 
@@ -57,7 +58,7 @@ public class WarehouseController {
     }
 
     @PostMapping("/warehouse")
-    public ResponseEntity<WarehouseDTO> create(@RequestBody Warehouse warehouse) {
+    public ResponseEntity<WarehouseDTO> create(@RequestBody @Valid Warehouse warehouse) {
         return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);
     }
 
