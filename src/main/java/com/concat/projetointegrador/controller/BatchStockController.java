@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.controller;
 
+import com.concat.projetointegrador.dto.BatchStockFilterDTO;
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.service.BatchStockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/batchstock")
@@ -29,6 +31,19 @@ public class BatchStockController {
     @PostMapping
     public ResponseEntity<BatchStock> create(@RequestBody BatchStock batchStock) {
         return new ResponseEntity<>(batchStockService.create(batchStock), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/duedate")
+    public ResponseEntity<List<BatchStockFilterDTO>> filter(
+            @RequestParam int days
+    ) {
+        List<BatchStock> batchStockList = batchStockService.filterBatchStocksThatExpireInXDays(days);
+        List<BatchStockFilterDTO> batchStockFilterDTOList = batchStockList
+                .stream()
+                .map(BatchStockFilterDTO::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(batchStockFilterDTOList);
     }
 
     @DeleteMapping("/{id}")
