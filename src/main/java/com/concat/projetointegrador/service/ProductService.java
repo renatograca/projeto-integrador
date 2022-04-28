@@ -34,7 +34,7 @@ public class ProductService {
         if (listProduct.isEmpty()) {
             throw new EntityNotFound("Não existem produtos cadastrados.");
         }
-        List<ProductDTO> listDTO = ProductDTO.convertToListProduct(listProduct);
+        List<ProductDTO> listDTO = ProductDTO.convertToListProductDTO(listProduct);
         return listDTO;
     }
 
@@ -70,7 +70,7 @@ public class ProductService {
 
     public List<ProductDTO> findByCategory(Category category) {
         List<Product> products = productRepository.findByCategory(category);
-        List<ProductDTO> productsDTO = ProductDTO.convertToListProduct(products);
+        List<ProductDTO> productsDTO = ProductDTO.convertToListProductDTO(products);
         return productsDTO;
     }
 }
