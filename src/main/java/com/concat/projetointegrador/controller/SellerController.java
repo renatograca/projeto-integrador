@@ -34,8 +34,8 @@ public class SellerController {
     }
 
     @GetMapping("/seller/{id}")
-    public ResponseEntity<Optional<Seller>> findByID(@PathVariable Long id) {//validar se é numero
-        Optional<Seller> seller = sellerService.findByID(id);
+    public ResponseEntity<Seller> findByID(@PathVariable Long id) {
+        Seller seller = sellerService.findByID(id);
         return ResponseEntity.ok(seller);
     }
 

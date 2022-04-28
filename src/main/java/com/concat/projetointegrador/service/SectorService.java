@@ -1,6 +1,8 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.dto.SectorRequestDTO;
+import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Sector;
 import com.concat.projetointegrador.repository.SectorRepository;
 
@@ -33,5 +35,9 @@ public class SectorService {
 
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    public Sector findByCategory(Category category) {
+        return repository.findByCategory(category);
     }
 }

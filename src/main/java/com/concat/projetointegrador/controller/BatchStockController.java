@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.InvalidParameterException;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -38,7 +39,7 @@ public class BatchStockController {
     }
 
     @PostMapping
-    public ResponseEntity<BatchStock> create(@RequestBody BatchStock batchStock) {
+    public ResponseEntity<BatchStock> create(@RequestBody @Valid BatchStock batchStock) {
         return new ResponseEntity<>(batchStockService.create(batchStock), HttpStatus.CREATED);
     }
 
