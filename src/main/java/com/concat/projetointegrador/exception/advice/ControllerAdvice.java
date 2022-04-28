@@ -18,12 +18,14 @@ public class ControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorDTO> objectNotFound(Exception e) {
+        e.printStackTrace();
         ErrorDTO errorDTO = new ErrorDTO(NOT_FOUND, e.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDTO> handleValidationExceptions(MethodArgumentNotValidException e) {
+        e.printStackTrace();
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
         List<String> results = new ArrayList<>();
         errors.forEach(x -> results.add(x.getDefaultMessage()));

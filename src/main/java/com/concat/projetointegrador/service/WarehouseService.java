@@ -51,7 +51,7 @@ public class WarehouseService {
         Warehouse warehouse = warehouseRepository.findById(id).orElseThrow(() -> new EntityNotFound("Este armazém não existe!"));
 
         warehouse.setName(warehouseModel.getName());
-        warehouse.setRegiao(warehouseModel.getRegiao());
+        warehouse.setRegion(warehouseModel.getRegion());
 
         warehouseRepository.save(warehouse);
 

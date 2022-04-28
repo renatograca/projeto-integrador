@@ -19,11 +19,10 @@ public class ProductService {
     private ProductRepository productRepository;
     private SellerService sellerService;
 
-    public ProductDTO findById(Long id) {
+    public Product findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        if (product.isPresent()) {
-            ProductDTO productDTO = ProductDTO.convertToProductDTO(product.get());
-            return productDTO;
+        if(product.isPresent()){
+            return product.get();
         } else {
             throw new EntityNotFound("O produto não foi encontrado!!");
         }
