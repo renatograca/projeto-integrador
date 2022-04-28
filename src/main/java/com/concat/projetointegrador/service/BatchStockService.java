@@ -1,7 +1,9 @@
 package com.concat.projetointegrador.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,14 @@ public class BatchStockService {
     public List<BatchStock> findAll() {
         List<BatchStock> listBatchStock = batchStockRepository.findAll();
         return listBatchStock;
+    }
+
+    public List<BatchStock> filterBatchStocksThatExpireInXDays(int numberOfDays) {
+        LocalDate expireTilDate = LocalDate.now().plusDays(numberOfDays);
+        return findAll()
+                .stream()
+                .filter(batchStock -> expireTilDate.isAfter(batchStock.getDueDate()))
+                .collect(Collectors.toList());
     }
 
     public BatchStock create(BatchStock batchStock) {
