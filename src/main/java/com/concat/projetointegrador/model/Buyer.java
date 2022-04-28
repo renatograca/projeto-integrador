@@ -32,5 +32,5 @@ public class Buyer {
 
     @NotNull(message = "cpf não pode ser nulo")
     @Size(min = 11, max = 11, message = "cpf deve possuir 11 caracteres")
-    private Integer cpf;
+    private Long cpf;
 }

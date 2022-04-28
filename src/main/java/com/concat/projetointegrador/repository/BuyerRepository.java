@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface BuyerRepository extends JpaRepository<Buyer, Long> {
-    Optional<Buyer> findByCpf(Integer cpf);
+    Optional<Buyer> findByCpf(Long cpf);
 
 
 }
