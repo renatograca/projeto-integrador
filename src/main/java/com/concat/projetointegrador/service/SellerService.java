@@ -15,18 +15,6 @@ public class SellerService {
 
     private SellerRepository sellerRepository;
 
-    public Seller create(Seller seller) {
-        return sellerRepository.save(seller);
-    }
-
-    public List<Seller> findAll() {
-        List<Seller> sellers = sellerRepository.findAll();
-        if (sellers.isEmpty()) {
-            throw new EntityNotFound("Vendedor não existe.");
-        }
-        return sellers;
-    }
-
     public Seller findByID(Long id) {
         Optional<Seller> seller = sellerRepository.findById(id);
         if (seller.isPresent()) {
@@ -35,16 +23,4 @@ public class SellerService {
             throw new EntityNotFound("Vendedor não existe.");
     }
 
-    public Seller update(Seller seller, Long id) {
-        Optional<Seller> doesTheSellerExist = sellerRepository.findById(id);
-        if (doesTheSellerExist.isPresent()) {
-            seller.setId(id);
-            return sellerRepository.save(seller);
-        }
-        throw new EntityNotFound("Vendedor não existe.");
-    }
-
-    public void delete(Long id) {
-        sellerRepository.deleteById(id);
-    }
 }

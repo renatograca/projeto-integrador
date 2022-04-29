@@ -25,17 +25,13 @@ public class BatchStockService {
 
     private BatchStockRepository batchStockRepository;
 
-    public BatchStock findById(Long id) {
+    public BatchStock findById(Long id) {// usado
         Optional<BatchStock> batchStock = batchStockRepository.findById(id);
         if(batchStock.isPresent()){
             return batchStock.get();
         } else {
             throw new EntityNotFound("O estoque não foi encontrado!!");
         }
-    }
-
-    public List<BatchStock> findAll() {
-        return batchStockRepository.findAll();
     }
 
     public List<BatchStockFilterDTO> filterBatchStocks(
@@ -84,9 +80,6 @@ public class BatchStockService {
         return batchStockRepository.save(batchStock);
     }
 
-    public void delete(Long id) {
-        batchStockRepository.deleteById(id);
-    }
 
     public List<BatchStock> findByProductId(Long id, Integer quantity) {
         List<BatchStock> doesTheBatchStockExist = getBatchStocks(id);

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class WarehouseService {
     private WarehouseRepository warehouseRepository;
 
-    public WarehouseDTO findById(Long id) {
+    public WarehouseDTO findById(Long id) { //usado
         Optional<Warehouse> warehouse = warehouseRepository.findById(id);
 
         if(warehouse.isEmpty()) {
@@ -30,16 +30,6 @@ public class WarehouseService {
         }
 
         return WarehouseDTO.convertToWarehouseDTO(warehouse.get());
-    }
-
-    public List<WarehouseDTO> findAll() {
-        List<Warehouse> listWarehouse = warehouseRepository.findAll();
-
-        if(listWarehouse.isEmpty()) {
-            throw new RuntimeException("Não existem armazéns registados!");
-        }
-
-        return WarehouseDTO.convertToListWarehouse(listWarehouse);
     }
 
     public List<WarehouseQuantityProductDTO> findAllProductForWarehouse(List<BatchStock> batchProducts, InboundOrderService inboundOrderService) {
@@ -68,18 +58,4 @@ public class WarehouseService {
         return WarehouseDTO.convertToWarehouseDTO(warehouseRepository.save(warehouseModel));
     }
 
-    public WarehouseDTO update(Warehouse warehouseModel, Long id) {
-        Warehouse warehouse = warehouseRepository.findById(id).orElseThrow(() -> new EntityNotFound("Este armazém não existe!"));
-
-        warehouse.setName(warehouseModel.getName());
-        warehouse.setRegion(warehouseModel.getRegion());
-
-        warehouseRepository.save(warehouse);
-
-        return WarehouseDTO.convertToWarehouseDTO(warehouseRepository.save(warehouse));
-    }
-
-    public void delete(Long id) {
-        warehouseRepository.deleteById(id);
-    }
 }

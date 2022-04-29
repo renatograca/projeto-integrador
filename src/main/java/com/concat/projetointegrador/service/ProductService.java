@@ -40,32 +40,14 @@ public class ProductService {
 
 
     public ProductDTO create(Product product) {
-//        Optional<Product> productOpt = productRepository.findByName(product.getName());
-//        if (productOpt.isPresent()) {
-//            throw new EntityNotFound("Esse produto já existe!"); // criar uma classe de erro especificaa
-//        }
+        Optional<Product> productOpt = productRepository.findById(product.getId());
+        if (productOpt.isPresent()) {
+            throw new RuntimeException("Esse produto já existe!");
+        }
         product.setSeller(sellerService.findByID(product.getSeller().getId()));
         ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
         return productDTO;
 
-    }
-
-    public void delete(Long id) {
-        productRepository.deleteById(id);
-    }
-
-    public ProductDTO update(Product product, Long id) {
-        Optional<Product> productRepo = productRepository.findById(id);
-        if (productRepo.isPresent()) {
-            productRepo.get().setCategory(product.getCategory());
-            productRepo.get().setName(product.getName());
-            productRepo.get().setVolume(product.getVolume());
-            productRepo.get().setPrice(product.getPrice());
-            ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(productRepo.get()));
-            return productDTO;
-        } else {
-            throw new EntityNotFound("O produto não existe!!");
-        }
     }
 
     public List<ProductDTO> findByCategory(Category category) {

@@ -19,13 +19,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PurchasedOrderService {
 
     private PurchasedOrderRepository purchasedOrderRepository;
-    private ProductService productService;
     private BatchStockService batchStockService;
     private CartRepository cartRepository;
     private BuyerService buyerService;
 
 
-    public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) {
+    public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) { //usado
         buyerService.findById(purchasedOrder.getBuyer().getId());
         List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;

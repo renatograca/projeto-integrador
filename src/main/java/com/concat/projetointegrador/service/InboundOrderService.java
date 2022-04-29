@@ -25,8 +25,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class InboundOrderService {
 
-	private WarehouseService warehouseService;
-
 	private InboundOrderRepository repository;
 	
 	private BatchStockRepository batchStockRepository;
@@ -38,9 +36,6 @@ public class InboundOrderService {
 				new SectorCapacityValidate(order, batchStockRepository),
 				new SectorCategoryMatchValidate(order)
 		);
-	}
-	public List<InboundOrder> findAllByActiveTrue() {
-		return repository.findAll();
 	}
 
 	private InboundOrder getInboundOrderById(Long id) {
@@ -86,10 +81,6 @@ public class InboundOrderService {
 				.stream()
 				.filter(inboundOrder -> inboundOrder.getSector().getId().equals(sectorId))
 				.collect(Collectors.toList());
-	}
-
-	public void delete(Long id) {
-		repository.deleteById(id);
 	}
 
 	public InboundOrder findById(Long id) {

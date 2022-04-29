@@ -46,7 +46,7 @@ public class InboundOrderController {
 
     @GetMapping
     public Collection<InboundOrder> findAllByActiveTrue() {
-        return orderService.findAllByActiveTrue();
+        return orderService.findAll();
     }
 
     @GetMapping("/{id}")
@@ -55,7 +55,7 @@ public class InboundOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {//usado
 		Sector sector = sectorService.findById(dto.getSector().getSectorCode());
 
 		warehouseService.findById(dto.getSector().getWarehouseCode());
@@ -112,9 +112,4 @@ public class InboundOrderController {
     	return new ResponseEntity<>(inboundOrder, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        orderService.delete(id);
-        return ResponseEntity.accepted().build();
-    }
 }

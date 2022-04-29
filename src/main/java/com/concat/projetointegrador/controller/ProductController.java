@@ -15,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.concat.projetointegrador.model.BatchStock;
-import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.service.BatchStockService;
-import com.concat.projetointegrador.service.ProductService;
 
 import javax.websocket.server.PathParam;
 
@@ -35,12 +33,7 @@ public class ProductController {
 	private SectorService sectorService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(ProductDTO.convertToProductDTO(productService.findById(id)));
-	}
-
-	@GetMapping("/{id}/")
-	public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id, @PathParam("orderBy") String orderBy) {
+	public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id, @PathParam("orderBy") String orderBy) {// usado
 
 		Product product = productService.findById(id);
 
@@ -82,14 +75,4 @@ public class ProductController {
         return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
     }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		productService.delete(id);
-		return ResponseEntity.noContent().build();
-	}
-
-	@PutMapping("/{id}")
-	public ResponseEntity<ProductDTO> update(@RequestBody Product product, @PathVariable Long id) {
-		return ResponseEntity.ok(productService.update(product, id));
-	}
 }

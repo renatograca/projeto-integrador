@@ -32,9 +32,6 @@ public class WarehouseController {
     private BatchStockService batchStockService;
 
     @Autowired
-    private SectorService sectorService;
-
-    @Autowired
     private InboundOrderService inboundOrderService;
 
     @GetMapping( "/warehouse/{id}")
@@ -42,13 +39,7 @@ public class WarehouseController {
         return ResponseEntity.ok(warehouseService.findById(id));
     }
 
-    @GetMapping( "/warehouse")
-    public ResponseEntity<List<WarehouseDTO>> findAll() {
-        return ResponseEntity.ok(warehouseService.findAll());
-    }
-
-
-    @GetMapping("/fresh-products/warehouse")
+    @GetMapping("/products/warehouse")
     public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "querytype") Long productId) {
         List<BatchStock> batchProducts = batchStockService.findAllByProductId(productId, null);
         List<WarehouseQuantityProductDTO> allProductForWarehouse = warehouseService.findAllProductForWarehouse(batchProducts, inboundOrderService);
@@ -57,19 +48,4 @@ public class WarehouseController {
         return ResponseEntity.ok(build);
     }
 
-    @PostMapping("/warehouse")
-    public ResponseEntity<WarehouseDTO> create(@RequestBody @Valid Warehouse warehouse) {
-        return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);
-    }
-
-    @PutMapping("/warehouse/{id}")
-    public ResponseEntity<WarehouseDTO> update(@RequestBody Warehouse warehouse, @PathVariable Long id) {
-        return ResponseEntity.ok(warehouseService.update(warehouse, id));
-    }
-
-    @DeleteMapping("/warehouse/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        warehouseService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 }
