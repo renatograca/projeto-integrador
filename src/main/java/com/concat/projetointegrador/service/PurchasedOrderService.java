@@ -1,21 +1,18 @@
 package com.concat.projetointegrador.service;
 
-import com.concat.projetointegrador.dto.CartDTO;
 import com.concat.projetointegrador.dto.PurchasedOrderDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.Cart;
 import com.concat.projetointegrador.model.PurchasedOrder;
+import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.CartRepository;
 import com.concat.projetointegrador.repository.PurchasedOrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -27,19 +24,19 @@ public class PurchasedOrderService {
     private CartRepository cartRepository;
     private BuyerService buyerService;
 
+
     public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) {
         buyerService.findById(purchasedOrder.getBuyer().getId());
         List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
-        purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
         for (Cart cart : purchasedOrder.getCart()) {
 
-            BatchStock batchStock = batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity());
-            carts.add(Cart.builder().products(batchStock.getProduct()).quantity(cart.getQuantity()).purchasedOrder(purchasedOrder).build());
-            total = total.add(batchStock.getProduct().getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
-
-
+            List<BatchStock> batchStock = batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity());
+            total = total.add(batchStock.get(0).getProduct().getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
+            carts.add(Cart.builder().products(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
+                    .purchasedOrder(purchasedOrder).build());
         }
+        purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
         carts = cartRepository.saveAll(carts);
         purchasedOrder.setCart(carts);
         PurchasedOrderDTO purchasedOrderDTO = PurchasedOrderDTO.builder().price(total).build();
@@ -64,12 +61,41 @@ public class PurchasedOrderService {
         if (!purchasedOrder.get().getStatus().equals("aberto")) {
             throw new RuntimeException("Este pedido já está finalizado");
         }
-        purchasedOrder.get().getCart().stream().forEach(cart -> batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity()));
+
+
+
+        validateQuantityInBatchStock(purchasedOrder.get());
+
+        purchasedOrder.get().getCart().forEach(cart -> {
+            List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
+            batchStocks.forEach(batchStock -> {
+                if(batchStock.getCurrentQuantity() >= cart.getQuantity()) {
+                    batchStock.setCurrentQuantity(batchStock.getCurrentQuantity() - cart.getQuantity());
+                    cart.setQuantity(0);
+                } else {
+                    cart.setQuantity(cart.getQuantity() - batchStock.getCurrentQuantity());
+                    batchStock.setCurrentQuantity(0);
+                }
+                batchStockService.create(batchStock);
+            });
+        });
+
 
         purchasedOrder.get().setStatus("finalizado");
         return purchasedOrderRepository.save(purchasedOrder.get());
 
-
     }
 
+    private void validateQuantityInBatchStock(PurchasedOrder purchasedOrder) {
+        for (Cart cart : purchasedOrder.getCart()) {
+            List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
+            Integer productQuantityTotal = batchStocks.stream().
+                    reduce(0, (acc, e) -> acc + e.getCurrentQuantity(), Integer::sum);
+
+            if (productQuantityTotal < cart.getQuantity()) {
+                throw new RuntimeException("A quantidade do produto não é suficiente");
+            }
+
+        }
+    }
 }
