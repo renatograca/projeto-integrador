@@ -44,7 +44,6 @@ public class InboundOrderDTO {
     public static InboundOrder map (InboundOrderDTO dto, Sector sector, List<BatchStock> batchStock) {
         return InboundOrder
                 .builder()
-                .sector(sector)
                 .batchStock(batchStock)
                 .build();
     }

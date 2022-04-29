@@ -59,7 +59,7 @@ public class ProductController {
 								)
 								.collect(Collectors.toList())
 				)
-				.sector(SectorRequestDTO.map(sectorService.findByCategory(product.getCategory())))
+				.sector(sectorService.findByCategory(product.getCategory()).stream().map(SectorRequestDTO::map).collect(Collectors.toList())  )
 				.productId(product.getId())
 				.build();
 

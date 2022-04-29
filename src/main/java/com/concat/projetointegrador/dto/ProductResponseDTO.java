@@ -12,7 +12,7 @@ import java.util.List;
 public class ProductResponseDTO {
 
     private Long productId;
-    private SectorRequestDTO sector;
+    private List<SectorRequestDTO> sector;
     private List<BatchStockDTO> batchStock;
 
 }

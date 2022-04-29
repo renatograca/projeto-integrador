@@ -52,8 +52,6 @@ public class InboundOrderService {
 	}
 
 	public InboundOrder create(InboundOrder order) {
-		warehouseService.findById(order.getSector().getWarehouse().getId());
-
 		initializeValidators(order);
 		validators.forEach(Validator::validate);
 

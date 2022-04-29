@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.concat.projetointegrador.model.Sector;
+import com.concat.projetointegrador.model.Warehouse;
+import com.concat.projetointegrador.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.concat.projetointegrador.dto.InboundOrderDTO;
 import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
-import com.concat.projetointegrador.service.InboundOrderService;
-import com.concat.projetointegrador.service.ProductService;
-import com.concat.projetointegrador.service.SectorService;
 
 @RestController
 @RequestMapping("/fresh-products/inboundorder")
@@ -31,6 +31,12 @@ public class InboundOrderController {
 
     @Autowired
     private InboundOrderService orderService;
+
+	@Autowired
+    private BatchStockService batchStockService;
+
+	@Autowired
+	private WarehouseService warehouseService;
 
     @Autowired
     private SectorService sectorService;
@@ -52,6 +58,8 @@ public class InboundOrderController {
     public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {
 		Sector sector = sectorService.findById(dto.getSector().getSectorCode());
 
+		warehouseService.findById(dto.getSector().getWarehouseCode());
+
 		InboundOrder inboundOrder = InboundOrderDTO.map(dto, sector);
     	
     	List<BatchStock> list = dto.getBatchStock()
@@ -62,6 +70,8 @@ public class InboundOrderController {
 			    		.category(sector.getCategory())
 			    		.currentQuantity(e.getInitialQuantity())
 			    		.dueDate(e.getDueDate())
+						.initialTemperature(e.getInitialTemperature())
+						.currentTemperature(e.getInitialTemperature())
 			    		.initialQuantity(e.getInitialQuantity())
 			    		.manufacturingDate(e.getManufacturingDate())
 			    		.manufacturingTime(e.getManufacturingTime())
@@ -85,9 +95,12 @@ public class InboundOrderController {
     			.map(
 					e-> 
 			    	BatchStock.builder()
+						.category(batchStockService.findById(id).getCategory())
 			    		.currentQuantity(e.getCurrentQuantity())
 			    		.dueDate(e.getDueDate())
 			    		.initialQuantity(e.getInitialQuantity())
+						.initialTemperature(e.getInitialTemperature())
+						.currentTemperature(e.getInitialTemperature())
 			    		.manufacturingDate(e.getManufacturingDate())
 			    		.manufacturingTime(e.getManufacturingTime())
 			    		.product(productService.findById(e.getProductId()))
@@ -96,7 +109,7 @@ public class InboundOrderController {
     	InboundOrder inboundOrder = InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()), list);
     	inboundOrder = orderService.update(id, inboundOrder);
     	
-    	return ResponseEntity.ok(inboundOrder);
+    	return new ResponseEntity<>(inboundOrder, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

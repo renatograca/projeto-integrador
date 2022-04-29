@@ -1,6 +1,8 @@
 package com.concat.projetointegrador.exception.advice;
 
+import com.concat.projetointegrador.exception.CategoryNotFoundException;
 import com.concat.projetointegrador.exception.ErrorDTO;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
@@ -20,6 +22,13 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorDTO> objectNotFound(Exception e) {
         e.printStackTrace();
         ErrorDTO errorDTO = new ErrorDTO(NOT_FOUND, e.getMessage());
+        return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorDTO> illegalArgumentExceptionHandl(Exception e) {
+        e.printStackTrace();
+        ErrorDTO errorDTO = new ErrorDTO(NOT_FOUND, ExceptionUtils.getRootCause(e).getMessage().split(":" )[0]);
         return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
     }
 

@@ -45,8 +45,14 @@ public class BatchStock {
     @NotNull(message = "a quantidade atual não pode ser nula")
     private Integer currentQuantity;
 
-//    @NotNull(message = "a data de fabricação não pode ser nula")
-//    @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "a temperatura inicial não pode ser nula")
+    private Integer initialTemperature;
+
+    @NotNull(message = "a temperatura atual não pode ser nula")
+    private Integer currentTemperature;
+
+    @NotNull(message = "a data de fabricação não pode ser nula")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate manufacturingDate;
 
     @NotNull(message = "o horário de fabricação não pode ser nulo")

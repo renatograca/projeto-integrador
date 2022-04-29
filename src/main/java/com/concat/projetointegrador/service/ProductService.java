@@ -70,6 +70,9 @@ public class ProductService {
 
     public List<ProductDTO> findByCategory(Category category) {
         List<Product> products = productRepository.findByCategory(category);
+        if(products.isEmpty()) {
+            throw new EntityNotFound("Não existem produtos nesta categoria!");
+        }
         List<ProductDTO> productsDTO = ProductDTO.convertToListProductDTO(products);
         return productsDTO;
     }

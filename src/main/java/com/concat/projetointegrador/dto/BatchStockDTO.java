@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -33,6 +35,9 @@ public class BatchStockDTO {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
+
+    @NotNull(message = "a temperatura inicial não pode ser nula")
+    private Integer initialTemperature;
 
     private Long productId;
 

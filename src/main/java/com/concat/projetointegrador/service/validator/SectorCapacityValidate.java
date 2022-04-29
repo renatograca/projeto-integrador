@@ -17,19 +17,19 @@ public class SectorCapacityValidate implements Validator {
     private InboundOrder order;
     private BatchStockRepository repository;
 
-    private int calculateBatchVolume(List<BatchStock> batchStockList, boolean initial) {
+    private Integer calculateBatchVolume(List<BatchStock> batchStockList, boolean initial) {
         if (initial) {
-            return order.getBatchStock().stream().reduce(0, (acc, e) -> acc + (e.getProduct().getVolume() * e.getInitialQuantity()), Integer::sum);
+            return batchStockList.stream().reduce(0, (acc, e) -> acc + (e.getProduct().getVolume() * e.getInitialQuantity()), Integer::sum);
         }
 
-        return order.getBatchStock().stream().reduce(0, (acc, e) -> acc + (e.getProduct().getVolume() * e.getCurrentQuantity()), Integer::sum);
+        return batchStockList.stream().reduce(0, (acc, e) -> acc + (e.getProduct().getVolume() * e.getCurrentQuantity()), Integer::sum);
 
     }
 
     @Override
     public void validate() {
-        int volume;
-        int orderVolume;
+        Integer volume;
+        Integer orderVolume;
         boolean volumeSmallerThanNewBatch;
         boolean newVolumeSmallerThanInitialCapacity;
 
@@ -39,7 +39,7 @@ public class SectorCapacityValidate implements Validator {
         orderVolume = calculateBatchVolume(order.getBatchStock(), true);
 
         volumeSmallerThanNewBatch = orderVolume > order.getSector().getCapacity() - volume;
-        newVolumeSmallerThanInitialCapacity = volume > order.getSector().getCapacity();
+        newVolumeSmallerThanInitialCapacity = volume >= order.getSector().getCapacity();
 
         if (volumeSmallerThanNewBatch || newVolumeSmallerThanInitialCapacity) {
             throw new RuntimeException("Capacidade total já atingida!");

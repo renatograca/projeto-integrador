@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import com.concat.projetointegrador.model.Sector;
 
+import java.util.List;
+
 @Repository
 public interface SectorRepository extends JpaRepository<Sector, Long> {
-    Sector findByCategory(Category category);
+    List<Sector> findByCategory(Category category);
 }

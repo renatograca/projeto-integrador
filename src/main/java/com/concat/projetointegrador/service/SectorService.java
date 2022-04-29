@@ -37,7 +37,7 @@ public class SectorService {
         repository.deleteById(id);
     }
 
-    public Sector findByCategory(Category category) {
+    public List<Sector> findByCategory(Category category) {
         return repository.findByCategory(category);
     }
 }

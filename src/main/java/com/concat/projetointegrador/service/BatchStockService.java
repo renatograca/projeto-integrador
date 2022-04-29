@@ -146,6 +146,7 @@ public class BatchStockService {
                                     batchStock.getCurrentQuantity() > 0
                             )
                     ).collect(Collectors.toList());
+
         return batchStocks;
     }
 }
