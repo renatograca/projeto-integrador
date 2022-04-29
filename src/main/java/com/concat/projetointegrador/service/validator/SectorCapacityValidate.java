@@ -20,7 +20,6 @@ public class SectorCapacityValidate implements Validator {
     private int calculateBatchVolume(List<BatchStock> batchStockList, boolean initial) {
         if (initial) {
             return order.getBatchStock().stream().reduce(0, (acc, e) -> acc + (e.getProduct().getVolume() * e.getInitialQuantity()), Integer::sum);
-
         }
 
         return order.getBatchStock().stream().reduce(0, (acc, e) -> acc + (e.getProduct().getVolume() * e.getCurrentQuantity()), Integer::sum);

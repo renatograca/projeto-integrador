@@ -15,7 +15,6 @@ public class Sector {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(unique = true, nullable = false)
     @ManyToOne
     private Warehouse warehouse;
 

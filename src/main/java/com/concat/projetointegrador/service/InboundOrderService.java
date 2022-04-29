@@ -3,6 +3,7 @@ package com.concat.projetointegrador.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -32,7 +33,7 @@ public class InboundOrderService {
 
 	private List<Validator> validators;
 
-	public void initializeValidators(InboundOrder order) {
+	private void initializeValidators(InboundOrder order) {
 		this.validators = Arrays.asList(
 				new SectorCapacityValidate(order, batchStockRepository),
 				new SectorCategoryMatchValidate(order)
@@ -57,9 +58,7 @@ public class InboundOrderService {
 		validators.forEach(Validator::validate);
 
 		InboundOrder newInboundOrder = repository.save(order);
-		order.getBatchStock().forEach(e-> {
-				e.setInboundOrder(newInboundOrder);
-		});
+		order.getBatchStock().forEach(e-> e.setInboundOrder(newInboundOrder));
 
 		List<BatchStock> newBatchStocks = batchStockRepository.saveAll(newInboundOrder.getBatchStock());
 
@@ -84,12 +83,23 @@ public class InboundOrderService {
 		return repository.save(dbOrder);
 	}
 
+	public List<InboundOrder> findBySectorId(Long sectorId) {
+		return findAll()
+				.stream()
+				.filter(inboundOrder -> inboundOrder.getSector().getId().equals(sectorId))
+				.collect(Collectors.toList());
+	}
+
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
 
 	public InboundOrder findById(Long id) {
 		return this.getInboundOrderById(id);
+	}
+
+	public List<InboundOrder> findAll() {
+		return repository.findAll();
 	}
 
 }

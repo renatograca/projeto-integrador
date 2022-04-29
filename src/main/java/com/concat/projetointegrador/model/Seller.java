@@ -25,6 +25,6 @@ public class Seller {
     private String name;
     @NotNull(message = "lastName não pode ser null")
     @Size(min = 1, max = 20, message = "LastName deve possuir de 1 a 20 caracteres.")
-    private String lastName;
+    private String lastname;
 
 }

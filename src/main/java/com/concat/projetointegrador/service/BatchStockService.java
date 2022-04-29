@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.service;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.concat.projetointegrador.dto.BatchStockFilterDTO;
+import com.concat.projetointegrador.model.InboundOrder;
 import org.springframework.stereotype.Service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
@@ -32,8 +35,49 @@ public class BatchStockService {
     }
 
     public List<BatchStock> findAll() {
-        List<BatchStock> listBatchStock = batchStockRepository.findAll();
-        return listBatchStock;
+        return batchStockRepository.findAll();
+    }
+
+    public List<BatchStockFilterDTO> filterBatchStocks(
+            List<InboundOrder> inboundOrderList,
+            int numberOfDays,
+            String category,
+            Integer asc
+    ) throws InvalidParameterException {
+        LocalDate expireTilDate = LocalDate.now().plusDays(numberOfDays);
+        List<BatchStockFilterDTO> batchStockFilterDTOList;
+
+        List<BatchStock> batchStockList = inboundOrderList
+                .stream()
+                .flatMap(inboundOrder -> inboundOrder.getBatchStock().stream())
+                .collect(Collectors.toList());
+
+        batchStockFilterDTOList = batchStockList
+                .stream()
+                .filter(batchStock -> expireTilDate.isAfter(batchStock.getDueDate()))
+                .map(BatchStockFilterDTO::convertToDTO)
+                .sorted(Comparator.comparing(BatchStockFilterDTO::getDueDate))
+                .collect(Collectors.toList());
+
+        if (category != null ) {
+            batchStockFilterDTOList = batchStockFilterDTOList
+                        .stream()
+                        .filter(
+                                batchStock -> batchStock.getCategory().equalsIgnoreCase(category)
+                        )
+                        .collect(Collectors.toList());
+        }
+
+        if(asc != null && asc == 0) {
+            return batchStockFilterDTOList
+                    .stream()
+                    .sorted((b1, b2) -> b2.getDueDate().compareTo(b1.getDueDate()))
+                    .collect(Collectors.toList());
+        } else if (asc != null && asc != 1) {
+            throw new InvalidParameterException("O valor de asc deve ser 0 ou 1!");
+        }
+
+        return batchStockFilterDTOList;
     }
 
     public BatchStock create(BatchStock batchStock) {
