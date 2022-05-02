@@ -19,9 +19,9 @@ public class ProductService {
     private SellerService sellerService;
 
     /**
-     * Busca um produto pelo id
-     * @param id Long - id do produto
-     * @return um produto caso esteja cadastrado
+     * Search for a product by id
+     * @param id Long - product id
+     * @return a product if registered
      */
     public Product findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
@@ -33,8 +33,8 @@ public class ProductService {
     }
 
     /**
-     * Busca um lista de produtos
-     * @return uma lista de produtos cadastrado
+     * Search a product list
+     * @return a list of registered products
      */
     public List<ProductDTO> findAll() {
         List<Product> listProduct = productRepository.findAll();
@@ -48,9 +48,9 @@ public class ProductService {
 
 
     /**
-     * Salva um produto
-     * @param product - objeto produto para inserção
-     * @return um produto DTO
+     * Save a product
+     * @param product - product object to insert
+     * @return a product DTO
      */
     public ProductDTO create(Product product) {
         Optional<Product> productOpt = productRepository.findById(product.getId());
@@ -64,9 +64,9 @@ public class ProductService {
     }
 
     /**
-     * Busca uma lista de produtos por categoria
-     * @param category - Enum categoria
-     * @return uma lista de produtos DTO
+     * Search a list of products by category
+     * @param category - Enum category
+     * @return a list of products DTO
      */
     public List<ProductDTO> findByCategory(Category category) {
         List<Product> products = productRepository.findByCategory(category);
