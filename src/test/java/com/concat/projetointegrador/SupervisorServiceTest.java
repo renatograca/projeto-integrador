@@ -1,4 +1,4 @@
-package com.concat.projetointegrador.unit;
+package com.concat.projetointegrador;
 
 import com.concat.projetointegrador.model.Supervisor;
 import com.concat.projetointegrador.repository.SupervisorRepository;
@@ -15,21 +15,18 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SupervisorServiceTest {
-//    @Mock
-//    private static SupervisorRepository supervisorRepository;
-//
-//    private static SupervisorService supervisorService;
+    @Mock
+    private static SupervisorRepository supervisorRepository;
 
-//    @BeforeAll
-//    static void init() {
-//        supervisorRepository = Mockito.mock(SupervisorRepository.class);
-//        supervisorService = new SupervisorService(supervisorRepository);
-//    }
+    private static SupervisorService supervisorService;
+
+    @BeforeAll
+    static void init() {
+        supervisorRepository = Mockito.mock(SupervisorRepository.class);
+        supervisorService = new SupervisorService(supervisorRepository);
+    }
     @Test
     public void shouldReturnASupervisorWithId() {
-        SupervisorRepository supervisorRepository = Mockito.mock(SupervisorRepository.class);
-        SupervisorService supervisorService = new SupervisorService(supervisorRepository);
-
         Mockito.when(supervisorRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(createSupervisor()));
         Supervisor supervisor = supervisorService.findById(1L);
 
@@ -42,11 +39,6 @@ public class SupervisorServiceTest {
 
     @Test
     public void shouldReturnErrorWhenNotFoundSupervisor() {
-        SupervisorRepository supervisorRepository = Mockito.mock(SupervisorRepository.class);
-        SupervisorService supervisorService = new SupervisorService(supervisorRepository);
-
-        Mockito.when(supervisorRepository.findById(Mockito.anyLong())).thenThrow(new RuntimeException("Não foi encontrado!"));
-
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> supervisorService.findById(1L));
         assertTrue(thrown.getMessage().contains("Não foi encontrado!"));
     }
