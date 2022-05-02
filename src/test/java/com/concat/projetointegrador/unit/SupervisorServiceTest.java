@@ -1,4 +1,4 @@
-package com.concat.projetointegrador;
+package com.concat.projetointegrador.unit;
 
 import com.concat.projetointegrador.model.Supervisor;
 import com.concat.projetointegrador.repository.SupervisorRepository;
