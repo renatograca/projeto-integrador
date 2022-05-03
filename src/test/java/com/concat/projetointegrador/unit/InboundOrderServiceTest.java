@@ -37,7 +37,7 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    public void shouldReturnAnInboundOrderById() {
+    void shouldReturnAnInboundOrderById() {
         Mockito
             .when(inboundOrderRepository.findById(1L))
             .thenReturn(inboundOrderMock());
@@ -48,7 +48,7 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    public void shouldCreateAndReturnAnInboundOrder() {
+    void shouldCreateAndReturnAnInboundOrder() {
         Mockito
             .when(batchStockRepository.saveAll(batchStockMock()))
             .thenReturn(batchStockMock());
@@ -63,7 +63,7 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    public void shouldUpdateAndReturnAnInboundOrder() {
+    void shouldUpdateAndReturnAnInboundOrder() {
         Mockito
                 .when(inboundOrderRepository.findById(1L))
                 .thenReturn(inboundOrderMock());
@@ -77,7 +77,7 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    public void shouldThrowAEntityNotFoundException() {
+    void shouldThrowAEntityNotFoundException() {
         Mockito
                 .when(inboundOrderRepository.findById(99L))
                 .thenReturn(Optional.empty());
@@ -89,7 +89,7 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    public void shouldReturnAListOfInboundOrder() {
+    void shouldReturnAListOfInboundOrder() {
         Mockito
                 .when(inboundOrderRepository.findAll())
                 .thenReturn(Arrays.asList(inboundOrderMock().get(), inboundOrderMock().get()));
@@ -99,7 +99,7 @@ class InboundOrderServiceTest {
     }
 
     @Test
-    public void shouldReturnAllInboundOrder() {
+    void shouldReturnAllInboundOrder() {
         Mockito
                 .when(inboundOrderRepository.findAll())
                 .thenReturn(Arrays.asList(inboundOrderMock().get(), inboundOrderMock().get()));
