@@ -1,16 +1,16 @@
 package com.concat.projetointegrador.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter @Setter
+@AllArgsConstructor
 @Entity
 @Table(name = "sector")
 public class Sector {
-    //TODO add nullable = false em warehouseId
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +27,7 @@ public class Sector {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    public Sector() {
+
+    }
 }
