@@ -4,6 +4,9 @@ import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.Buyer;
 import com.concat.projetointegrador.repository.BuyerRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,4 +26,11 @@ public class BuyerService {
         throw new EntityNotFound("Comprador não encontrado");
     }
 
+    public Buyer create(Buyer buyer) {
+        Optional<Buyer> buyerOpt = buyerRepository.findByCpf(buyer.getCpf());
+        if(buyerOpt.isPresent()) {
+            throw new RuntimeException("Comprador já cadastrado");
+        }
+        return buyerRepository.save(buyer);
+    }
 }
