@@ -1,5 +1,8 @@
 package com.concat.projetointegrador.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,10 +13,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "sector")
 public class Sector {
-    //TODO add nullable = false em warehouseId
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
