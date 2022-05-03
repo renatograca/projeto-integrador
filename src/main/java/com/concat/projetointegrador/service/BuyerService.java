@@ -15,10 +15,16 @@ public class BuyerService {
 
     private BuyerRepository buyerRepository;
 
+    /**
+     * find a buyer by its id
+     * @param id Long - buyers id
+     * @return buyer if it exists
+     * @throws EntityNotFound if buyer doenst exist
+     */
     public Buyer findById(Long id) {
         Optional<Buyer> buyer = buyerRepository.findById(id);
         if(buyer.isPresent()) {
-        return buyer.get();
+            return buyer.get();
         }
         throw new EntityNotFound("Comprador não encontrado");
     }
