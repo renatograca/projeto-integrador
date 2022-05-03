@@ -1,4 +1,4 @@
-package com.concat.projetointegrador.service;
+package com.concat.projetointegrador.unit;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.Category;
@@ -7,6 +7,7 @@ import com.concat.projetointegrador.model.Supervisor;
 import com.concat.projetointegrador.model.Warehouse;
 import com.concat.projetointegrador.repository.SectorRepository;
 
+import com.concat.projetointegrador.service.SectorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,8 +31,8 @@ class SectorServiceTest {
     @Test
     void shouldReturnASectorById() {
         Sector sector = mockSector();
-        Sector result = service.findById(1L);
         when(sectorRepositoryMock.findById(anyLong())).thenReturn(Optional.of(sector));
+        Sector result = service.findById(1L);
 
         assertEquals(result.getClass(), sector.getClass());
     }

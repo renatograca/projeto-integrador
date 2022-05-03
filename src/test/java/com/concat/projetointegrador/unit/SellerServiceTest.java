@@ -1,6 +1,7 @@
-package com.concat.projetointegrador.model;
+package com.concat.projetointegrador.unit;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.Seller;
 import com.concat.projetointegrador.repository.SellerRepository;
 import com.concat.projetointegrador.service.SellerService;
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +11,7 @@ import org.mockito.Mockito;
 
 import java.util.Optional;
 
-class SellerServiceTest {
+public class SellerServiceTest {
 
     public static final long ID = 1L;
     public static final String NAME = "V";
@@ -46,5 +47,4 @@ class SellerServiceTest {
         seller = Seller.builder().id(ID).name(NAME).lastName(LAST_NAME).build();
         optionalSeller = Optional.of(Seller.builder().id(ID).name(NAME).lastName(LAST_NAME).build());
     }
-
 }

@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "sector")
 public class Sector {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +30,4 @@ public class Sector {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    public Sector() {
-
-    }
 }
