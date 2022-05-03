@@ -131,6 +131,28 @@ class BatchStockServiceTest {
         assertEquals("frango", batchStock.getProduct().getName());
     }
 
+    @Test
+    void shouldReturnProductByBatchStock() throws Exception {
+        List<BatchStock> batchStocks;
+        Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
+        batchStocks = service.findByProductId(Mockito.anyLong(), 1);
+        assertEquals("frango", batchStocks.get(0).getProduct().getName());
+    }
+
+    @Test
+    void shouldReturnProductByBatchStockNotFound() throws Exception {
+        Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(new ArrayList<>());
+        Throwable exception = assertThrows(EntityNotFound.class, () -> service.findByProductId(Mockito.anyLong(), 1));
+        assertEquals("Este produto não existe", exception.getMessage());
+    }
+
+    @Test
+    void shouldReturnProductByBatchStockInsufficientAmount() throws Exception {
+        Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
+        Throwable exception = assertThrows(EntityNotFound.class, () -> service.findByProductId(Mockito.anyLong(), 20));
+        assertEquals("Estoque insuficiente", exception.getMessage());
+    }
+
 
 
 }
