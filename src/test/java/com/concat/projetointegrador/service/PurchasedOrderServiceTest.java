@@ -3,8 +3,6 @@ package com.concat.projetointegrador.service;
 import com.concat.projetointegrador.dto.PurchasedOrderDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.*;
-import com.concat.projetointegrador.repository.BatchStockRepository;
-import com.concat.projetointegrador.repository.BuyerRepository;
 import com.concat.projetointegrador.repository.CartRepository;
 import com.concat.projetointegrador.repository.PurchasedOrderRepository;
 import org.junit.jupiter.api.Assertions;
@@ -106,13 +104,11 @@ class PurchasedOrderServiceTest {
 
 
         Mockito.when(purchasedOrderRepository.findById(Mockito.anyLong())).thenReturn(optionalPurchasedOrder);
-        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+        batchStock.setCurrentQuantity(0);
         Mockito.when(batchStockService.findAllByProductId(Mockito.anyLong(), Mockito.anyString())).thenReturn(batchStocks);
-        Mockito.when(batchStockService.create(Mockito.any())).thenReturn(batchStock);
+        RuntimeException response = Assertions.assertThrows(RuntimeException.class, () -> purchasedOrderService.update(Mockito.anyLong()));
 
-        PurchasedOrder response = purchasedOrderService.update(2L);
-
-        Assertions.assertEquals(response.getStatus(), "finalizado");
+        Assertions.assertEquals(response.getMessage(), "A quantidade do produto não é suficiente");
 
     }
 
