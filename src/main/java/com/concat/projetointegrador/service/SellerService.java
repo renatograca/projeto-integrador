@@ -6,7 +6,6 @@ import com.concat.projetointegrador.repository.SellerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +14,11 @@ public class SellerService {
 
     private SellerRepository sellerRepository;
 
+    /**
+     * Find a Seller by ID or throw an EntityNotFound Exception
+     * @param id A Long type ID from a seller
+     * @return Seller
+     */
     public Seller findByID(Long id) {
         Optional<Seller> seller = sellerRepository.findById(id);
         if (seller.isPresent()) {
