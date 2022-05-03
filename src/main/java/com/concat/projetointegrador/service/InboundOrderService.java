@@ -31,6 +31,11 @@ public class InboundOrderService {
 
 	private List<Validator> validators;
 
+
+		/**
+		 *
+		 * @param order order to be validated
+		 */
 	private void initializeValidators(InboundOrder order) {
 		this.validators = Arrays.asList(
 				new SectorCapacityValidate(order, batchStockRepository),
@@ -38,6 +43,11 @@ public class InboundOrderService {
 		);
 	}
 
+		/**
+		 *
+		 * @param id id that represents the inbound order on database
+		 * @return returns the inbound order with this id
+		 */
 	private InboundOrder getInboundOrderById(Long id) {
 		Optional<InboundOrder> opt = repository.findById(id);
 		if (opt.isEmpty()) {
@@ -46,6 +56,11 @@ public class InboundOrderService {
 		return opt.get();
 	}
 
+		/**
+		 *
+		 * @param order - object with the data to registrate on database
+		 * @return returns the created database
+		 */
 	public InboundOrder create(InboundOrder order) {
 		initializeValidators(order);
 		validators.forEach(Validator::validate);
@@ -62,6 +77,12 @@ public class InboundOrderService {
 		return newInboundOrder;
 	}
 
+		/**
+		 *
+		 * @param id - Long id that represents the inbound order on the database
+		 * @param order - object with the data to update
+		 * @return returns the updated inbound order
+		 */
 	public InboundOrder update(Long id, InboundOrder order) {
 		InboundOrder dbOrder = getInboundOrderById(id);
 
@@ -76,17 +97,29 @@ public class InboundOrderService {
 		return repository.save(dbOrder);
 	}
 
+		/**
+		 * @param sectorId Long that represents the unique identifier of the sector
+		 * @return List<InboundOrder> returns a list of inbound orders that have this sector
+		 */
 	public List<InboundOrder> findBySectorId(Long sectorId) {
-		return findAll()
+		return repository
+				.findAll()
 				.stream()
 				.filter(inboundOrder -> inboundOrder.getSector().getId().equals(sectorId))
 				.collect(Collectors.toList());
 	}
 
+		/**
+		 * @param id - Long that represents the unique identifier
+		 * @return InboundOrder - returns an object with type InboundOrder
+		 */
 	public InboundOrder findById(Long id) {
 		return this.getInboundOrderById(id);
 	}
 
+		/**
+		 * @return returns a list of inbound orders
+		 */
 	public List<InboundOrder> findAll() {
 		return repository.findAll();
 	}

@@ -4,11 +4,13 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Getter @Setter
 @Entity
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "sector")
 public class Sector {
     //TODO add nullable = false em warehouseId
 
