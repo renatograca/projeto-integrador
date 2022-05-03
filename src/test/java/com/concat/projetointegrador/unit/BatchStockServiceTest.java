@@ -5,10 +5,7 @@ import com.concat.projetointegrador.dto.ProductDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.*;
 import com.concat.projetointegrador.repository.BatchStockRepository;
-import com.concat.projetointegrador.repository.ProductRepository;
 import com.concat.projetointegrador.service.BatchStockService;
-import com.concat.projetointegrador.service.ProductService;
-import net.bytebuddy.implementation.bind.annotation.Super;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,7 +63,7 @@ class BatchStockServiceTest {
     }
 
     private List<BatchStock> mockListBatchStock() {
-        List<BatchStock> listBatchStock = Arrays.asList(
+        return Arrays.asList(
                 BatchStock.builder()
                         .id(0L)
                         .category(Category.CONGELADOS)
@@ -91,25 +88,23 @@ class BatchStockServiceTest {
                         .dueDate(LocalDate.of(2023, 11, 10))
                         .product(mockProduct())
                         .build());
-        return listBatchStock;
     }
 
     private List<InboundOrder> mockListInboundOrder(){
         Supervisor supervisor = Supervisor.builder().name("Maria").lastName("Ferraz").build();
         Warehouse werehouse = Warehouse.builder().name("Casa Verder").region("São Paulo").build();
         Sector sector = Sector.builder().id(0L).warehouse(werehouse).supervisor(supervisor).category(Category.CONGELADOS).capacity(100).build();
-        List<InboundOrder> listInboundOrder = Arrays.asList(
+        return Arrays.asList(
                 InboundOrder.builder()
                 .id(0L)
                 .sector(sector)
                 .batchStock(mockListBatchStock())
                 .build()
         );
-        return listInboundOrder;
     }
 
     @Test
-    void shouldReturnGetBatchStockById() throws Exception {
+    void shouldReturnGetBatchStockById() {
         BatchStock batchStock;
         Mockito.when(batchStockRepositoryMock.findById(Mockito.anyLong())).thenReturn(Optional.of(mockBatchStock()));
         batchStock = service.findById(Mockito.anyLong());
@@ -117,14 +112,14 @@ class BatchStockServiceTest {
     }
 
     @Test
-    void shouldReturnGetBatchStockByIdNotFound() throws Exception {
+    void shouldReturnGetBatchStockByIdNotFound() {
         Mockito.when(batchStockRepositoryMock.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findById(Mockito.anyLong()));
         assertEquals("O estoque não foi encontrado!!", exception.getMessage());
     }
 
     @Test
-    void shouldCreateBatchStock() throws Exception {
+    void shouldCreateBatchStock() {
         BatchStock batchStock;
         Mockito.when(batchStockRepositoryMock.save(Mockito.any())).thenReturn(mockBatchStock());
         batchStock = service.create(mockBatchStock());
@@ -132,7 +127,7 @@ class BatchStockServiceTest {
     }
 
     @Test
-    void shouldReturnProductByBatchStock() throws Exception {
+    void shouldReturnProductByBatchStock() {
         List<BatchStock> batchStocks;
         Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
         batchStocks = service.findByProductId(Mockito.anyLong(), 1);
@@ -140,21 +135,21 @@ class BatchStockServiceTest {
     }
 
     @Test
-    void shouldReturnProductByBatchStockNotFound() throws Exception {
+    void shouldReturnProductByBatchStockNotFound() {
         Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(new ArrayList<>());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findByProductId(Mockito.anyLong(), 1));
         assertEquals("Este produto não existe", exception.getMessage());
     }
 
     @Test
-    void shouldReturnProductByBatchStockInsufficientAmount() throws Exception {
+    void shouldReturnProductByBatchStockInsufficientAmount() {
         Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findByProductId(Mockito.anyLong(), 20));
         assertEquals("Estoque insuficiente", exception.getMessage());
     }
 
     @Test
-    void shouldReturnBatchStockOrderById() throws Exception {
+    void shouldReturnBatchStockOrderById() {
         List<BatchStock> batchStocks;
         Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
         batchStocks = service.findAllByProductId(Mockito.anyLong(), "L");
@@ -162,7 +157,7 @@ class BatchStockServiceTest {
     }
 
     @Test
-    void shouldReturnBatchStockOrderByQuantity() throws Exception {
+    void shouldReturnBatchStockOrderByQuantity() {
         List<BatchStock> batchStocks;
         Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
         batchStocks = service.findAllByProductId(Mockito.anyLong(), "C");
@@ -171,7 +166,7 @@ class BatchStockServiceTest {
     }
 
     @Test
-    void shouldReturnBatchStockOrderByDueDate() throws Exception {
+    void shouldReturnBatchStockOrderByDueDate() {
         List<BatchStock> batchStocks;
         Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
         batchStocks = service.findAllByProductId(Mockito.anyLong(), "F");
@@ -179,7 +174,7 @@ class BatchStockServiceTest {
     }
 
     @Test
-    void shouldReturnBatchStock() throws Exception {
+    void shouldReturnBatchStock() {
         List<BatchStock> batchStocks;
         Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
         batchStocks = service.findAllByProductId(Mockito.anyLong(), null);
@@ -187,28 +182,28 @@ class BatchStockServiceTest {
     }
 
     @Test
-    void shouldReturnBatchStockNotFound() throws Exception {
+    void shouldReturnBatchStockNotFound() {
         Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(new ArrayList<>());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findAllByProductId(Mockito.anyLong(), null));
         assertEquals("Não foi encontrado nenhum lote para esse produto!", exception.getMessage());
     }
 
     @Test
-    void shouldFilterBatchStocksParameterAsc() throws Exception {
+    void shouldFilterBatchStocksParameterAsc() {
         List<BatchStockFilterDTO> batchStocks;
         batchStocks = service.filterBatchStocks(mockListInboundOrder(), 800, "congelados", 0);
         assertEquals(LocalDate.of(2023,11,10), batchStocks.get(0).getDueDate());
     }
 
     @Test
-    void shouldFilterBatchStocks() throws Exception {
+    void shouldFilterBatchStocks() {
         List<BatchStockFilterDTO> batchStocks;
         batchStocks = service.filterBatchStocks(mockListInboundOrder(), 800, "congelados", null);
         assertEquals(LocalDate.of(2023,10,10), batchStocks.get(0).getDueDate());
     }
 
     @Test
-    void shouldFilterBatchStocksInvalidParameter() throws Exception {
+    void shouldFilterBatchStocksInvalidParameter() {
         Throwable exception = assertThrows(InvalidParameterException.class, () -> service.filterBatchStocks(mockListInboundOrder(), 800, "congelados", 9));
         assertEquals("O valor de asc deve ser 0 ou 1!", exception.getMessage());
     }
