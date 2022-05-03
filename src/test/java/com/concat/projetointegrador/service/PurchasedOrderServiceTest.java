@@ -6,25 +6,32 @@ import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.BuyerRepository;
 import com.concat.projetointegrador.repository.CartRepository;
 import com.concat.projetointegrador.repository.PurchasedOrderRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 class PurchasedOrderServiceTest {
 
     private PurchasedOrderRepository purchasedOrderRepository = Mockito.mock(PurchasedOrderRepository.class);
+    private Optional<PurchasedOrder> optionalPurchasedOrder;
     private PurchasedOrderService purchasedOrderService;
     private PurchasedOrderDTO purchasedOrderDTO;
     private PurchasedOrder purchasedOrder;
-    private BatchStockRepository batchStockRepository = Mockito.mock(BatchStockRepository.class);
-    private BatchStockService batchStockService;
+    private BatchStockService batchStockService = Mockito.mock(BatchStockService.class);
+    private List<BatchStock> batchStocks;
     private CartRepository cartRepository = Mockito.mock(CartRepository.class);
-    private BuyerRepository buyerRepository = Mockito.mock(BuyerRepository.class);
-    private BuyerService buyerService;
+    private BuyerService buyerService = Mockito.mock(BuyerService.class);
+    private Sector sector;
+    private Supervisor supervisor;
+    private Warehouse warehouse;
     private Buyer buyer;
     private Product product;
     private Seller seller;
@@ -33,8 +40,6 @@ class PurchasedOrderServiceTest {
 
     @BeforeEach
     private void setUp() {
-        buyerService = new BuyerService(buyerRepository);
-        batchStockService = new BatchStockService(batchStockRepository);
         purchasedOrderService = new PurchasedOrderService(purchasedOrderRepository, batchStockService, cartRepository, buyerService);
         startSeller();
         startProduct();
@@ -42,16 +47,31 @@ class PurchasedOrderServiceTest {
         startListOfCart();
         startPurchasedOrder();
         startPurchasedOrderDTO();
+        startSupervisor();
+        startWarehouse();
+        startSector();
+        startBatchStocks();
     }
 
     @Test
-    public void sholdReturnTotalPriceOfProdutsInCarts() {
+    public void shouldReturnTotalPriceOfProductsInCartsWhenCreatePurchasedOrder() {
 
+        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
+        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocks);
+        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
+
+        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
+
+        Assertions.assertEquals(response.getPrice(), purchasedOrderDTO.getPrice());
 
     }
 
     @Test
-    void findById() {
+    public void whenFindByIDThenReturnASeller() {
+        Mockito.when(purchasedOrderRepository.findById(Mockito.anyLong())).thenReturn(optionalPurchasedOrder);
+        PurchasedOrder response = purchasedOrderService.findById(1L);
+        Assertions.assertEquals(response.getClass(), purchasedOrder.getClass());
     }
 
     @Test
@@ -84,6 +104,7 @@ class PurchasedOrderServiceTest {
 
     private void startListOfCart() {
         ArrayList<Cart> carts0 = new ArrayList();
+        carts = new ArrayList();
         PurchasedOrder purchasedOrderForCarts = PurchasedOrder.builder()
                 .id(1l)
                 .status("aberto")
@@ -97,7 +118,8 @@ class PurchasedOrderServiceTest {
                 .purchasedOrder(purchasedOrderForCarts)
                 .build();
         carts0.add(cart);
-        carts.add(cart);//testar adicionar novamente cart
+        carts.add(cart);
+        carts.add(cart);
     }
 
     private void startPurchasedOrder() {
@@ -107,10 +129,73 @@ class PurchasedOrderServiceTest {
                 .buyer(buyer)
                 .cart(carts)
                 .build();
+        optionalPurchasedOrder = Optional.of(PurchasedOrder.builder()
+                .id(2L)
+                .status("aberto")
+                .buyer(buyer)
+                .cart(carts)
+                .build());
     }
 
     private void startPurchasedOrderDTO() {
-        purchasedOrderDTO = PurchasedOrderDTO.builder().price(BigDecimal.valueOf(8.99)).build();
+        purchasedOrderDTO = PurchasedOrderDTO.builder().price(BigDecimal.valueOf(17.98)).build();
+    }
+
+    private void startSupervisor() {
+        supervisor = Supervisor.builder()
+                .id(1L)
+                .name("")
+                .lastName("")
+                .build();
+    }
+
+    private void startWarehouse() {
+        warehouse = Warehouse
+                .builder()
+                .id(1L)
+                .name("")
+                .region("")
+                .build();
+    }
+
+    private void startSector() {
+        sector = Sector
+                .builder()
+                .id(1L)
+                .capacity(1)
+                .warehouse(warehouse)
+                .supervisor(supervisor)
+                .category(Category.CONGELADOS)
+                .build();
+    }
+
+    private void startBatchStocks(){
+
+        batchStocks = new ArrayList<>();
+        InboundOrder inboundOrder = InboundOrder
+                .builder()
+                .id(1L)
+                .sector(sector)
+                .batchStock(batchStocks)
+                .build();
+
+        BatchStock batchStock =
+                BatchStock
+                        .builder()
+                        .id(1L)
+                        .currentQuantity(1)
+                        .initialQuantity(1)
+                        .initialTemperature(1)
+                        .currentTemperature(1)
+                        .product(product)
+                        .dueDate(LocalDate.now())
+                        .category(Category.CONGELADOS)
+                        .inboundOrder(inboundOrder)
+                        .manufacturingDate(LocalDate.now())
+                        .manufacturingTime(LocalTime.now())
+                        .build();
+
+        batchStocks.add(batchStock);
     }
 
 }

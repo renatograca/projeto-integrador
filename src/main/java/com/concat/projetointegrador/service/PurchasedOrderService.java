@@ -34,7 +34,7 @@ public class PurchasedOrderService {
             carts.add(Cart.builder().products(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
                     .purchasedOrder(purchasedOrder).build());
         }
-        purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
+        purchasedOrder = purchasedOrderRepository.save(purchasedOrder);//?? que isso??
         carts = cartRepository.saveAll(carts);
         purchasedOrder.setCart(carts);
         PurchasedOrderDTO purchasedOrderDTO = PurchasedOrderDTO.builder().price(total).build();
