@@ -26,5 +26,4 @@ public class SellerService {
         }
             throw new EntityNotFound("Vendedor não existe.");
     }
-
 }
