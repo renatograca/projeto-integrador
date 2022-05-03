@@ -24,7 +24,7 @@ public class PurchasedOrderService {
     private BuyerService buyerService;
 
 
-    public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) { //usado
+    public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) {
         buyerService.findById(purchasedOrder.getBuyer().getId());
         List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
