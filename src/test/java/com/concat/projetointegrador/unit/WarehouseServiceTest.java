@@ -20,9 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class WarehouseServiceTest {
+public class WarehouseServiceTest {
     private WarehouseService service;
     private final WarehouseRepository warehouseRepositoryMock = Mockito.mock(WarehouseRepository.class);
+
+    @Mock
+    private InboundOrderService inboundOrderService;
 
     @BeforeEach
     public void init() {
@@ -72,5 +75,83 @@ class WarehouseServiceTest {
         Throwable exception = assertThrows(RuntimeException.class, () -> service.create(mockWarehouse()));
         assertEquals("Esse armazém já existe!", exception.getMessage());
     }
-}
 
+    @Test
+    public void shouldReturnQuantityProductByWarehouse() {
+        inboundOrderService = Mockito.mock(InboundOrderService.class);
+        List<BatchStock> batchStocks = Arrays.asList(
+                batchStockMock(),
+                batchStockMock()
+        );
+        Mockito.when(inboundOrderService.findById(Mockito.anyLong())).thenReturn(inboundOrderMock());
+        List<WarehouseQuantityProductDTO> allProductForWarehouse = service.findAllProductForWarehouse(batchStocks, inboundOrderService);
+        assertEquals(4, allProductForWarehouse.get(0).getTotalQuantity());
+        assertEquals(warehouseMock().getId(), allProductForWarehouse.get(0).getWarehouseCode());
+    }
+
+    private BatchStock batchStockMock() {
+        return BatchStock.builder()
+                .id(1L)
+                .category(Category.CONGELADOS)
+                .currentQuantity(2)
+                .dueDate(LocalDate.now())
+                .manufacturingDate(LocalDate.now())
+                .currentTemperature(2)
+                .initialQuantity(10)
+                .initialTemperature(1)
+                .manufacturingTime(LocalTime.now())
+                .product(productMock())
+                .inboundOrder(InboundOrder.builder().id(1L).build())
+                .build();
+    }
+
+    private Product productMock() {
+        return Product.builder()
+                .id(1L)
+                .category(Category.CONGELADOS)
+                .name("Melhor Produto ou anuncio")
+                .price(BigDecimal.valueOf(50))
+                .seller(sellerMock())
+                .volume(1)
+                .build();
+    }
+
+    private Seller sellerMock() {
+        return Seller.builder()
+                .id(1L)
+                .name("Melhor")
+                .lastName("Seller")
+                .build();
+    }
+
+    private InboundOrder inboundOrderMock() {
+        return InboundOrder.builder()
+                .id(1L)
+                .batchStock(Arrays.asList(batchStockMock(), batchStockMock()))
+                .sector(sectorMock())
+                .build();
+    }
+    private  Sector sectorMock() {
+        return Sector.builder()
+                .id(1L)
+                .warehouse(warehouseMock())
+                .category(Category.CONGELADOS)
+                .capacity(20)
+                .supervisor(supervisorMock())
+                .build();
+    }
+    private Warehouse warehouseMock(){
+        return Warehouse.builder()
+                .id(1L)
+                .name("Melhor warehouse")
+                .region("Melhor regiao")
+                .build();
+    }
+    private Supervisor supervisorMock(){
+        return Supervisor.builder()
+                .id(1L)
+                .name("Melhor")
+                .lastName("Supervisor")
+                .build();
+    }
+}

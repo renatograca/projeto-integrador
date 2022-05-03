@@ -46,7 +46,7 @@ public class WarehouseService {
         List<WarehouseQuantityProductDTO> warehouseQuantityProductDTOList = new ArrayList<>();
         List<WarehouseQuantityProductDTO> warehouseQuantityProductDTOs = batchProducts.stream().map(batchStock -> WarehouseQuantityProductDTO.map(
                 batchStock.getCurrentQuantity(),
-                inboundOrderService.findById(batchStock.getInboundOrder().getId()).getSector().getId()
+                inboundOrderService.findById(batchStock.getInboundOrder().getId()).getSector().getWarehouse().getId()
         )).collect(Collectors.toList());
         Map<Long, Integer> sumQuantityForWarehouse = WarehouseResponseForQuantityProductsDTO.sumQuantityForWarehouse(warehouseQuantityProductDTOs);
 
