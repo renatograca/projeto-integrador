@@ -1,6 +1,7 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.dto.PurchasedOrderDTO;
+import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.*;
 import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.BuyerRepository;
@@ -27,6 +28,7 @@ class PurchasedOrderServiceTest {
     private PurchasedOrder purchasedOrder;
     private BatchStockService batchStockService = Mockito.mock(BatchStockService.class);
     private List<BatchStock> batchStocks;
+    private BatchStock batchStock;
     private CartRepository cartRepository = Mockito.mock(CartRepository.class);
     private BuyerService buyerService = Mockito.mock(BuyerService.class);
     private Sector sector;
@@ -68,14 +70,50 @@ class PurchasedOrderServiceTest {
     }
 
     @Test
-    public void whenFindByIDThenReturnASeller() {
+    public void whenFindByIDThenReturnAPurchasedOrder() {
         Mockito.when(purchasedOrderRepository.findById(Mockito.anyLong())).thenReturn(optionalPurchasedOrder);
         PurchasedOrder response = purchasedOrderService.findById(1L);
         Assertions.assertEquals(response.getClass(), purchasedOrder.getClass());
     }
 
     @Test
-    void update() {
+    public void shouldReturnAnErrorWhenNotFoundAPurchasedOrder() {
+        Mockito.when(purchasedOrderRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+        EntityNotFound entityNotFound = Assertions
+                .assertThrows(EntityNotFound.class, () -> purchasedOrderService.findById(Mockito.anyLong()));
+
+        Assertions.assertEquals(entityNotFound.getMessage(), "Pedido não existe");
+    }
+
+    @Test
+    void shouldUpdateStatusInPurchasedOrderAndUpdateBatchStock() {
+
+
+        Mockito.when(purchasedOrderRepository.findById(Mockito.anyLong())).thenReturn(optionalPurchasedOrder);
+        startUpdateInPurchasedOrder();
+        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+        Mockito.when(batchStockService.findAllByProductId(Mockito.anyLong(), Mockito.anyString())).thenReturn(batchStocks);
+        Mockito.when(batchStockService.create(Mockito.any())).thenReturn(batchStock);
+
+        PurchasedOrder response = purchasedOrderService.update(2L);
+
+        Assertions.assertEquals(response.getStatus(), "finalizado");
+
+    }
+
+    @Test
+    void returnRuntimeExceptionWhenProductQuantityIsNotEnough() {
+
+
+        Mockito.when(purchasedOrderRepository.findById(Mockito.anyLong())).thenReturn(optionalPurchasedOrder);
+        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+        Mockito.when(batchStockService.findAllByProductId(Mockito.anyLong(), Mockito.anyString())).thenReturn(batchStocks);
+        Mockito.when(batchStockService.create(Mockito.any())).thenReturn(batchStock);
+
+        PurchasedOrder response = purchasedOrderService.update(2L);
+
+        Assertions.assertEquals(response.getStatus(), "finalizado");
+
     }
 
     private void startSeller() {
@@ -169,9 +207,7 @@ class PurchasedOrderServiceTest {
                 .build();
     }
 
-    private void startBatchStocks(){
-
-        batchStocks = new ArrayList<>();
+    private void startBatchStock() {
         InboundOrder inboundOrder = InboundOrder
                 .builder()
                 .id(1L)
@@ -179,12 +215,12 @@ class PurchasedOrderServiceTest {
                 .batchStock(batchStocks)
                 .build();
 
-        BatchStock batchStock =
+        batchStock =
                 BatchStock
                         .builder()
                         .id(1L)
-                        .currentQuantity(1)
-                        .initialQuantity(1)
+                        .currentQuantity(60)
+                        .initialQuantity(60)
                         .initialTemperature(1)
                         .currentTemperature(1)
                         .product(product)
@@ -194,8 +230,31 @@ class PurchasedOrderServiceTest {
                         .manufacturingDate(LocalDate.now())
                         .manufacturingTime(LocalTime.now())
                         .build();
+    }
+
+    private void startBatchStocks(){
+
+        batchStocks = new ArrayList<>();
+        startBatchStock();
 
         batchStocks.add(batchStock);
+    }
+
+    private void startUpdateInPurchasedOrder() {
+
+        purchasedOrder = PurchasedOrder.builder()
+                .id(2L)
+                .status("finalizado")
+                .buyer(buyer)
+                .cart(carts)
+                .build();
+        optionalPurchasedOrder = Optional.of(PurchasedOrder.builder()
+                .id(2L)
+                .status("finalizado")
+                .buyer(buyer)
+                .cart(carts)
+                .build());
+
     }
 
 }
