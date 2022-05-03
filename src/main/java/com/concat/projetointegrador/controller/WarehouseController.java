@@ -34,11 +34,21 @@ public class WarehouseController {
     @Autowired
     private InboundOrderService inboundOrderService;
 
+    /**
+     * Search warehouse by id
+     * @param id - Long ID warehouse
+     * @return the warehouse when find with status 200 OK
+     */
     @GetMapping( "/warehouse/{id}")
     public ResponseEntity<WarehouseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(warehouseService.findById(id));
     }
 
+    /**
+     * Search a products list by warehouse
+     * @param productId - Long ID product
+     * @return A list of products by warehouse
+     */
     @GetMapping("/products/warehouse")
     public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "querytype") Long productId) {
         List<BatchStock> batchProducts = batchStockService.findAllByProductId(productId, null);
@@ -46,6 +56,16 @@ public class WarehouseController {
         WarehouseResponseForQuantityProductsDTO build = WarehouseResponseForQuantityProductsDTO.builder().productId(productId).warehouses(allProductForWarehouse).build();
 
         return ResponseEntity.ok(build);
+    }
+
+    /**
+     * Register a new warehouse
+     * @param warehouse - An object with the data of the store (name and region)
+     * @return  The object that was registered with the status 201 created
+     */
+    @PostMapping("/warehouse")
+    public ResponseEntity<WarehouseDTO> create(@RequestBody @Valid Warehouse warehouse) {
+        return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);
     }
 
 }
