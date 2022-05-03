@@ -193,6 +193,24 @@ class BatchStockServiceTest {
         assertEquals("Não foi encontrado nenhum lote para esse produto!", exception.getMessage());
     }
 
+    @Test
+    void shouldFilterBatchStocksParameterAsc() throws Exception {
+        List<BatchStockFilterDTO> batchStocks;
+        batchStocks = service.filterBatchStocks(mockListInboundOrder(), 800, "congelados", 0);
+        assertEquals(LocalDate.of(2023,11,10), batchStocks.get(0).getDueDate());
+    }
 
+    @Test
+    void shouldFilterBatchStocks() throws Exception {
+        List<BatchStockFilterDTO> batchStocks;
+        batchStocks = service.filterBatchStocks(mockListInboundOrder(), 800, "congelados", null);
+        assertEquals(LocalDate.of(2023,10,10), batchStocks.get(0).getDueDate());
+    }
+
+    @Test
+    void shouldFilterBatchStocksInvalidParameter() throws Exception {
+        Throwable exception = assertThrows(InvalidParameterException.class, () -> service.filterBatchStocks(mockListInboundOrder(), 800, "congelados", 9));
+        assertEquals("O valor de asc deve ser 0 ou 1!", exception.getMessage());
+    }
 
 }
