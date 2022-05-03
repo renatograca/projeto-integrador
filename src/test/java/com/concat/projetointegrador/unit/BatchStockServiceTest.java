@@ -123,6 +123,14 @@ class BatchStockServiceTest {
         assertEquals("O estoque não foi encontrado!!", exception.getMessage());
     }
 
+    @Test
+    void shouldCreateBatchStock() throws Exception {
+        BatchStock batchStock;
+        Mockito.when(batchStockRepositoryMock.save(Mockito.any())).thenReturn(mockBatchStock());
+        batchStock = service.create(mockBatchStock());
+        assertEquals("frango", batchStock.getProduct().getName());
+    }
+
 
 
 }
