@@ -5,6 +5,7 @@ import com.concat.projetointegrador.model.Supervisor;
 import com.concat.projetointegrador.service.SupervisorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,6 +34,7 @@ public class SupervisorController {
 								.path("/supervisor/{id}")
 								.buildAndExpand(newSupervisor.getId())
 								.toUri();
+
 				return ResponseEntity.created(uri).body(supervisorReturn);
 		}
 

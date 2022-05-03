@@ -16,6 +16,7 @@ public class SellerController {
 
 		private final SellerService sellerService;
 
+
 		@PostMapping("/seller")
 		public ResponseEntity<Seller> create(@RequestBody @Valid Seller seller, UriComponentsBuilder uriComponentsBuilder) {
 				Seller newSeller = sellerService.create(seller);

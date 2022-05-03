@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class BuyerService {
 
     private BuyerRepository buyerRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public Buyer findById(Long id) {
         Optional<Buyer> buyer = buyerRepository.findById(id);
@@ -27,6 +29,7 @@ public class BuyerService {
     }
 
     public Buyer create(Buyer buyer) {
+        buyer.setPassword(passwordEncoder.encode(buyer.getPassword()));
         Optional<Buyer> buyerOpt = buyerRepository.findByCpf(buyer.getCpf());
         if(buyerOpt.isPresent()) {
             throw new RuntimeException("Comprador já cadastrado");

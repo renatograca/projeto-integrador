@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name="\"user\"")
+@Table(name="\"client\"")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 public class User implements UserDetails {

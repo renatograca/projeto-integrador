@@ -15,6 +15,7 @@ import java.util.Optional;
 public class SellerService {
 
 		private final BCryptPasswordEncoder passwordEncoder;
+
     private SellerRepository sellerRepository;
 
     public Seller findByID(Long id) {

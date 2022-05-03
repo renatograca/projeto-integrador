@@ -34,19 +34,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		protected void configure(HttpSecurity http) throws Exception {
 				String[]  WHITELIST = {
 								"/**/login",
-								"/**/user/save",
-								"/**/role/save",
-								"/**/refresh-token",
-								"**"
+								"/**/seller",
+								"/**/buyer",
+								"/**/refresh-token"
 				};
 
 				http.csrf().disable();
 				http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 				http.authorizeRequests()
 								.antMatchers(WHITELIST)
 								.permitAll()
-//								.antMatchers("/api").hasRole("ADMIN")
+								.antMatchers("/**/supervisor")
+									.hasAuthority("ADMIN")
 								.anyRequest().authenticated();
+
 				http.addFilterBefore(new CustomAuthorizationFIlter(), UsernamePasswordAuthenticationFilter.class);
 				http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
 		}

@@ -38,6 +38,8 @@ public class InboundOrderControllerTest {
 				objectMapper.registerModule(new JavaTimeModule());
 				String payload = "{\"sector\":{\"sectorCode\":1,\"warehouseCode\":1},\"batchStock\":[{\"initialQuantity\":1,\"manufacturingDate\":\"2022-10-10\",\"manufacturingTime\":\"20:20:20\",\"dueDate\":\"2025-10-10\",\"initialTemperature\":2,\"productId\":1}]}";
 
+
+
 				mock.perform(MockMvcRequestBuilders
 								.post("/fresh-products/inboundorder")
 								.contentType(MediaType.APPLICATION_JSON)
