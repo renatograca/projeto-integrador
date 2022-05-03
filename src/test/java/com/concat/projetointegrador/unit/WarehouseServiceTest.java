@@ -38,6 +38,7 @@ public class WarehouseServiceTest {
         Mockito.when(inboundOrderService.findById(Mockito.anyLong())).thenReturn(inboundOrderMock());
         List<WarehouseQuantityProductDTO> allProductForWarehouse = warehouseService.findAllProductForWarehouse(batchStocks, inboundOrderService);
         assertEquals(4, allProductForWarehouse.get(0).getTotalQuantity());
+        assertEquals(warehouseMock().getId(), allProductForWarehouse.get(0).getWarehouseCode());
     }
 
     private BatchStock batchStockMock() {
