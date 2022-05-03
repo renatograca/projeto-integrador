@@ -1,13 +1,14 @@
 package com.concat.projetointegrador.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter @Setter
 @Entity
-@Table(name = "sector")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Sector {
     //TODO add nullable = false em warehouseId
 
