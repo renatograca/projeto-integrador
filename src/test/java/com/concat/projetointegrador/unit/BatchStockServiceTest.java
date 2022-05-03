@@ -153,6 +153,46 @@ class BatchStockServiceTest {
         assertEquals("Estoque insuficiente", exception.getMessage());
     }
 
+    @Test
+    void shouldReturnBatchStockOrderById() throws Exception {
+        List<BatchStock> batchStocks;
+        Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
+        batchStocks = service.findAllByProductId(Mockito.anyLong(), "L");
+        assertEquals(0L, batchStocks.get(0).getId());
+    }
+
+    @Test
+    void shouldReturnBatchStockOrderByQuantity() throws Exception {
+        List<BatchStock> batchStocks;
+        Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
+        batchStocks = service.findAllByProductId(Mockito.anyLong(), "C");
+        assertEquals(5
+                , batchStocks.get(0).getCurrentQuantity());
+    }
+
+    @Test
+    void shouldReturnBatchStockOrderByDueDate() throws Exception {
+        List<BatchStock> batchStocks;
+        Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
+        batchStocks = service.findAllByProductId(Mockito.anyLong(), "F");
+        assertEquals(LocalDate.of(2023, 10, 10), batchStocks.get(0).getDueDate());
+    }
+
+    @Test
+    void shouldReturnBatchStock() throws Exception {
+        List<BatchStock> batchStocks;
+        Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(mockListBatchStock());
+        batchStocks = service.findAllByProductId(Mockito.anyLong(), null);
+        assertEquals(0L, batchStocks.get(0).getId());
+    }
+
+    @Test
+    void shouldReturnBatchStockNotFound() throws Exception {
+        Mockito.when(batchStockRepositoryMock.findAllByProductId(Mockito.anyLong())).thenReturn(new ArrayList<>());
+        Throwable exception = assertThrows(EntityNotFound.class, () -> service.findAllByProductId(Mockito.anyLong(), null));
+        assertEquals("Não foi encontrado nenhum lote para esse produto!", exception.getMessage());
+    }
+
 
 
 }
