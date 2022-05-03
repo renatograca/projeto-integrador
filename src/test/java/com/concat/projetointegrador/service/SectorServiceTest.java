@@ -29,7 +29,7 @@ class SectorServiceTest {
 
     @Test
     void shouldReturnASectorById() {
-        Sector sector = MockSector();
+        Sector sector = mockSector();
         Sector result = service.findById(1L);
         when(sectorRepositoryMock.findById(anyLong())).thenReturn(Optional.of(sector));
 
@@ -49,9 +49,9 @@ class SectorServiceTest {
     @Test
     void shouldReturnASectorByCategory() {
         List<Sector> sectorList = Arrays.asList(
-                MockSector(),
-                MockSector(),
-                MockSector()
+                mockSector(),
+                mockSector(),
+                mockSector()
         );
         List<Sector> resultList = service.findByCategory(Category.CONGELADOS);
         when(sectorRepositoryMock.findByCategory(Category.CONGELADOS)).thenReturn(sectorList);
@@ -59,7 +59,7 @@ class SectorServiceTest {
         resultList.forEach(s1 -> sectorList.forEach(s2 -> assertEquals(s1.getClass(), s2.getClass())));
     }
 
-    private Sector MockSector() {
+    private Sector mockSector() {
         return new Sector(1L, warehouseMock, 100, supervisorMock, Category.CONGELADOS);
     }
 
