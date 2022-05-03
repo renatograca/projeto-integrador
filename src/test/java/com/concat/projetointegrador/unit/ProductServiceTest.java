@@ -50,7 +50,7 @@ class ProductServiceTest {
     }
 
     private List<Product> mockListProduct() {
-        List<Product> productList = Arrays.asList(Product.builder()
+        return Arrays.asList(Product.builder()
                         .name("carne")
                         .volume(1)
                         .category(Category.FRESCOS)
@@ -62,11 +62,10 @@ class ProductServiceTest {
                         .category(Category.FRESCOS)
                         .price(BigDecimal.valueOf(3))
                         .build());
-        return productList;
     }
 
     @Test
-    void shouldReturnGetProductDTOById() throws Exception {
+    void shouldReturnGetProductDTOById() {
         ProductDTO productDTO;
         Mockito.when(productRepositoryMock.findById(Mockito.anyLong())).thenReturn(Optional.of(mockProduct()));
         productDTO = ProductDTO.convertToProductDTO(service.findById(Mockito.anyLong()));
@@ -75,14 +74,14 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldReturnGetProductDTOByIdNotFound() throws Exception {
+    void shouldReturnGetProductDTOByIdNotFound() {
         Mockito.when(productRepositoryMock.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findById(Mockito.anyLong()));
         assertEquals("O produto não foi encontrado!!", exception.getMessage());
     }
 
     @Test
-    void shouldReturnGetListProductDTO() throws Exception {
+    void shouldReturnGetListProductDTO() {
         List<ProductDTO> listProductDTO;
         Mockito.when(productRepositoryMock.findAll()).thenReturn(mockListProduct());
         listProductDTO = service.findAll();
@@ -90,14 +89,14 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldReturnGetListProductDTONotFound() throws Exception {
+    void shouldReturnGetListProductDTONotFound() {
         Mockito.when(productRepositoryMock.findAll()).thenReturn(new ArrayList<>());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findAll());
         assertEquals("Não existem produtos cadastrados.", exception.getMessage());
     }
 
     @Test
-    void shouldCreateProduct() throws Exception {
+    void shouldCreateProduct() {
         ProductDTO productDTO;
         Mockito.when(productRepositoryMock.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         Mockito.when(productRepositoryMock.save(Mockito.any())).thenReturn(mockProduct());
@@ -106,7 +105,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldReturnErrorExistCreateProduct() throws Exception {
+    void shouldReturnErrorExistCreateProduct() {
         Mockito.when(productRepositoryMock.findById(Mockito.anyLong())).thenReturn(Optional.of(mockProduct()));
         Mockito.when(productRepositoryMock.save(Mockito.any())).thenReturn(mockProduct());
         Throwable exception = assertThrows(RuntimeException.class, () -> service.create(mockProduct()));
@@ -114,7 +113,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldReturnProductByCategory() throws Exception {
+    void shouldReturnProductByCategory() {
         List<ProductDTO> listProductDTO;
         Mockito.when(productRepositoryMock.findByCategory(Mockito.any())).thenReturn(mockListProduct());
         listProductDTO = service.findByCategory(Category.CONGELADOS);
@@ -122,7 +121,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldReturnProductByCategoryNotFound() throws Exception {
+    void shouldReturnProductByCategoryNotFound() {
         Mockito.when(productRepositoryMock.findByCategory(Mockito.any())).thenReturn(new ArrayList<>());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findByCategory(Category.CONGELADOS));
         assertEquals("Não existem produtos nesta categoria!", exception.getMessage());
