@@ -1,18 +1,26 @@
 package com.concat.projetointegrador.unit;
 
 import com.concat.projetointegrador.dto.WarehouseDTO;
+import com.concat.projetointegrador.dto.WarehouseQuantityProductDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
-import com.concat.projetointegrador.model.Warehouse;
+import com.concat.projetointegrador.model.*;
 import com.concat.projetointegrador.repository.InboundOrderRepository;
 import com.concat.projetointegrador.repository.WarehouseRepository;
+import com.concat.projetointegrador.service.InboundOrderService;
 import com.concat.projetointegrador.service.WarehouseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
