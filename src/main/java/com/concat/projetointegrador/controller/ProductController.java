@@ -33,12 +33,9 @@ public class ProductController {
 	private SectorService sectorService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id, @PathParam("orderBy") String orderBy) {// usado
-
+	public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id, @PathParam("orderBy") String orderBy) {
 		Product product = productService.findById(id);
-
 		List<BatchStock> batchStock = batchStockService.findAllByProductId(product.getId(), orderBy);
-
 		ProductResponseDTO build = ProductResponseDTO
 				.builder()
 				.productId(product.getId())
@@ -55,14 +52,12 @@ public class ProductController {
 				.sector(sectorService.findByCategory(product.getCategory()).stream().map(SectorRequestDTO::map).collect(Collectors.toList())  )
 				.productId(product.getId())
 				.build();
-
 		return ResponseEntity.ok(build);
 	}
 
 	@GetMapping
 	public ResponseEntity<List<ProductDTO>> findAll() {
 		return ResponseEntity.ok(productService.findAll());
-
 	}
 
     @GetMapping("/category/{category}")
