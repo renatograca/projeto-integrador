@@ -93,19 +93,18 @@ public class InboundOrderController {
     	List<BatchStock> list = dto.getBatchStock()
     			.stream()
     			.map(
-					e-> 
-			    	BatchStock.builder()
-						.category(batchStockService.findById(id).getCategory())
-			    		.currentQuantity(e.getCurrentQuantity())
-			    		.dueDate(e.getDueDate())
-			    		.initialQuantity(e.getInitialQuantity())
-						.initialTemperature(e.getInitialTemperature())
-						.currentTemperature(e.getInitialTemperature())
-			    		.manufacturingDate(e.getManufacturingDate())
-			    		.manufacturingTime(e.getManufacturingTime())
-			    		.product(productService.findById(e.getProductId()))
-			    		.build()
-				).collect(Collectors.toList());
+							e-> BatchStock.builder()
+									.category(batchStockService.findById(id).getCategory())
+					        .currentQuantity(e.getCurrentQuantity())
+					        .dueDate(e.getDueDate())
+					        .initialQuantity(e.getInitialQuantity())
+									.initialTemperature(e.getInitialTemperature())
+									.currentTemperature(e.getInitialTemperature())
+					        .manufacturingDate(e.getManufacturingDate())
+					        .manufacturingTime(e.getManufacturingTime())
+					        .product(productService.findById(e.getProductId()))
+					        .build()
+					).collect(Collectors.toList());
     	InboundOrder inboundOrder = InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()), list);
     	inboundOrder = orderService.update(id, inboundOrder);
     	

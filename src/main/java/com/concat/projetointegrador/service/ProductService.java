@@ -6,7 +6,6 @@ import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.ProductRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +18,11 @@ public class ProductService {
     private ProductRepository productRepository;
     private SellerService sellerService;
 
+    /**
+     * Search for a product by id
+     * @param id Long - product id
+     * @return a product if registered
+     */
     public Product findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
@@ -28,6 +32,10 @@ public class ProductService {
         }
     }
 
+    /**
+     * Search a product list
+     * @return a list of registered products
+     */
     public List<ProductDTO> findAll() {
         List<Product> listProduct = productRepository.findAll();
 
@@ -38,7 +46,11 @@ public class ProductService {
         return listDTO;
     }
 
-
+    /**
+     * Save a product
+     * @param product - product object to insert
+     * @return a product DTO
+     */
     public ProductDTO create(Product product) {
         Optional<Product> productOpt = productRepository.findById(product.getId());
         if (productOpt.isPresent()) {
@@ -50,6 +62,11 @@ public class ProductService {
 
     }
 
+    /**
+     * Search a list of products by category
+     * @param category - Enum category
+     * @return a list of products DTO
+     */
     public List<ProductDTO> findByCategory(Category category) {
         List<Product> products = productRepository.findByCategory(category);
         if(products.isEmpty()) {
