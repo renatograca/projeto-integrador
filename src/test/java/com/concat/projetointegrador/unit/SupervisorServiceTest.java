@@ -24,7 +24,7 @@ public class SupervisorServiceTest {
     @BeforeAll
     static void init() {
         supervisorRepository = Mockito.mock(SupervisorRepository.class);
-        supervisorService = new SupervisorService(supervisorRepository, passwordEncoder);
+        supervisorService = new SupervisorService(supervisorRepository);
     }
     @Test
     public void shouldReturnASupervisorWithId() {
