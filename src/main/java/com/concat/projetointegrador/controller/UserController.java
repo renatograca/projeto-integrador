@@ -29,10 +29,10 @@ import java.util.List;
 public class UserController {
 		private final UserService userService;
 
-		@GetMapping
-		public ResponseEntity<List<User>> getUsers() {
-				return ResponseEntity.ok().body( userService.getUsers());
-		}
+//		@GetMapping
+//		public ResponseEntity<List<User>> getUsers() {
+//				return ResponseEntity.ok().body( userService.getUsers());
+//		}
 
 		@PostMapping("/user/save")
 		public ResponseEntity<User> saveUser(@RequestBody User user) {

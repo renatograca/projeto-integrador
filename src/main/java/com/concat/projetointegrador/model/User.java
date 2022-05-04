@@ -1,5 +1,13 @@
 package com.concat.projetointegrador.model;
 
+import com.concat.projetointegrador.configuration.CustomAuthorityDeserializer;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,14 +18,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name="\"client\"")
+@Table(name="\"user\"")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 public class User implements UserDetails {
@@ -66,6 +73,7 @@ public class User implements UserDetails {
 		}
 
 		@Override
+		@JsonDeserialize(using = CustomAuthorityDeserializer.class)
 		public Collection<? extends GrantedAuthority> getAuthorities() {
 				List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 				authorities.add(new SimpleGrantedAuthority(getDiscriminatorValue()));
@@ -92,4 +100,5 @@ public class User implements UserDetails {
 		public boolean isEnabled() {
 				return true;
 		}
+
 }
