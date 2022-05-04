@@ -38,10 +38,10 @@ public class SellerServiceTest {
     @Test
     public void shouldReturnAnErrorWhenNotFoundASeller() {
         Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
-        EntityNotFound entitityNotFound = Assertions
+        EntityNotFound entityNotFound = Assertions
                 .assertThrows(EntityNotFound.class, () -> service.findByID(Mockito.anyLong()));
 
-        Assertions.assertEquals(entitityNotFound.getMessage(), "Vendedor não existe.");
+        Assertions.assertEquals(entityNotFound.getMessage(), "Vendedor não existe.");
     }
 
     private void startSeller() {
