@@ -20,7 +20,7 @@ import com.concat.projetointegrador.service.BatchStockService;
 import javax.websocket.server.PathParam;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping
 public class ProductController {
 
 	@Autowired
@@ -33,7 +33,12 @@ public class ProductController {
 	private SectorService sectorService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id, @PathParam("orderBy") String orderBy) {// usado
+	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
+		return ResponseEntity.ok(ProductDTO.convertToProductDTO(productService.findById(id)));
+	}
+
+	@GetMapping("/list/{id}")
+	public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id, @PathParam("orderBy") String orderBy) {
 
 		Product product = productService.findById(id);
 

@@ -9,22 +9,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/orders")
 public class PurchaseOrderController {
 
     @Autowired
     private PurchasedOrderService purchaseOrderService;
 
-    @PostMapping("/purchasedOrder")
+    @PostMapping
     public ResponseEntity<PurchasedOrderDTO> create(@RequestBody PurchasedOrder purchasedOrder) {
         return new ResponseEntity<>(purchaseOrderService.create(purchasedOrder), HttpStatus.CREATED);
     }
 
-    @GetMapping("/purchasedOrder")
+    @GetMapping
     public ResponseEntity<PurchasedOrder> findById(@RequestParam Long id) {
         return ResponseEntity.ok(purchaseOrderService.findById(id));
     }
 
-    @PutMapping("/purchasedOrder")
+    @PutMapping
     public ResponseEntity<PurchasedOrder> update(@RequestParam Long id) {
         return ResponseEntity.ok(purchaseOrderService.update(id));
     }
