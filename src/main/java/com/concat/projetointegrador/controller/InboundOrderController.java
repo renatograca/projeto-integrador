@@ -5,11 +5,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.Sector;
+import com.concat.projetointegrador.model.Warehouse;
 import com.concat.projetointegrador.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,16 +47,28 @@ public class InboundOrderController {
     private ProductService productService;
 
     @GetMapping
+    /**
+     * @return returns a list of inbound orders
+     */
     public Collection<InboundOrder> findAllByActiveTrue() {
         return orderService.findAll();
     }
 
     @GetMapping("/{id}")
+    /**
+     * @param id - Long that represents the unique identifier
+     * @return InboundOrder - returns an object with type InboundOrder
+     */
     public InboundOrder findAllByIdAndActiveTrue(@PathVariable Long id) {
         return orderService.findById(id);
     }
 
     @PostMapping
+    /**
+     *
+     * @param order - object with the data to registrate on database
+     * @return returns the created database
+     */
     public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {//usado
 		Sector sector = sectorService.findById(dto.getSector().getSectorCode());
 
@@ -87,23 +103,28 @@ public class InboundOrderController {
     }
 
     @PutMapping("/{id}")
+    /**
+     *
+     * @param id - Long id that represents the inbound order on the database
+     * @param order - object with the data to update
+     * @return returns the updated inbound order
+     */
     public ResponseEntity<InboundOrder> update(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
     	List<BatchStock> list = dto.getBatchStock()
     			.stream()
     			.map(
-					e-> 
-			    	BatchStock.builder()
-						.category(batchStockService.findById(id).getCategory())
-			    		.currentQuantity(e.getCurrentQuantity())
-			    		.dueDate(e.getDueDate())
-			    		.initialQuantity(e.getInitialQuantity())
-						.initialTemperature(e.getInitialTemperature())
-						.currentTemperature(e.getInitialTemperature())
-			    		.manufacturingDate(e.getManufacturingDate())
-			    		.manufacturingTime(e.getManufacturingTime())
-			    		.product(productService.findById(e.getProductId()))
-			    		.build()
-				).collect(Collectors.toList());
+							e-> BatchStock.builder()
+									.category(batchStockService.findById(id).getCategory())
+					        .currentQuantity(e.getCurrentQuantity())
+					        .dueDate(e.getDueDate())
+					        .initialQuantity(e.getInitialQuantity())
+									.initialTemperature(e.getInitialTemperature())
+									.currentTemperature(e.getInitialTemperature())
+					        .manufacturingDate(e.getManufacturingDate())
+					        .manufacturingTime(e.getManufacturingTime())
+					        .product(productService.findById(e.getProductId()))
+					        .build()
+					).collect(Collectors.toList());
     	InboundOrder inboundOrder = InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()), list);
     	inboundOrder = orderService.update(id, inboundOrder);
     	

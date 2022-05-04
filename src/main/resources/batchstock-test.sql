@@ -1,56 +1,67 @@
-insert into warehouse (id, name, region) values ('1', 'Tools', 'Doujia');
+insert into WAREHOUSE (id, name, region) values (1, 'Tools', 'Doujia');
 
-insert into seller (id, last_name, name) values ('1', 'Fearick', 'Janette');
+INSERT INTO "user" (role, id, cpf, last_name, name, password, username) VALUES('ADMIN', 1, NULL, 'ADMIN', 'ADMIN', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'ADMIN');
 
-insert into supervisor (id, last_name, name) values ('1', 'Van Hesteren', 'Basile');
+INSERT INTO "user" (role, id, cpf, last_name, name, password, username) VALUES('Supervisor', 2, NULL, 'Supervisor', 'Supervisor', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Supervisor');
 
-insert into sector (capacity, category, id, supervisor_id, warehouse_id) values (100, 'FRESCOS', '1', '1', '1');
+INSERT INTO "user" (role, id, cpf, last_name, name, password, username) VALUES('Seller', 3, NULL, 'Seller', 'Seller', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Seller');
 
-INSERT INTO product (id, category, name, price, volume, seller_id) VALUES (1,'CONGELADOS','frango',20.00,1,1);
+INSERT INTO "user" (role, id, cpf, last_name, name, password, username) VALUES('Buyer', 4, NULL, 'Buyer', 'Buyer', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Buyer');
 
-insert into inbound_order (id, order_date, sector_id) values (1, '2022-04-20', 1);
+INSERT INTO sector (id, capacity, category, "supervisor_id", warehouse_id) VALUES(1, 1000, 'CONGELADOS', 2, 1);
 
-insert into batch_stock (
-     category,
-     current_quantity,
-     due_date,
-     id,
-     inbound_order_id,
-     initial_quantity,
-     manufacturing_date,
-     manufacturing_time,
-     product_id,
-     initial_temperature,
-     current_temperature
-)
-values ('FRESCOS', 5, '2022-05-10', '1', '1', 5, '2022-10-10', '20:20:20', '1', 20, 20);
+INSERT INTO inbound_order (id, order_date, sector_id) VALUES(99, '2022-05-04', 1);
 
-insert into batch_stock (
+INSERT INTO product (id,category,name,price,volume,"seller_id") VALUES
+    (1,'CONGELADOS','frango',20.00,1,3);
+
+INSERT INTO batch_stock (
+    id,
     category,
     current_quantity,
+    current_temperature,
     due_date,
-    id,
-    inbound_order_id,
     initial_quantity,
+    initial_temperature,
     manufacturing_date,
     manufacturing_time,
-    product_id,
-    initial_temperature,
-    current_temperature
-)
-values ('CONGELADOS', 5, '2022-05-11', '2', '1', 5, '2022-10-10', '20:20:20', '1', 20, 20);
+    inbound_order_id,
+    product_id
+ )
+ VALUES(1, 'CONGELADOS', 1, 2, '2022-05-10', 1, 2, '2022-10-10', '20:20:20', 99, 1);
 
-insert into batch_stock (
+INSERT INTO batch_stock (
+    id,
     category,
     current_quantity,
+    current_temperature,
     due_date,
-    id,
-    inbound_order_id,
     initial_quantity,
+    initial_temperature,
     manufacturing_date,
     manufacturing_time,
-    product_id,
-    initial_temperature,
-    current_temperature
+    inbound_order_id,
+    product_id
 )
-values ('REFRIGERADOS', 5, '2022-05-12', '3', '1', 5, '2022-10-10', '20:20:20', '1', 20, 20);
+VALUES(2, 'CONGELADOS', 1, 2, '2022-05-11', 1, 2, '2022-10-10', '20:20:20', 99, 1);
+
+INSERT INTO batch_stock (
+    id,
+    category,
+    current_quantity,
+    current_temperature,
+    due_date,
+    initial_quantity,
+    initial_temperature,
+    manufacturing_date,
+    manufacturing_time,
+    inbound_order_id,
+    product_id
+)
+VALUES(3, 'CONGELADOS', 1, 2, '2022-05-12', 1, 2, '2022-10-10', '20:20:20', 99, 1);
+
+insert into purchased_order (id, date, status, "buyer_id") values (1,'2022-04-20', 'aberto', 1);
+
+insert into cart (id, quantity, products_id, purchased_order_id) values (1, 10, 1, 1);
+
+

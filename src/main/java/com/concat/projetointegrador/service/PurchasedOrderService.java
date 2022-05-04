@@ -23,8 +23,12 @@ public class PurchasedOrderService {
     private CartRepository cartRepository;
     private BuyerService buyerService;
 
-
-    public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) { //usado
+    /**
+     * Save a PurchasedOrder
+     * @param purchasedOrder is an object PurchasedOrder to save
+     * @return Sum of all products prices in cart, multiplied by yours quantity
+     */
+    public PurchasedOrderDTO create(PurchasedOrder purchasedOrder) {
         buyerService.findById(purchasedOrder.getBuyer().getId());
         List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
@@ -42,6 +46,11 @@ public class PurchasedOrderService {
         return purchasedOrderDTO;
     }
 
+    /**
+     * Find a PurchaseOrder by id
+     * @param id is a Long property on PurchasedOrder
+     * @return a PurchasedOrder or an EntityNotFound Exception
+     */
     public PurchasedOrder findById(Long id) {
         Optional<PurchasedOrder> purchasedOrderOpt = purchasedOrderRepository.findById(id);
         if (purchasedOrderOpt.isPresent()) {
@@ -51,6 +60,11 @@ public class PurchasedOrderService {
 
     }
 
+    /**
+     * Change the status on a PurchasedOrder
+     * @param id is a Long property on PurchasedOrder
+     * @return the updated status on PurchasedOrder for "finalizado" or an custom exception
+     */
     public PurchasedOrder update(Long id) {
         Optional<PurchasedOrder> purchasedOrder = purchasedOrderRepository.findById(id);
         if (!purchasedOrder.isPresent()) {
@@ -87,6 +101,10 @@ public class PurchasedOrderService {
 
     }
 
+    /**
+     * Validate if BatchStock has a valid quantity
+     * @param purchasedOrder is an object PurchasedOrder with the BatchStock to validate
+     */
     private void validateQuantityInBatchStock(PurchasedOrder purchasedOrder) {
         for (Cart cart : purchasedOrder.getCart()) {
             List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");

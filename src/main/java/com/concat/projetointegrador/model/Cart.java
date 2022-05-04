@@ -22,7 +22,7 @@ public class Cart {
     private Integer quantity;
 
     @ManyToOne
-    private Product products;
+    private Product products;// corrigir esse nome
 
     @ManyToOne
     @JsonIgnore

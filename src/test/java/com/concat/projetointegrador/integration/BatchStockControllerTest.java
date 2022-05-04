@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,10 +42,15 @@ public class BatchStockControllerTest {
     @Test
     public void givenCategoryType_whenFilterBatchStock_thenReturnMatchBatchStocks() throws Exception {
         MvcResult response = mockMvc.perform(get("/batchstock/duedate")
+                .with(
+                        user("Supervisor")
+                                .password("123")
+                )
                 .param("days", "40")
                 .param("sectorId", "1")
                 .param("category", "congelados")
                 .contentType(MediaType.APPLICATION_JSON))
+
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andReturn();
@@ -52,7 +58,7 @@ public class BatchStockControllerTest {
         String json = response.getResponse().getContentAsString();
         List batchStockResponseDTOList = objectMapper.readValue(json, List.class);
 
-        assertEquals(1, batchStockResponseDTOList.size());
+        assertEquals(3, batchStockResponseDTOList.size());
     }
 
     @Test
@@ -74,6 +80,10 @@ public class BatchStockControllerTest {
     @Test
     public void givenSortAsDesc_whenFilterBatchStock_thenReturnBatchStockByDueDateDesc() throws Exception {
         MvcResult response = mockMvc.perform(get("/batchstock/duedate")
+                        .with(
+                                user("Supervisor")
+                                        .password("123")
+                        )
                         .param("days", "40")
                         .param("sectorId", "1")
                         .param("asc", "0")
@@ -99,6 +109,10 @@ public class BatchStockControllerTest {
 
     private List setupMvc() throws Exception {
         MvcResult response = mockMvc.perform(get("/batchstock/duedate")
+                        .with(
+                                user("Supervisor")
+                                        .password("123")
+                        )
                         .param("days", "40")
                         .param("sectorId", "1")
                         .contentType(MediaType.APPLICATION_JSON))
