@@ -32,6 +32,13 @@ public class ProductController {
 	@Autowired
 	private SectorService sectorService;
 
+
+	/**
+	 * Search product by id
+	 * @param id - product id
+	 * @param orderBy - path param
+	 * @return the product with this id
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id, @PathParam("orderBy") String orderBy) {
 		Product product = productService.findById(id);
@@ -55,17 +62,33 @@ public class ProductController {
 		return ResponseEntity.ok(build);
 	}
 
+
+	/**
+	 * Search all products
+	 * @return all searched products
+	 */
 	@GetMapping
 	public ResponseEntity<List<ProductDTO>> findAll() {
 		return ResponseEntity.ok(productService.findAll());
 	}
 
+
+	/**
+	 * Searching category products
+	 * @param category - product category
+	 * @return the product linked to the category
+	 */
     @GetMapping("/category/{category}")
     public ResponseEntity<List<ProductDTO>> findByCategory(@PathVariable Category category) {
         return ResponseEntity.ok(productService.findByCategory(category));
     }
 
-    @PostMapping
+	/**
+	 * Create a new product
+	 * @param product - an object with data to register in the database
+	 * @return returns the created database
+	 */
+	@PostMapping
     public ResponseEntity<ProductDTO> create(@RequestBody Product product) {
         return new ResponseEntity<>(productService.create(product), HttpStatus.CREATED);
     }
