@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.Sector;
 import com.concat.projetointegrador.model.Warehouse;
 import com.concat.projetointegrador.service.*;
@@ -46,19 +47,28 @@ public class InboundOrderController {
     private ProductService productService;
 
     @GetMapping
-    @PreAuthorize("Supervisor")
+    /**
+     * @return returns a list of inbound orders
+     */
     public Collection<InboundOrder> findAllByActiveTrue() {
         return orderService.findAll();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("Supervisor")
+    /**
+     * @param id - Long that represents the unique identifier
+     * @return InboundOrder - returns an object with type InboundOrder
+     */
     public InboundOrder findAllByIdAndActiveTrue(@PathVariable Long id) {
         return orderService.findById(id);
     }
 
     @PostMapping
-    @PreAuthorize("Supervisor")
+    /**
+     *
+     * @param order - object with the data to registrate on database
+     * @return returns the created database
+     */
     public ResponseEntity<InboundOrder> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {//usado
 		Sector sector = sectorService.findById(dto.getSector().getSectorCode());
 
@@ -93,7 +103,12 @@ public class InboundOrderController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("Supervisor")
+    /**
+     *
+     * @param id - Long id that represents the inbound order on the database
+     * @param order - object with the data to update
+     * @return returns the updated inbound order
+     */
     public ResponseEntity<InboundOrder> update(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
     	List<BatchStock> list = dto.getBatchStock()
     			.stream()
