@@ -1,6 +1,8 @@
 package com.concat.projetointegrador.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.concat.projetointegrador.dto.InboundOrderDTO;
 import com.concat.projetointegrador.model.*;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
@@ -19,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -28,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@Sql(value = {"/test-schema.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/test-inbound-order.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class InboundOrderControllerTest {
 
 		@Autowired
@@ -38,12 +42,16 @@ public class InboundOrderControllerTest {
 		public void shouldCreateAInboundOrder() throws Exception {
 				String payload = "{\"sector\":{\"sectorCode\":1,\"warehouseCode\":1},\"batchStock\":[{\"initialQuantity\":1,\"manufacturingDate\":\"2022-10-10\",\"manufacturingTime\":\"20:20:20\",\"dueDate\":\"2025-10-10\",\"initialTemperature\":2,\"productId\":1}]}";
 
-				MvcResult result = mock.perform(post("/fresh-products/inboundorder")
+				SimpleGrantedAuthority supervisor = new SimpleGrantedAuthority("Supervisor");
+				ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+				simpleGrantedAuthorities.add(supervisor);
+				MvcResult result = mock.perform(post("/inboundorder")
 												.contentType(MediaType.APPLICATION_JSON)
 												.content(payload)
 												.with(
 																user("Supervisor")
 																.password("123")
+																.authorities(simpleGrantedAuthorities)
 												)
 								)
 								.andExpect(MockMvcResultMatchers.status().isCreated())
@@ -55,18 +63,24 @@ public class InboundOrderControllerTest {
 				objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 
 				String jsonReturned = result.getResponse().getContentAsString();
-				InboundOrder inboundOrder = objectMapper.readValue(jsonReturned, InboundOrder.class);
+				InboundOrderDTO inboundOrder = objectMapper.readValue(jsonReturned, InboundOrderDTO.class);
 
-				assertEquals(100, inboundOrder.getId());
+				assertEquals(1, inboundOrder.getBatchStock().get(0).getInitialQuantity());
 
 		}
 
 		@Test
 		public void shouldFindAInboundOrderById() throws Exception {
-				MvcResult result = mock.perform(get("/fresh-products/inboundorder/{id}", 99)
+
+				SimpleGrantedAuthority supervisor = new SimpleGrantedAuthority("Supervisor");
+				ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+				simpleGrantedAuthorities.add(supervisor);
+
+				MvcResult result = mock.perform(get("/inboundorder/{id}", 99)
 												.with(
 																user("Supervisor")
 																.password("123")
+																.authorities(simpleGrantedAuthorities)
 												)
 								)
 								.andExpect(MockMvcResultMatchers.status().isOk())
@@ -86,10 +100,15 @@ public class InboundOrderControllerTest {
 
 		@Test
 		public void shouldReturnAllInboundOrders() throws Exception {
-				MvcResult result = mock.perform(get("/fresh-products/inboundorder", 99)
+
+				SimpleGrantedAuthority supervisor = new SimpleGrantedAuthority("Supervisor");
+				ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+				simpleGrantedAuthorities.add(supervisor);
+				MvcResult result = mock.perform(get("/inboundorder", 99)
 												.with(
 																user("Supervisor")
-																				.password("123")
+																.password("123")
+																.authorities(simpleGrantedAuthorities)
 												)
 								)
 								.andExpect(MockMvcResultMatchers.status().isOk())
@@ -101,7 +120,7 @@ public class InboundOrderControllerTest {
 				objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 
 				String jsonReturned = result.getResponse().getContentAsString();
-				List<InboundOrder> inboundOrder = objectMapper.readValue(jsonReturned, List.class);
+				List<InboundOrderDTO> inboundOrder = objectMapper.readValue(jsonReturned, List.class);
 
 				assertEquals( 1, inboundOrder.size());
 
@@ -111,13 +130,18 @@ public class InboundOrderControllerTest {
 		public void shouldUpdateAInboundOrderById() throws Exception {
 				String payload = "{\"sector\":{\"sectorCode\":1,\"warehouseCode\":1},\"batchStock\":[{\"initialQuantity\":1,\"manufacturingDate\":\"2022-10-10\",\"manufacturingTime\":\"20:20:20\",\"dueDate\":\"2025-10-10\",\"initialTemperature\":23,\"currentQuantity\":23,\"initialTemperature\":23,\"productId\":1}]}";
 
+				SimpleGrantedAuthority supervisor = new SimpleGrantedAuthority("Supervisor");
+				ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+				simpleGrantedAuthorities.add(supervisor);
+
 				MvcResult result = mock.perform(
-								put("/fresh-products/inboundorder/{id}", 99)
+								put("/inboundorder/{id}", 99)
 												.contentType(MediaType.APPLICATION_JSON)
 												.content(payload)
 												.with(
 																user("Supervisor")
 																.password("123")
+																.authorities(simpleGrantedAuthorities)
 												)
 								)
 								.andExpect(MockMvcResultMatchers.status().isCreated())
