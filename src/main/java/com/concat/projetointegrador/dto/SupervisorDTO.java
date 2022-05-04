@@ -1,34 +1,28 @@
 package com.concat.projetointegrador.dto;
 
 import com.concat.projetointegrador.model.Supervisor;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class SupervisorDTO {
+
+    private Long id;
     private String name;
     private String lastName;
-    private String userName;
-    @JsonIgnoreProperties
-    private String password;
+    private String username;
+    private Long cpf;
 
-    public static Supervisor map(SupervisorDTO supervisorDto) {
-        return Supervisor.builder()
-                .name(supervisorDto.getName())
-                .lastName(supervisorDto.getLastName())
-                .username(supervisorDto.getUserName())
-                .password(supervisorDto.getPassword())
-                .build();
-    }
     public static SupervisorDTO map(Supervisor supervisor) {
-        return new SupervisorDTO(supervisor.getName(), supervisor.getLastName(), supervisor.getUsername(), supervisor.getPassword());
+        return SupervisorDTO.builder()
+                .id(supervisor.getId())
+                .name(supervisor.getName())
+                .lastName(supervisor.getLastName())
+                .username(supervisor.getUsername())
+                .cpf(supervisor.getCpf())
+                .build();
     }
 }
