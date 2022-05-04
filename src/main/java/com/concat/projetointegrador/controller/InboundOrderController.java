@@ -34,11 +34,11 @@ public class InboundOrderController {
     @Autowired
     private InboundOrderService orderService;
 
-		@Autowired
+	@Autowired
     private BatchStockService batchStockService;
 
-		@Autowired
-		private WarehouseService warehouseService;
+	@Autowired
+	private WarehouseService warehouseService;
 
     @Autowired
     private SectorService sectorService;
