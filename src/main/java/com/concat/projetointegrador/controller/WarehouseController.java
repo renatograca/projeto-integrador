@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
+@RequestMapping("/warehouse")
 public class WarehouseController {
 
     @Autowired
@@ -34,22 +35,22 @@ public class WarehouseController {
     @Autowired
     private InboundOrderService inboundOrderService;
 
-    /**
-     * Search warehouse by id
-     * @param id - Long ID warehouse
-     * @return the warehouse when find with status 200 OK
-     */
-    @GetMapping( "/warehouse/{id}")
-    public ResponseEntity<WarehouseDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(warehouseService.findById(id));
-    }
+//    /**   não é requisito
+//     * Search warehouse by id
+//     * @param id - Long ID warehouse
+//     * @return the warehouse when find with status 200 OK
+//     */
+//    @GetMapping( "/{id}")
+//    public ResponseEntity<WarehouseDTO> findById(@PathVariable Long id) {
+//        return ResponseEntity.ok(warehouseService.findById(id));
+//    }
 
     /**
      * Search a products list by warehouse
      * @param productId - Long ID product
      * @return A list of products by warehouse
      */
-    @GetMapping("/products/warehouse")
+    @GetMapping
     public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "querytype") Long productId) {
         List<BatchStock> batchProducts = batchStockService.findAllByProductId(productId, null);
         List<WarehouseQuantityProductDTO> allProductForWarehouse = warehouseService.findAllProductForWarehouse(batchProducts, inboundOrderService);
@@ -63,7 +64,7 @@ public class WarehouseController {
      * @param warehouse - An object with the data of the store (name and region)
      * @return  The object that was registered with the status 201 created
      */
-    @PostMapping("/warehouse")
+    @PostMapping
     public ResponseEntity<WarehouseDTO> create(@RequestBody @Valid Warehouse warehouse) {
         return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);
     }
