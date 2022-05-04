@@ -27,7 +27,7 @@ public class WarehouseService {
      * @param id
      * @return a warehouse if found
      */
-    public WarehouseDTO findById(Long id) { //usado
+    public WarehouseDTO findById(Long id) {
         Optional<Warehouse> warehouse = warehouseRepository.findById(id);
 
         if(warehouse.isEmpty()) {
@@ -72,5 +72,4 @@ public class WarehouseService {
 
         return WarehouseDTO.convertToWarehouseDTO(warehouseRepository.save(warehouseModel));
     }
-
 }

@@ -67,5 +67,4 @@ public class WarehouseController {
     public ResponseEntity<WarehouseDTO> create(@RequestBody @Valid Warehouse warehouse) {
         return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);
     }
-
 }
