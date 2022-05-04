@@ -35,23 +35,23 @@ public class WarehouseController {
     @Autowired
     private InboundOrderService inboundOrderService;
 
-//    /**   não é requisito
-//     * Search warehouse by id
-//     * @param id - Long ID warehouse
-//     * @return the warehouse when find with status 200 OK
-//     */
-//    @GetMapping( "/{id}")
-//    public ResponseEntity<WarehouseDTO> findById(@PathVariable Long id) {
-//        return ResponseEntity.ok(warehouseService.findById(id));
-//    }
+    /**
+     * Search warehouse by id
+     * @param id - Long ID warehouse
+     * @return the warehouse when find with status 200 OK
+     */
+    @GetMapping( "/{id}")
+    public ResponseEntity<WarehouseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(warehouseService.findById(id));
+    }
 
     /**
      * Search a products list by warehouse
      * @param productId - Long ID product
      * @return A list of products by warehouse
      */
-    @GetMapping
-    public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "querytype") Long productId) {
+    @GetMapping("/products/warehouse")
+    public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "productId") Long productId) {
         List<BatchStock> batchProducts = batchStockService.findAllByProductId(productId, null);
         List<WarehouseQuantityProductDTO> allProductForWarehouse = warehouseService.findAllProductForWarehouse(batchProducts, inboundOrderService);
         WarehouseResponseForQuantityProductsDTO build = WarehouseResponseForQuantityProductsDTO.builder().productId(productId).warehouses(allProductForWarehouse).build();
@@ -68,5 +68,4 @@ public class WarehouseController {
     public ResponseEntity<WarehouseDTO> create(@RequestBody @Valid Warehouse warehouse) {
         return new ResponseEntity<>(warehouseService.create(warehouse),HttpStatus.CREATED);
     }
-
 }

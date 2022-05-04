@@ -79,7 +79,6 @@ public class WarehouseServiceTest {
     @Test
     void shouldReturnErrorExistCreateProduct() {
         Mockito.when(warehouseRepositoryMock.findByName(Mockito.any())).thenReturn(Optional.of(mockWarehouse()));
-        // Mockito.when(warehouseRepositoryMock.save(Mockito.any())).thenReturn(mockWarehouse());
         Throwable exception = assertThrows(RuntimeException.class, () -> service.create(mockWarehouse()));
         assertEquals("Esse armazém já existe!", exception.getMessage());
     }

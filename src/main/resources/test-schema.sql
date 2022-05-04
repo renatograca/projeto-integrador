@@ -1,12 +1,12 @@
 insert into WAREHOUSE (id, name, region) values (1, 'Tools', 'Doujia');
 
-INSERT INTO "user" (role, id, cpf, last_name, name, password, username) VALUES('ADMIN', 1, NULL, 'ADMIN', 'ADMIN', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'ADMIN');
+INSERT INTO "client" (role, id, cpf, last_name, name, password, username) VALUES('ADMIN', 1, NULL, 'ADMIN', 'ADMIN', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'ADMIN');
 
-INSERT INTO "user" (role, id, cpf, last_name, name, password, username) VALUES('Supervisor', 2, NULL, 'Supervisor', 'Supervisor', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Supervisor');
+INSERT INTO "client" (role, id, cpf, last_name, name, password, username) VALUES('Supervisor', 2, NULL, 'Supervisor', 'Supervisor', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Supervisor');
 
-INSERT INTO "user" (role, id, cpf, last_name, name, password, username) VALUES('Seller', 3, NULL, 'Seller', 'Seller', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Seller');
+INSERT INTO "client" (role, id, cpf, last_name, name, password, username) VALUES('Seller', 3, NULL, 'Seller', 'Seller', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Seller');
 
-INSERT INTO "user" (role, id, cpf, last_name, name, password, username) VALUES('Buyer', 4, NULL, 'Buyer', 'Buyer', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Buyer');
+INSERT INTO "client" (role, id, cpf, last_name, name, password, username) VALUES('Buyer', 4, NULL, 'Buyer', 'Buyer', '$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u', 'Buyer');
 
 INSERT INTO sector (id, capacity, category, "supervisor_id", warehouse_id) VALUES(1, 1000, 'CONGELADOS', 2, 1);
 
