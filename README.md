@@ -19,17 +19,18 @@ URL Base: localhost:8080/api/v1/fresh-products
 | :---------- | :--------- | :----------------------- |:------------------- |
 | `POST` | `/inboundorder` | Cadastra um lote | {"sector":{"sectorCode":1,"warehouseCode":1},"batchStock":[{"initialQuantity":100,"currentQuantity": 99,"initialTemperature":2,"currentTemperature": 2,"manufacturingDate":"2022-10-10","manufacturingTime":"20:20:20","dueDate": "2025-10-10","productId": 1}]}|
 | `PUT` | `/inboundorder/{id}` | Altera um lote existente | {"sector":{"sectorCode":1,"warehouseCode":1},"batchStock":[{"initialQuantity":100,"currentQuantity": 99,"initialTemperature":2,"currentTemperature": 2,"manufacturingDate":"2022-10-10","manufacturingTime":"20:20:20","dueDate": "2025-10-10","productId": 1}]}|
-| `GET` |  | Busca todos os produtos | --|
-| `GET` | `/{id}` | Busca produto por id | --|
-| `GET` | `/{id}/?orderBy=F` | Veja uma lista de produtos ordenados com todos os lotes onde aparece (L = Lote, C = quantidade atual, F = data de vencimento)| |
-| `GET` | `/category/{category}` | Busca produtos por categoria (FRESCOS, REFRIGERADOS, CONGELADOS) | |
-| `POST` | | Cadastra um produdo |{"name":"Asinha de frango","volume":10,"price":11.0,"category":"FRESCOS","seller":{"id": 1}}|
+| `GET` | `/products` | Busca todos os produtos | --|
+| `GET` | `/products/{id}` | Busca produto por id | --|
+| `GET` | `/products/list/{id}/?orderBy=F` | Veja uma lista de produtos ordenados com todos os lotes onde aparece (L = Lote, C = quantidade atual, F = data de vencimento)| |
+| `GET` | `products/category/{category}` | Busca produtos por categoria (FRESCOS, REFRIGERADOS, CONGELADOS) | |
+| `POST` | `/products` | Cadastra um produdo |{"name":"Asinha de frango","volume":10,"price":11.0,"category":"FRESCOS","seller":{"id": 1}}|
 | `POST` | `/orders` | Registre um pedido com a lista de produtos que compõem o PurchaseOrder. |{"buyer":{"id":1},"status": "aberto","cart":[{"products":{"id": 1},"quantity": 5}]}|
-| `GET` | `/orders` | Mostrar produtos no pedido | |
-| `PUT` | `/orders/id=1` | Modifica o pedido existente para torná-lo do tipo de carrinho ABERTO/FINALIZADO | |
-| `GET` | `/warehouse` | Obtenha a quantidade total de produtos por armazém | |
+| `GET` | `/orders?id=1` | Mostrar produtos no pedido | |
+| `PUT` | `/orders?id=1` | Modifica o pedido existente para torná-lo do tipo de carrinho ABERTO/FINALIZADO | |
 | `POST` | `/warehouse` | Cadastra um armazém |{"name": "embu","regiao": "Zona Sul SP"}|
-| `*GET` | `/api/v1/fresh-products/batchstock/due-date` | Obtenha uma lista de lotes dentro do prazo de validade solicitado, que pertencem a uma determinada categoria de produto (FS = FRESCOS, RF = REFRIGERADO, FF = CONGELADO)| |
+| `GET` | `/warehouse/products?productId=1` | Obtenha a quantidade total de produtos por armazém | |
+| `GET` | `/warehouse/{id}` | Obtenha um armazém pelo id| |
+| `GET` | `/batchstock/duedate?days=600&sectorId=1` | Obtenha uma lista de lotes dentro do prazo de validade solicitado, que pertencem a uma determinada categoria de produto (FS = FRESCOS, RF = REFRIGERADO, FF = CONGELADO)| |
 
 
 
