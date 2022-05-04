@@ -1,3 +1,4 @@
+
 # Projeto Final Bootcamp
 
 O objetivo deste projeto final é implementar uma API REST no âmbito do slogan e aplicar
@@ -11,7 +12,7 @@ O Seguinte desafio foi proposto para aplicar os conhecimentos até então alcan�
 
 
 ## Endpoints
-Arquivo de rotas do Postman: [Arquivo](https://)
+Arquivo de rotas do Postman: [postman_collection.json)](https://github.com/buskari/projeto-integrador/blob/develop/postman/Projeto%20Integrador.postman_collection.json)
 
 URL Base: localhost:8080/api/v1/fresh-products
 
@@ -44,3 +45,4 @@ URL Base: localhost:8080/api/v1/fresh-products
 - [Melissa Amorim](https://github.com/amorimmel)
 - [Renato Graça](https://github.com/renatograca)
 - [Vinícios Fraga](https://github.com/itIsV)
+
