@@ -20,22 +20,11 @@ public class SupervisorController {
 		private SupervisorService supervisorService;
 
 		@PostMapping
-		public ResponseEntity<SupervisorDTO> create(@RequestBody SupervisorDTO supervisorDto, UriComponentsBuilder uriBuilder) {
-				Supervisor supervisor = Supervisor.builder()
-								.name(supervisorDto.getName())
-								.lastName(supervisorDto.getLastName())
-								.password(supervisorDto.getPassword())
-								.username(supervisorDto.getUserName())
-								.build();
-
-				Supervisor newSupervisor = supervisorService.create(supervisor);
-				SupervisorDTO supervisorReturn = SupervisorDTO.map(newSupervisor);
-				URI uri = uriBuilder
-								.path("/supervisor/{id}")
-								.buildAndExpand(newSupervisor.getId())
-								.toUri();
-
-				return ResponseEntity.created(uri).body(supervisorReturn);
+		public ResponseEntity<SupervisorDTO> create(@RequestBody Supervisor supervisor, UriComponentsBuilder uriBuilder) {
+				SupervisorDTO newSupervisor = SupervisorDTO.map(supervisorService.create(supervisor));
+				URI uri = uriBuilder.path("/supervisor/{id}").buildAndExpand(newSupervisor.getId()).toUri();
+				return ResponseEntity.created(uri).body(newSupervisor);
 		}
+
 
 }
