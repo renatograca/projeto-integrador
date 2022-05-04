@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql({"/test-schema.sql"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Sql(value = {"/test-schema.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class ProductControllerTest {
 
     @Autowired
@@ -33,7 +33,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldCreateAProductAndReturn201() throws Exception {
-                mockMvc.perform(MockMvcRequestBuilders.post("/products")
+                mockMvc.perform(MockMvcRequestBuilders.post("")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payloadProduct()))
                 .andExpect(status().isCreated())
@@ -43,7 +43,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldFindByCategoryAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products/category/{category}", "CONGELADOS"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/category/{category}", "CONGELADOS"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString();
@@ -52,7 +52,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldFindAllAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(""))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString();
@@ -61,7 +61,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldFindByIdAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", "1" ))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/{id}", "1" ))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString();

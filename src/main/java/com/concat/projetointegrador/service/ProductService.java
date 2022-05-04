@@ -6,7 +6,6 @@ import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.ProductRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +18,10 @@ public class ProductService {
     private ProductRepository productRepository;
     private SellerService sellerService;
 
-
     /**
-     * find a product by its id
-     * @param id - product id
-     * @return - product if it exists
-     * @throws - EntityNotFound if product doenst exist
+     * Search for a product by id
+     * @param id Long - product id
+     * @return a product if registered
      */
     public Product findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
@@ -36,9 +33,8 @@ public class ProductService {
     }
 
     /**
-     * find all products
-     * @return - a list of DTO
-     * @throws - EntityNotFound if product is not registered
+     * Search a product list
+     * @return a list of registered products
      */
     public List<ProductDTO> findAll() {
         List<Product> listProduct = productRepository.findAll();
@@ -50,12 +46,10 @@ public class ProductService {
         return listDTO;
     }
 
-
     /**
-     * create a new product
-     * @param product - an object with data to register in the database
-     * @return - returns the created database
-     * @throws - RunTimeException if product is exist
+     * Save a product
+     * @param product - product object to insert
+     * @return a product DTO
      */
     public ProductDTO create(Product product) {
         Optional<Product> productOpt = productRepository.findById(product.getId());
@@ -69,10 +63,9 @@ public class ProductService {
     }
 
     /**
-     * find a product by its category
-     * @param category - product category
-     * @return a list of product DTO
-     * @throws - EntityNotFound if product is not registered
+     * Search a list of products by category
+     * @param category - Enum category
+     * @return a list of products DTO
      */
     public List<ProductDTO> findByCategory(Category category) {
         List<Product> products = productRepository.findByCategory(category);

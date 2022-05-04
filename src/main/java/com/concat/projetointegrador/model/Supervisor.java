@@ -4,20 +4,15 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
-@Getter
-@Setter
-@Builder
+
 @Entity
-@Table(name = "supervisor")
-@AllArgsConstructor
 @NoArgsConstructor
-public class Supervisor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @NotNull(message = "'name' não pode ser nulo")
-    private String name;
-    @NotNull(message = "'lastname' não pode ser nulo")
-    private String lastName;
+@DiscriminatorValue("Supervisor")
+public class Supervisor extends User {
+    @Builder
+    public Supervisor(Long id, String username, String password, String name, String lastName) {
+        super(id,username,password,name,lastName);
+    }
 }

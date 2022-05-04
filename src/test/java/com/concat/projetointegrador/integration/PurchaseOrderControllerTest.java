@@ -33,7 +33,7 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void shouldCreateAPurchaseOrderAndReturn201() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/purchasedOrder")
+        mockMvc.perform(MockMvcRequestBuilders.post("/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload()))
                 .andExpect(status().isCreated())
@@ -43,7 +43,7 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void shouldFindByIdAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/purchasedOrder")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/orders")
                 .param("id", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
@@ -56,7 +56,7 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void shouldUpdateAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/purchasedOrder")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload())
                 .param("id", "1"))

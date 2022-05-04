@@ -20,7 +20,7 @@ import com.concat.projetointegrador.service.BatchStockService;
 import javax.websocket.server.PathParam;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping
 public class ProductController {
 
 	@Autowired
@@ -32,15 +32,24 @@ public class ProductController {
 	@Autowired
 	private SectorService sectorService;
 
-
 	/**
 	 * Search product by id
+	 * @param id Long - product id
+	 * @return a product
+	 */
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
+		return ResponseEntity.ok(ProductDTO.convertToProductDTO(productService.findById(id)));
+	}
+
+	/**
+	 * Fetch a batch stock list by product id
 	 * @param id - product id
 	 * @param orderBy - path param
 	 * @return the product with this id
 	 */
-	@GetMapping("/{id}")
-	public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id, @PathParam("orderBy") String orderBy) {
+	@GetMapping("/list/{id}")
+	public ResponseEntity<ProductResponseDTO> findByBatchStockByProducts(@PathVariable Long id, @PathParam("orderBy") String orderBy) {
 		Product product = productService.findById(id);
 		List<BatchStock> batchStock = batchStockService.findAllByProductId(product.getId(), orderBy);
 		ProductResponseDTO build = ProductResponseDTO

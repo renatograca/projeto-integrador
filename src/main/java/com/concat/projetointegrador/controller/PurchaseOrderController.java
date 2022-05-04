@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/orders")
 public class PurchaseOrderController {
 
     @Autowired
@@ -16,30 +17,34 @@ public class PurchaseOrderController {
 
     /**
      * Save a purchase order
+     *
      * @param purchasedOrder - purchase order object
      * @return the creation of a purchase order with the status code 201 created
      */
-    @PostMapping("/purchasedOrder")
+    @PostMapping
     public ResponseEntity<PurchasedOrderDTO> create(@RequestBody PurchasedOrder purchasedOrder) {
         return new ResponseEntity<>(purchaseOrderService.create(purchasedOrder), HttpStatus.CREATED);
     }
 
+
     /**
      * Search for a purchase order by id
+     *
      * @param id Long - purchase order id
      * @return a purchase order with status code 200 ok
      */
-    @GetMapping("/purchasedOrder")
+    @GetMapping
     public ResponseEntity<PurchasedOrder> findById(@RequestParam Long id) {
         return ResponseEntity.ok(purchaseOrderService.findById(id));
     }
 
     /**
      * Updates a purchase order to "completed" status
+     *
      * @param id Long - purchase order id
      * @return returns a purchase order with status "completed" and status code 200 ok
      */
-    @PutMapping("/purchasedOrder")
+    @PutMapping
     public ResponseEntity<PurchasedOrder> update(@RequestParam Long id) {
         return ResponseEntity.ok(purchaseOrderService.update(id));
     }
