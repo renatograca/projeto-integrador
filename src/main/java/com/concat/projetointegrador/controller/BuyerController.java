@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/buyer")
 public class BuyerController {
 
 		@Autowired
