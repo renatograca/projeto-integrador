@@ -52,14 +52,9 @@ public class ProductService {
      * @return a product DTO
      */
     public ProductDTO create(Product product) {
-        Optional<Product> productOpt = productRepository.findById(product.getId());
-        if (productOpt.isPresent()) {
-            throw new RuntimeException("Esse produto já existe!");
-        }
         product.setSeller(sellerService.findByID(product.getSeller().getId()));
         ProductDTO productDTO = ProductDTO.convertToProductDTO(productRepository.save(product));
         return productDTO;
-
     }
 
     /**

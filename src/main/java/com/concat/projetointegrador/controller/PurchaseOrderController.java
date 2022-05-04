@@ -40,8 +40,21 @@ public class PurchaseOrderController {
      * @return a purchase order with status code 200 ok
      */
     @GetMapping
-    public ResponseEntity<PurchasedOrder> findById(@RequestParam Long id) {
-        return ResponseEntity.ok(purchaseOrderService.findById(id));
+    public ResponseEntity<PurchasedOrderResponseDTO> findById(@RequestParam Long id) {
+        PurchasedOrder purchasedOrder = purchaseOrderService.findById(id);
+        List<CartsDTO> carts = purchasedOrder.getCart().stream()
+                .map(cart -> CartsDTO.builder()
+                        .id(cart.getId())
+                        .quantity(cart.getQuantity())
+                        .productDTO(ProductDTO.convertToProductDTO(cart.getProducts()))
+                        .build()).collect(Collectors.toList());
+        PurchasedOrderResponseDTO purchasedOrderResponseDTO = PurchasedOrderResponseDTO.builder()
+                .id(purchasedOrder.getId())
+                .date(purchasedOrder.getDate())
+                .status(purchasedOrder.getStatus())
+                .cartsDTO(carts)
+                .build();
+        return ResponseEntity.ok(purchasedOrderResponseDTO);
     }
 
     /**

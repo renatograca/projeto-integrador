@@ -30,11 +30,11 @@ public class InboundOrderController {
     @Autowired
     private InboundOrderService orderService;
 
-	@Autowired
+    @Autowired
     private BatchStockService batchStockService;
 
-	@Autowired
-	private WarehouseService warehouseService;
+    @Autowired
+    private WarehouseService warehouseService;
 
     @Autowired
     private SectorService sectorService;
@@ -67,65 +67,65 @@ public class InboundOrderController {
      * @return returns the updated inbound order
      */
     public ResponseEntity<InboundOrderDTO> update(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
-    	List<BatchStock> list = dto.getBatchStock()
-    			.stream()
-    			.map(
-							e-> BatchStock.builder()
-									.category(batchStockService.findById(id).getCategory())
-					        .currentQuantity(e.getCurrentQuantity())
-					        .dueDate(e.getDueDate())
-					        .initialQuantity(e.getInitialQuantity())
-									.initialTemperature(e.getInitialTemperature())
-									.currentTemperature(e.getInitialTemperature())
-					        .manufacturingDate(e.getManufacturingDate())
-					        .manufacturingTime(e.getManufacturingTime())
-					        .product(productService.findById(e.getProductId()))
-					        .build()
-					).collect(Collectors.toList());
-    	  InboundOrder inboundOrder = InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()), list);
-    	  inboundOrder = orderService.update(id, inboundOrder);
-		    InboundOrderDTO map = InboundOrderDTO.map(inboundOrder);
-		    return new ResponseEntity<>(map, HttpStatus.CREATED);
+        List<BatchStock> list = dto.getBatchStock()
+                .stream()
+                .map(
+                        e -> BatchStock.builder()
+                                .category(batchStockService.findById(e.getId()).getCategory())
+                                .currentQuantity(e.getCurrentQuantity())
+                                .dueDate(e.getDueDate())
+                                .initialQuantity(e.getInitialQuantity())
+                                .initialTemperature(e.getInitialTemperature())
+                                .currentTemperature(e.getInitialTemperature())
+                                .manufacturingDate(e.getManufacturingDate())
+                                .manufacturingTime(e.getManufacturingTime())
+                                .id(e.getId())
+                                .product(productService.findById(e.getProductId()))
+                                .build()
+                ).collect(Collectors.toList());
+        InboundOrder inboundOrder = InboundOrderDTO.map(dto, sectorService.findById(dto.getSector().getSectorCode()), list);
+        inboundOrder = orderService.update(id, inboundOrder);
+        InboundOrderDTO map = InboundOrderDTO.map(inboundOrder);
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 
-		/**
-		 *
-		 * @param order - object with the data to registrate on database
-		 * @return returns the created database
-		 */
-		@PostMapping
-		public ResponseEntity<InboundOrderDTO> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {//usado
-				Sector sector = sectorService.findById(dto.getSector().getSectorCode());
+    /**
+     * @param order - object with the data to registrate on database
+     * @return returns the created database
+     */
+    @PostMapping
+    public ResponseEntity<InboundOrderDTO> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {//usado
+        Sector sector = sectorService.findById(dto.getSector().getSectorCode());
 
-				warehouseService.findById(dto.getSector().getWarehouseCode());
+        warehouseService.findById(dto.getSector().getWarehouseCode());
 
-				InboundOrder inboundOrder = InboundOrderDTO.map(dto, sector);
+        InboundOrder inboundOrder = InboundOrderDTO.map(dto, sector);
 
-				List<BatchStock> list = dto.getBatchStock()
-								.stream()
-								.map(
-												e->
-																BatchStock.builder()
-																				.category(sector.getCategory())
-																				.currentQuantity(e.getInitialQuantity())
-																				.dueDate(e.getDueDate())
-																				.initialTemperature(e.getInitialTemperature())
-																				.currentTemperature(e.getInitialTemperature())
-																				.initialQuantity(e.getInitialQuantity())
-																				.manufacturingDate(e.getManufacturingDate())
-																				.manufacturingTime(e.getManufacturingTime())
-																				.product(productService.findById(e.getProductId()))
-																				.build()
-								).collect(Collectors.toList());
+        List<BatchStock> list = dto.getBatchStock()
+                .stream()
+                .map(
+                        e ->
+                                BatchStock.builder()
+                                        .category(sector.getCategory())
+                                        .currentQuantity(e.getInitialQuantity())
+                                        .dueDate(e.getDueDate())
+                                        .initialTemperature(e.getInitialTemperature())
+                                        .currentTemperature(e.getInitialTemperature())
+                                        .initialQuantity(e.getInitialQuantity())
+                                        .manufacturingDate(e.getManufacturingDate())
+                                        .manufacturingTime(e.getManufacturingTime())
+                                        .product(productService.findById(e.getProductId()))
+                                        .build()
+                ).collect(Collectors.toList());
 
-				inboundOrder.setBatchStock(list);
+        inboundOrder.setBatchStock(list);
 
-				InboundOrder order = orderService.create(inboundOrder);
+        InboundOrder order = orderService.create(inboundOrder);
 
-				URI uri = uriBuilder.path("/fresh-products/inboundorder/{id}").buildAndExpand(order.getId()).toUri();
+        URI uri = uriBuilder.path("/fresh-products/inboundorder/{id}").buildAndExpand(order.getId()).toUri();
 
-				InboundOrderDTO map = InboundOrderDTO.map(inboundOrder);
-				return ResponseEntity.created(uri).body(map);
-		}
+        InboundOrderDTO map = InboundOrderDTO.map(inboundOrder);
+        return ResponseEntity.created(uri).body(map);
+    }
 
 }

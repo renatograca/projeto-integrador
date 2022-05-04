@@ -24,6 +24,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class BatchStockDTO {
 
+    private Long id;
+
     private Integer initialQuantity;
     private Integer currentQuantity;
 
