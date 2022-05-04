@@ -30,8 +30,13 @@ public class SellerService {
             throw new EntityNotFound("Vendedor não existe.");
     }
 
-		public Seller create(Seller seller) {
-				seller.setPassword(passwordEncoder.encode(seller.getPassword()));
-				return sellerRepository.save(seller);
-		}
+    /**
+     * Save a Seller in database
+     * @param seller is an object Seller to save
+     * @return the object Seller with your id
+     */
+    public Seller create(Seller seller) {
+            seller.setPassword(passwordEncoder.encode(seller.getPassword()));
+            return sellerRepository.save(seller);
+    }
 }
