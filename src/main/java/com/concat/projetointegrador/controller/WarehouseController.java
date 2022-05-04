@@ -50,7 +50,7 @@ public class WarehouseController {
      * @return A list of products by warehouse
      */
     @GetMapping("/products/warehouse")
-    public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "querytype") Long productId) {
+    public ResponseEntity<WarehouseResponseForQuantityProductsDTO> findAllProductForWarehouse(@RequestParam(value = "productId") Long productId) {
         List<BatchStock> batchProducts = batchStockService.findAllByProductId(productId, null);
         List<WarehouseQuantityProductDTO> allProductForWarehouse = warehouseService.findAllProductForWarehouse(batchProducts, inboundOrderService);
         WarehouseResponseForQuantityProductsDTO build = WarehouseResponseForQuantityProductsDTO.builder().productId(productId).warehouses(allProductForWarehouse).build();

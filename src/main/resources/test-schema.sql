@@ -16,3 +16,4 @@ INSERT INTO product (id,category,name,price,volume,"seller_id") VALUES
     (1,'CONGELADOS','frango',20.00,1,3);
 
 INSERT INTO batch_stock (id, category, current_quantity, current_temperature, due_date, initial_quantity, initial_temperature, manufacturing_date, manufacturing_time, inbound_order_id, product_id) VALUES(99, 'CONGELADOS', 1, 2, '2025-10-10', 1, 2, '2022-10-10', '20:20:20', 99, 1);
+INSERT INTO batch_stock (id, category, current_quantity, current_temperature, due_date, initial_quantity, initial_temperature, manufacturing_date, manufacturing_time, inbound_order_id, product_id) VALUES(98, 'CONGELADOS', 1, 2, '2025-10-10', 1, 2, '2022-10-10', '20:20:20', 99, 1);

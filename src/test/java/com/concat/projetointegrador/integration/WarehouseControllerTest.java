@@ -1,6 +1,7 @@
 package com.concat.projetointegrador.integration;
 
 import com.concat.projetointegrador.dto.WarehouseDTO;
+import com.concat.projetointegrador.dto.WarehouseResponseForQuantityProductsDTO;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,11 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.List;
+
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
@@ -42,6 +47,9 @@ public class WarehouseControllerTest {
         return "{\"name\":\"armazem frios\", \"region\":\"melhor regiao\"}";
     }
 
+    private String warehouseExist() {
+        return "{\"name\":\"Tools\", \"region\":\"Doujia\"}";
+    }
     @Test
     public void shouldCreateAWarehouseAndReturn201() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/warehouse")
@@ -61,11 +69,7 @@ public class WarehouseControllerTest {
     @Test
     public void shouldReturnWarehouseByIdReturnStatus200() throws Exception {
         MvcResult result = mockMvc.perform(get("/warehouse/{id}", 1)
-                        .with(
-                                user("Supervisor")
-                                        .password("123")
-                        )
-                )
+                        .with(user("Supervisor").password("123")))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -79,5 +83,18 @@ public class WarehouseControllerTest {
         WarehouseDTO warehouseDTO = objectMapper.readValue(jsonReturned, WarehouseDTO.class);
 
         assertEquals("Tools", warehouseDTO.getName());
+    }
+
+    @Test
+    public void shouldReturnQuantityProductByIdForWarehouseReturnStatus200() throws Exception {
+        MvcResult result = mockMvc.perform(get("/products/warehouse/")
+                        .param("productId", "1")
+                        .with(user("Supervisor").password("123")))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonReturned = result.getResponse().getContentAsString();
+
+        assertEquals("{\"productId\":1,\"warehouses\":[{\"warehouseCode\":1,\"totalQuantity\":2}]}", jsonReturned);
     }
 }
