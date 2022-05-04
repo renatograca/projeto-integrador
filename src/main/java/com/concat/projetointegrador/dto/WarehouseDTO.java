@@ -16,12 +16,12 @@ public class WarehouseDTO {
 
     private Long id;
     private String name;
-    private String regiao;
+    private String region;
 
     public static WarehouseDTO convertToWarehouseDTO(Warehouse warehouse) {
         return WarehouseDTO.builder()
                 .id(warehouse.getId())
-                .regiao(warehouse.getRegion())
+                .region(warehouse.getRegion())
                 .name(warehouse.getName()).build();
     }
 
@@ -37,7 +37,7 @@ public class WarehouseDTO {
     public static Warehouse map(WarehouseDTO warehouseDTO) {
         return Warehouse.builder()
                 .id(warehouseDTO.getId())
-                .region(warehouseDTO.getRegiao())
+                .region(warehouseDTO.getRegion())
                 .name(warehouseDTO.getName()).build();
     }
 }

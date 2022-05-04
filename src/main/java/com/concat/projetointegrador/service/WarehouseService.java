@@ -22,21 +22,31 @@ import java.util.stream.Collectors;
 public class WarehouseService {
     private WarehouseRepository warehouseRepository;
 
+    /**
+     * Search warehouse by id
+     * @param id
+     * @return a warehouse if found
+     */
     public WarehouseDTO findById(Long id) { //usado
         Optional<Warehouse> warehouse = warehouseRepository.findById(id);
 
         if(warehouse.isEmpty()) {
-            throw new RuntimeException("Armazém não encontrado!");
+            throw new EntityNotFound("Armazém não encontrado!");
         }
-
         return WarehouseDTO.convertToWarehouseDTO(warehouse.get());
     }
 
+    /**
+     * Search a products list by warehouse
+     * @param batchProducts
+     * @param inboundOrderService
+     * @returns a list of products by warehouse
+     */
     public List<WarehouseQuantityProductDTO> findAllProductForWarehouse(List<BatchStock> batchProducts, InboundOrderService inboundOrderService) {
         List<WarehouseQuantityProductDTO> warehouseQuantityProductDTOList = new ArrayList<>();
         List<WarehouseQuantityProductDTO> warehouseQuantityProductDTOs = batchProducts.stream().map(batchStock -> WarehouseQuantityProductDTO.map(
                 batchStock.getCurrentQuantity(),
-                inboundOrderService.findById(batchStock.getInboundOrder().getId()).getSector().getId()
+                inboundOrderService.findById(batchStock.getInboundOrder().getId()).getSector().getWarehouse().getId()
         )).collect(Collectors.toList());
         Map<Long, Integer> sumQuantityForWarehouse = WarehouseResponseForQuantityProductsDTO.sumQuantityForWarehouse(warehouseQuantityProductDTOs);
 
@@ -47,12 +57,17 @@ public class WarehouseService {
         return warehouseQuantityProductDTOList;
     }
 
+    /**
+     * Save a warehouse
+     * @param warehouseModel - warehouse object to insert
+     * @return a warehouse DTO
+     */
     @Transactional
     public WarehouseDTO create(Warehouse warehouseModel) {
             Optional<Warehouse> warehouse = warehouseRepository.findByName(warehouseModel.getName());
 
         if(warehouse.isPresent()){
-            throw new RuntimeException("Esse armazém já esta cadastrado!");
+            throw new RuntimeException("Esse armazém já existe!");
         }
 
         return WarehouseDTO.convertToWarehouseDTO(warehouseRepository.save(warehouseModel));
