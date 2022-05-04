@@ -1,10 +1,13 @@
-package com.concat.projetointegrador.service;
+package com.concat.projetointegrador.unit;
 
 import com.concat.projetointegrador.dto.PurchasedOrderDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.*;
 import com.concat.projetointegrador.repository.CartRepository;
 import com.concat.projetointegrador.repository.PurchasedOrderRepository;
+import com.concat.projetointegrador.service.BatchStockService;
+import com.concat.projetointegrador.service.BuyerService;
+import com.concat.projetointegrador.service.PurchasedOrderService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
