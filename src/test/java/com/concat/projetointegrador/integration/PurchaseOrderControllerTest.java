@@ -1,5 +1,12 @@
 package com.concat.projetointegrador.integration;
 
+import com.concat.projetointegrador.model.InboundOrder;
+import com.concat.projetointegrador.model.PurchasedOrder;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -50,8 +57,14 @@ public class PurchaseOrderControllerTest {
                 .param("id", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertEquals("{\"id\":1,\"date\":\"2022-04-20\",\"status\":\"aberto\",\"buyer\":{\"id\":1,\"username\":\"ADMIN\",\"password\":\"$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u\",\"name\":\"ADMIN\",\"lastName\":\"ADMIN\",\"cpf\":null,\"enabled\":true,\"discriminatorValue\":\"Buyer\",\"accountNonExpired\":true,\"accountNonLocked\":true,\"credentialsNonExpired\":true,\"authorities\":[{\"authority\":\"Buyer\"}]},\"cart\":[{\"id\":1,\"quantity\":10,\"products\":{\"id\":1,\"name\":\"frango\",\"volume\":1,\"price\":20.00,\"category\":\"CONGELADOS\",\"seller\":{\"id\":3,\"username\":\"Seller\",\"password\":\"$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u\",\"name\":\"Seller\",\"lastName\":\"Seller\",\"cpf\":null,\"enabled\":true,\"discriminatorValue\":\"Seller\",\"accountNonExpired\":true,\"accountNonLocked\":true,\"credentialsNonExpired\":true,\"authorities\":[{\"authority\":\"Seller\"}]}}}]}", response);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        String jsonReturned = result.getResponse().getContentAsString();
+        PurchasedOrder purchasedOrder = objectMapper.readValue(jsonReturned, PurchasedOrder.class);
+        assertEquals("aberto", purchasedOrder.getStatus());
     }
 
     @Test
@@ -63,7 +76,13 @@ public class PurchaseOrderControllerTest {
                 .param("id", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertEquals("{\"id\":1,\"date\":\"2022-04-20\",\"status\":\"finalizado\",\"buyer\":{\"id\":1,\"username\":\"ADMIN\",\"password\":\"$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u\",\"name\":\"ADMIN\",\"lastName\":\"ADMIN\",\"cpf\":null,\"enabled\":true,\"discriminatorValue\":\"Buyer\",\"accountNonExpired\":true,\"accountNonLocked\":true,\"credentialsNonExpired\":true,\"authorities\":[{\"authority\":\"Buyer\"}]},\"cart\":[{\"id\":1,\"quantity\":10,\"products\":{\"id\":1,\"name\":\"frango\",\"volume\":1,\"price\":20.00,\"category\":\"CONGELADOS\",\"seller\":{\"id\":3,\"username\":\"Seller\",\"password\":\"$2a$10$81VuVXFi5JmfOdCblgjj0ODqsn11TUXfUEYnm.jInkbUIcd9xx31u\",\"name\":\"Seller\",\"lastName\":\"Seller\",\"cpf\":null,\"enabled\":true,\"discriminatorValue\":\"Seller\",\"accountNonExpired\":true,\"accountNonLocked\":true,\"credentialsNonExpired\":true,\"authorities\":[{\"authority\":\"Seller\"}]}}}]}", response);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+
+        String jsonReturned = result.getResponse().getContentAsString();
+        PurchasedOrder purchasedOrder = objectMapper.readValue(jsonReturned, PurchasedOrder.class);
+        assertEquals("finalizado", purchasedOrder.getStatus());
     }
 }
