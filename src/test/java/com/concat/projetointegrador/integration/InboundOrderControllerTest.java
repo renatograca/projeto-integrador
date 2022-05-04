@@ -1,152 +1,140 @@
 package com.concat.projetointegrador.integration;
 
-import com.concat.projetointegrador.dto.InboundOrderDTO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.concat.projetointegrador.model.*;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Sql(value = {"/test-schema.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class InboundOrderControllerTest {
 
 		@Autowired
 		private MockMvc mock;
 
 		@Test
-		@Sql({"/test-schema.sql"})
 		public void shouldCreateAInboundOrder() throws Exception {
-				ObjectMapper objectMapper = new ObjectMapper();
-				objectMapper.registerModule(new JavaTimeModule());
 				String payload = "{\"sector\":{\"sectorCode\":1,\"warehouseCode\":1},\"batchStock\":[{\"initialQuantity\":1,\"manufacturingDate\":\"2022-10-10\",\"manufacturingTime\":\"20:20:20\",\"dueDate\":\"2025-10-10\",\"initialTemperature\":2,\"productId\":1}]}";
 
+				MvcResult result = mock.perform(post("/fresh-products/inboundorder")
+												.contentType(MediaType.APPLICATION_JSON)
+												.content(payload)
+												.with(
+																user("Supervisor")
+																.password("123")
+												)
+								)
+								.andExpect(MockMvcResultMatchers.status().isCreated())
+								.andReturn();
 
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.registerModule(new JavaTimeModule());
+				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+				objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 
-				mock.perform(MockMvcRequestBuilders
-								.post("/fresh-products/inboundorder")
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(payload)
-				).andExpect(MockMvcResultMatchers.status().isCreated());
+				String jsonReturned = result.getResponse().getContentAsString();
+				InboundOrder inboundOrder = objectMapper.readValue(jsonReturned, InboundOrder.class);
 
-				MvcResult result = mock.perform(MockMvcRequestBuilders
-								.get("/fresh-products/inboundorder")
-				).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-
-				String returnJson = result.getResponse().getContentAsString();
-
-
-//				VendedorDto dto = new ObjectMapper().readValue(returnJson, VendedorDto.class);
-//				assertEquals("333.123.111-10", dto.getCpf());
+				assertEquals(100, inboundOrder.getId());
 
 		}
 
-		private static Optional<InboundOrder> inboundOrderMock(){
-				return Optional.of(
-								InboundOrder
-												.builder()
-												.id(1L)
-												.sector(sectorMock())
-												.batchStock(batchStockMock())
-												.build());
+		@Test
+		public void shouldFindAInboundOrderById() throws Exception {
+				MvcResult result = mock.perform(get("/fresh-products/inboundorder/{id}", 99)
+												.with(
+																user("Supervisor")
+																.password("123")
+												)
+								)
+								.andExpect(MockMvcResultMatchers.status().isOk())
+								.andReturn();
+
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.registerModule(new JavaTimeModule());
+				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+				objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+
+				String jsonReturned = result.getResponse().getContentAsString();
+				InboundOrder inboundOrder = objectMapper.readValue(jsonReturned, InboundOrder.class);
+
+				assertEquals(99, inboundOrder.getId());
+
 		}
 
-		private static Sector sectorMock() {
-				return Sector
-								.builder()
-								.id(1L)
-								.capacity(1)
-								.warehouse(warehouseMock())
-								.supervisor(supervisorMock())
-								.category(Category.CONGELADOS)
-								.build();
+		@Test
+		public void shouldReturnAllInboundOrders() throws Exception {
+				MvcResult result = mock.perform(get("/fresh-products/inboundorder", 99)
+												.with(
+																user("Supervisor")
+																				.password("123")
+												)
+								)
+								.andExpect(MockMvcResultMatchers.status().isOk())
+								.andReturn();
+
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.registerModule(new JavaTimeModule());
+				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+				objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+
+				String jsonReturned = result.getResponse().getContentAsString();
+				List<InboundOrder> inboundOrder = objectMapper.readValue(jsonReturned, List.class);
+
+				assertEquals( 1, inboundOrder.size());
+
 		}
 
-		private static Warehouse warehouseMock() {
-				return Warehouse
-								.builder()
-								.id(1L)
-								.name("")
-								.region("")
-								.build();
-		}
+		@Test
+		public void shouldUpdateAInboundOrderById() throws Exception {
+				String payload = "{\"sector\":{\"sectorCode\":1,\"warehouseCode\":1},\"batchStock\":[{\"initialQuantity\":1,\"manufacturingDate\":\"2022-10-10\",\"manufacturingTime\":\"20:20:20\",\"dueDate\":\"2025-10-10\",\"initialTemperature\":23,\"currentQuantity\":23,\"initialTemperature\":23,\"productId\":1}]}";
 
-		private static Supervisor supervisorMock() {
-				return Supervisor.builder()
-								.id(1L)
-								.name("")
-								.lastName("")
-								.build();
-		}
+				MvcResult result = mock.perform(
+								put("/fresh-products/inboundorder/{id}", 99)
+												.contentType(MediaType.APPLICATION_JSON)
+												.content(payload)
+												.with(
+																user("Supervisor")
+																.password("123")
+												)
+								)
+								.andExpect(MockMvcResultMatchers.status().isCreated())
+								.andReturn();
 
-		private static List<BatchStock> batchStockMock(){
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.registerModule(new JavaTimeModule());
+				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+				objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 
-				ArrayList<BatchStock> batchStocks = new ArrayList<>();
-				InboundOrder inboundOrder = InboundOrder
-								.builder()
-								.id(1L)
-								.sector(sectorMock())
-								.batchStock(batchStocks)
-								.build();
+				String jsonReturned = result.getResponse().getContentAsString();
+				InboundOrder inboundOrder = objectMapper.readValue(jsonReturned, InboundOrder.class);
 
-				BatchStock batchStock =
-								BatchStock
-												.builder()
-												.id(1L)
-												.currentQuantity(1)
-												.initialQuantity(1)
-												.initialTemperature(1)
-												.currentTemperature(1)
-												.product(productMock())
-												.dueDate(LocalDate.now())
-												.category(Category.CONGELADOS)
-												.inboundOrder(inboundOrder)
-												.manufacturingDate(LocalDate.now())
-												.manufacturingTime(LocalTime.now())
-												.build();
+				assertEquals(23, inboundOrder.getBatchStock().get(0).getInitialTemperature());
 
-				batchStocks.add(batchStock);
-
-
-				return batchStocks;
-		}
-
-		private static Product productMock() {
-				return Product
-								.builder()
-								.id(1L)
-								.name("")
-								.volume(1)
-								.seller(sellerMock())
-								.price(BigDecimal.TEN)
-								.category(Category.CONGELADOS)
-								.build();
-		}
-
-		private static Seller sellerMock() {
-				return Seller
-								.builder()
-								.id(1L)
-								.name("")
-								.lastName("")
-								.build();
 		}
 
 }
+
+
