@@ -1,7 +1,6 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
-import com.concat.projetointegrador.dto.SectorRequestDTO;
 import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Sector;
 import com.concat.projetointegrador.repository.SectorRepository;
@@ -9,7 +8,6 @@ import com.concat.projetointegrador.repository.SectorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
