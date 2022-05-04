@@ -19,6 +19,13 @@ public class ProductService {
     private ProductRepository productRepository;
     private SellerService sellerService;
 
+
+    /**
+     * find a product by its id
+     * @param id - product id
+     * @return - product if it exists
+     * @throws - EntityNotFound if product doenst exist
+     */
     public Product findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
@@ -28,6 +35,11 @@ public class ProductService {
         }
     }
 
+    /**
+     * find all products
+     * @return - a list of DTO
+     * @throws - EntityNotFound if product is not registered
+     */
     public List<ProductDTO> findAll() {
         List<Product> listProduct = productRepository.findAll();
 
@@ -39,6 +51,12 @@ public class ProductService {
     }
 
 
+    /**
+     * create a new product
+     * @param product - an object with data to register in the database
+     * @return - returns the created database
+     * @throws - RunTimeException if product is exist
+     */
     public ProductDTO create(Product product) {
         Optional<Product> productOpt = productRepository.findById(product.getId());
         if (productOpt.isPresent()) {
@@ -50,6 +68,12 @@ public class ProductService {
 
     }
 
+    /**
+     * find a product by its category
+     * @param category - product category
+     * @return a list of product DTO
+     * @throws - EntityNotFound if product is not registered
+     */
     public List<ProductDTO> findByCategory(Category category) {
         List<Product> products = productRepository.findByCategory(category);
         if(products.isEmpty()) {
