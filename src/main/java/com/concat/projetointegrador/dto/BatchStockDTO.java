@@ -44,6 +44,7 @@ public class BatchStockDTO {
     public static BatchStockDTO map(BatchStock batchStock) {
         BatchStockDTO batchStockDTO = new BatchStockDTO();
         BeanUtils.copyProperties(batchStock, batchStockDTO);
+        batchStockDTO.setProductId(batchStock.getProduct().getId());
         return batchStockDTO;
     }
 }

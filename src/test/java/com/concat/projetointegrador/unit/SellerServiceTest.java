@@ -16,11 +16,14 @@ public class SellerServiceTest {
 
     public static final long ID = 1L;
     public static final String NAME = "V";
+    public static final String USERNAME = "OnlyV";
+    public static final String PASSWORD = "NANI!!";
     public static final String LAST_NAME = "?";
     private SellerService service;
     private SellerRepository repository = Mockito.mock(SellerRepository.class);
     private Optional<Seller> optionalSeller;
     private Seller seller;
+    private Seller objectSeller;
 
     @BeforeEach
     private void setUp() {
@@ -38,14 +41,22 @@ public class SellerServiceTest {
     @Test
     public void shouldReturnAnErrorWhenNotFoundASeller() {
         Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
-        EntityNotFound entitityNotFound = Assertions
+        EntityNotFound entityNotFound = Assertions
                 .assertThrows(EntityNotFound.class, () -> service.findByID(Mockito.anyLong()));
 
-        Assertions.assertEquals(entitityNotFound.getMessage(), "Vendedor não existe.");
+        Assertions.assertEquals(entityNotFound.getMessage(), "Vendedor não existe.");
+    }
+
+    @Test
+    public void whenCreateASellerThenReturnASeller() {
+        Mockito.when(repository.save(Mockito.any())).thenReturn(seller);
+        Seller response = service.create(objectSeller);
+        Assertions.assertEquals(response.getClass(), seller.getClass());
     }
 
     private void startSeller() {
-        seller = Seller.builder().id(ID).name(NAME).lastName(LAST_NAME).build();
-        optionalSeller = Optional.of(Seller.builder().id(ID).name(NAME).lastName(LAST_NAME).build());
+        seller = Seller.builder().id(ID).username(USERNAME).password(PASSWORD).name(NAME).lastName(LAST_NAME).build();
+        objectSeller = Seller.builder().username(USERNAME).password(PASSWORD).name(NAME).lastName(LAST_NAME).build();
+        optionalSeller = Optional.of(Seller.builder().id(ID).username(USERNAME).password(PASSWORD).name(NAME).lastName(LAST_NAME).build());
     }
 }

@@ -8,11 +8,13 @@ import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.InboundOrder;
 import com.concat.projetointegrador.model.Sector;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
+@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class InboundOrderDTO {
 
     private final LocalDate orderDate = LocalDate.now();

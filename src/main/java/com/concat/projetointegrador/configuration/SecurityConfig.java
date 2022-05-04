@@ -45,8 +45,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				http.authorizeRequests()
 								.antMatchers(WHITELIST)
 								.permitAll()
-								.antMatchers("/**/supervisor")
+								.antMatchers("/supervisor")
 									.hasAuthority("ADMIN")
+								.antMatchers("/inboundorder")
+								.hasAuthority("Supervisor")
 								.anyRequest().authenticated();
 
 				http.addFilterBefore(new CustomAuthorizationFIlter(), UsernamePasswordAuthenticationFilter.class);

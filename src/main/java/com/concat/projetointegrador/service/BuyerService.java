@@ -34,6 +34,11 @@ public class BuyerService {
         throw new EntityNotFound("Comprador não encontrado");
     }
 
+    /**
+     * create a new buyer
+     * @param buyer - buyer object to insert
+     * @return a buyer
+     */
     public Buyer create(Buyer buyer) {
         buyer.setPassword(passwordEncoder.encode(buyer.getPassword()));
         Optional<Buyer> buyerOpt = buyerRepository.findByCpf(buyer.getCpf());

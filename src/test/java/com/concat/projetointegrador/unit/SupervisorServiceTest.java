@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.unit;
 
+import com.concat.projetointegrador.model.Buyer;
 import com.concat.projetointegrador.model.Supervisor;
 import com.concat.projetointegrador.repository.SupervisorRepository;
 import com.concat.projetointegrador.service.SupervisorService;
@@ -19,13 +20,14 @@ public class SupervisorServiceTest {
 
     private static SupervisorService supervisorService;
 
-    private static  BCryptPasswordEncoder passwordEncoder;
+    private static BCryptPasswordEncoder passwordEncoder;
 
     @BeforeAll
     static void init() {
         supervisorRepository = Mockito.mock(SupervisorRepository.class);
-        supervisorService = new SupervisorService(supervisorRepository, passwordEncoder);
+        supervisorService = new SupervisorService(supervisorRepository);
     }
+
     @Test
     public void shouldReturnASupervisorWithId() {
         Mockito.when(supervisorRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(createSupervisor()));
@@ -48,6 +50,16 @@ public class SupervisorServiceTest {
                 .id(1L)
                 .name("Renato")
                 .lastName("Graça")
+                .password("123")
+                .username("Renatinho")
                 .build();
+    }
+
+    @Test
+    void shouldCreateSupervisor() {
+        Supervisor supervisor;
+        Mockito.when(supervisorRepository.save(Mockito.any())).thenReturn(createSupervisor());
+        supervisor = supervisorService.create(createSupervisor());
+        assertEquals("Renato", supervisor.getName());
     }
 }
