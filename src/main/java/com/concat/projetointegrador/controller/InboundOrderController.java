@@ -90,11 +90,11 @@ public class InboundOrderController {
     }
 
     /**
-     * @param order - object with the data to registrate on database
+     * @param dto - object with the data to registrate on database
      * @return returns the created database
      */
     @PostMapping
-    public ResponseEntity<InboundOrderDTO> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {//usado
+    public ResponseEntity<InboundOrderDTO> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {
         Sector sector = sectorService.findById(dto.getSector().getSectorCode());
 
         warehouseService.findById(dto.getSector().getWarehouseCode());
@@ -106,6 +106,7 @@ public class InboundOrderController {
                 .map(
                         e ->
                                 BatchStock.builder()
+                                        .inboundOrder(inboundOrder)
                                         .category(sector.getCategory())
                                         .currentQuantity(e.getInitialQuantity())
                                         .dueDate(e.getDueDate())

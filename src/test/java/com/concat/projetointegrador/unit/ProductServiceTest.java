@@ -105,14 +105,6 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldReturnErrorExistCreateProduct() {
-        Mockito.when(productRepositoryMock.findById(Mockito.anyLong())).thenReturn(Optional.of(mockProduct()));
-        Mockito.when(productRepositoryMock.save(Mockito.any())).thenReturn(mockProduct());
-        Throwable exception = assertThrows(RuntimeException.class, () -> service.create(mockProduct()));
-        assertEquals("Esse produto já existe!", exception.getMessage());
-    }
-
-    @Test
     void shouldReturnProductByCategory() {
         List<ProductDTO> listProductDTO;
         Mockito.when(productRepositoryMock.findByCategory(Mockito.any())).thenReturn(mockListProduct());

@@ -87,7 +87,7 @@ public class WarehouseControllerTest {
 
     @Test
     public void shouldReturnQuantityProductByIdForWarehouseReturnStatus200() throws Exception {
-        MvcResult result = mockMvc.perform(get("/products/warehouse/")
+        MvcResult result = mockMvc.perform(get("/warehouse/products")
                         .param("productId", "1")
                         .with(user("Supervisor").password("123")))
                 .andExpect(status().isOk())
@@ -95,6 +95,6 @@ public class WarehouseControllerTest {
 
         String jsonReturned = result.getResponse().getContentAsString();
 
-        assertEquals("{\"productId\":1,\"warehouses\":[{\"warehouseCode\":1,\"totalQuantity\":2}]}", jsonReturned);
+        assertEquals("{\"productId\":1,\"warehouses\":[{\"warehouseCode\":1,\"totalQuantity\":11}]}", jsonReturned);
     }
 }

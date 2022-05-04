@@ -128,7 +128,7 @@ public class InboundOrderControllerTest {
 
 		@Test
 		public void shouldUpdateAInboundOrderById() throws Exception {
-				String payload = "{\"sector\":{\"sectorCode\":1,\"warehouseCode\":1},\"batchStock\":[{\"initialQuantity\":1,\"manufacturingDate\":\"2022-10-10\",\"manufacturingTime\":\"20:20:20\",\"dueDate\":\"2025-10-10\",\"initialTemperature\":23,\"currentQuantity\":23,\"initialTemperature\":23,\"productId\":1}]}";
+				String payload = "{\"sector\":{\"sectorCode\":1,\"warehouseCode\":1},\"batchStock\":[{\"id\":99,\"initialQuantity\":1,\"manufacturingDate\":\"2022-10-10\",\"manufacturingTime\":\"20:20:20\",\"dueDate\":\"2025-10-10\",\"initialTemperature\":23,\"currentQuantity\":23,\"initialTemperature\":23,\"productId\":1}]}";
 
 				SimpleGrantedAuthority supervisor = new SimpleGrantedAuthority("Supervisor");
 				ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();

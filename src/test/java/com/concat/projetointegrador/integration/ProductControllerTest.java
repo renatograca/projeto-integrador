@@ -1,6 +1,14 @@
 package com.concat.projetointegrador.integration;
 
+import com.concat.projetointegrador.dto.InboundOrderDTO;
+import com.concat.projetointegrador.dto.ProductResponseDTO;
+import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.ProductRepository;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,7 +42,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldCreateAProductAndReturn201() throws Exception {
-                mockMvc.perform(MockMvcRequestBuilders.post("/")
+                mockMvc.perform(MockMvcRequestBuilders.post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payloadProduct())
                         .with(user("Seller").password("123")))
@@ -45,7 +53,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldFindByCategoryAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/category/{category}", "CONGELADOS")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products/category/{category}", "CONGELADOS")
                 .with(user("Seller").password("123")))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
@@ -55,7 +63,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldFindAllAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products")
                 .with(user("Seller").password("123")))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
@@ -65,21 +73,22 @@ public class ProductControllerTest {
 
     @Test
     public void shouldFindByBatchStockByProductsAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/list/{id}", "1" )
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products/list/{id}", "1" )
                 .with(user("Seller").password("123")))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertEquals("{\"productId\":1,\"sector\":[{\"sectorCode\":1,\"warehouseCode\":1}],\"batchStock\":[" +
-                "{\"initialQuantity\":10,\"currentQuantity\":10,\"manufacturingDate\":\"2022-04-20\",\"manufacturingTime\"" +
-                ":\"20:00:00\",\"dueDate\":\"2023-10-10\",\"initialTemperature\":9,\"productId\":1},{\"initialQuantity\"" +
-                ":1,\"currentQuantity\":1,\"manufacturingDate\":\"2022-10-10\",\"manufacturingTime\":\"20:20:20\",\"dueDate\"" +
-                ":\"2025-10-10\",\"initialTemperature\":2,\"productId\":1}]}", response);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        String jsonReturned = result.getResponse().getContentAsString();
+        ProductResponseDTO product = objectMapper.readValue(jsonReturned, ProductResponseDTO.class);
+        assertEquals(1L, product.getProductId());
     }
 
     @Test
     public void shouldFindByIdAndReturn200() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/{id}", "1" )
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", "1" )
                 .with(user("Seller").password("123")))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
