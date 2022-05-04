@@ -10,4 +10,47 @@ INSERT INTO product (id, category, name, price, volume, seller_id) VALUES (1,'CO
 
 insert into inbound_order (id, order_date, sector_id) values (1, '2022-04-20', 1);
 
-insert into batch_stock (category, current_quantity, due_date, id, inbound_order_id, initial_quantity, manufacturing_date, manufacturing_time, product_id, initial_temperature, current_temperature) values ('FRESCOS', 5, '2022-05-10', '1', '1', 5, '2022-10-10', '20:20:20', '1', 20, 20);
+insert into batch_stock (
+     category,
+     current_quantity,
+     due_date,
+     id,
+     inbound_order_id,
+     initial_quantity,
+     manufacturing_date,
+     manufacturing_time,
+     product_id,
+     initial_temperature,
+     current_temperature
+)
+values ('FRESCOS', 5, '2022-05-10', '1', '1', 5, '2022-10-10', '20:20:20', '1', 20, 20);
+
+insert into batch_stock (
+    category,
+    current_quantity,
+    due_date,
+    id,
+    inbound_order_id,
+    initial_quantity,
+    manufacturing_date,
+    manufacturing_time,
+    product_id,
+    initial_temperature,
+    current_temperature
+)
+values ('CONGELADOS', 5, '2022-05-11', '2', '1', 5, '2022-10-10', '20:20:20', '1', 20, 20);
+
+insert into batch_stock (
+    category,
+    current_quantity,
+    due_date,
+    id,
+    inbound_order_id,
+    initial_quantity,
+    manufacturing_date,
+    manufacturing_time,
+    product_id,
+    initial_temperature,
+    current_temperature
+)
+values ('REFRIGERADOS', 5, '2022-05-12', '3', '1', 5, '2022-10-10', '20:20:20', '1', 20, 20);
