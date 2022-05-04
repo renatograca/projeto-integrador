@@ -15,13 +15,17 @@ import java.util.List;
 @RequestMapping("/buyer")
 public class BuyerController {
 
-		@Autowired
-		private BuyerService buyerService;
+    @Autowired
+    private BuyerService buyerService;
 
-		@PostMapping
-		public ResponseEntity<BuyerDTO> create(@RequestBody @Valid Buyer buyer) {
-				BuyerDTO buyerDTO = BuyerDTO.convertToBuyerDTO(buyerService.create(buyer));
-				return new ResponseEntity<>(buyerDTO, HttpStatus.CREATED);
-		}
+    /** create a new buyer
+     * @param buyer - object buyer
+     * @return a buyer DTO
+     */
+    @PostMapping
+    public ResponseEntity<BuyerDTO> create(@RequestBody @Valid Buyer buyer) {
+        BuyerDTO buyerDTO = BuyerDTO.convertToBuyerDTO(buyerService.create(buyer));
+        return new ResponseEntity<>(buyerDTO, HttpStatus.CREATED);
+    }
 
 }
