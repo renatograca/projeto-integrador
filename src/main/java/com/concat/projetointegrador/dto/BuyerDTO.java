@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class BuyerDTO {
 
+    private Long id;
     private String name;
     private String lastName;
     private String username;
@@ -17,6 +18,7 @@ public class BuyerDTO {
 
     public static BuyerDTO convertToBuyerDTO(Buyer buyer) {
         return BuyerDTO.builder()
+                .id(buyer.getId())
                 .name(buyer.getName())
                 .lastName(buyer.getLastName())
                 .username(buyer.getUsername())

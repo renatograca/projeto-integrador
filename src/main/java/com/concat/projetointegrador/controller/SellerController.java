@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.controller;
 
+import com.concat.projetointegrador.dto.SellerDTO;
 import com.concat.projetointegrador.model.Seller;
 import com.concat.projetointegrador.service.SellerService;
 import lombok.AllArgsConstructor;
@@ -18,14 +19,13 @@ public class SellerController {
 
 
 		@PostMapping("/seller")
-		public ResponseEntity<Seller> create(@RequestBody @Valid Seller seller, UriComponentsBuilder uriComponentsBuilder) {
-				Seller newSeller = sellerService.create(seller);
+		public ResponseEntity<SellerDTO> create(@RequestBody @Valid Seller seller, UriComponentsBuilder uriComponentsBuilder) {
+				SellerDTO newSeller = SellerDTO.convertToSellerDTO(sellerService.create(seller));
 				URI uri = uriComponentsBuilder.path("/seller/{id}")
 								.buildAndExpand(newSeller.getId())
 								.toUri();
 				return ResponseEntity.created(uri).body(newSeller);
 		}
-
 
 		@GetMapping("/seller/{id}")
 		public ResponseEntity<Seller> findByID(@PathVariable Long id) {
