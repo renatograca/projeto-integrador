@@ -12,7 +12,7 @@ O Seguinte desafio foi proposto para aplicar os conhecimentos até então alcan�
 
 
 ## Endpoints
-Arquivo de rotas do Postman: [postman_collection.json)](https://github.com/buskari/projeto-integrador/blob/develop/postman/Projeto%20Integrador.postman_collection.json)
+Arquivo de rotas do Postman: [postman_collection.json](https://github.com/buskari/projeto-integrador/blob/develop/postman/Projeto%20Integrador.postman_collection.json)
 
 URL Base: localhost:8080/api/v1/fresh-products
 
