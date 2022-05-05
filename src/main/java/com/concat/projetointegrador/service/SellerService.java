@@ -1,6 +1,7 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.exception.ProductsNotRegistrate;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.model.Seller;
 import com.concat.projetointegrador.repository.ProductRepository;
@@ -47,7 +48,7 @@ public class SellerService {
     public List<Product> findAllProductsBySeller(Seller seller) {
         List<Product> products = productRepository.findProductBySeller(seller);
         if (products.isEmpty()) {
-            throw new RuntimeException("Não existe produtos cadastrados para esse vendedor!");
+            throw new ProductsNotRegistrate("Não existe produtos cadastrados para esse vendedor!");
         }
         return products;
     }
