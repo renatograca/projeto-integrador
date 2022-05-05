@@ -30,6 +30,11 @@ public class BuyerController {
         return new ResponseEntity<>(buyerDTO, HttpStatus.CREATED);
     }
 
+    /**
+     * fetches all orders from a buyer
+     * @param id Long - buyer id
+     * @return an object with the first name , last name and the list of orders
+     */
     @GetMapping("/purchaseorder/{id}")
     public ResponseEntity<BuyerResponseDTO> findByPurchaseOrderByBuyer(@PathVariable Long id) {
         Buyer buyer = buyerService.findById(id);

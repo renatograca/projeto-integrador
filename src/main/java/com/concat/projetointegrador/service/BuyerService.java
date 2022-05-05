@@ -55,6 +55,12 @@ public class BuyerService {
         return buyerRepository.save(buyer);
     }
 
+    /**
+     * fetches all completed orders from a buyer
+     * @param buyer - object buyer
+     * @return a list of completed orders
+     * @throws ObjectNotRegistrate - returns an exception if there are no orders
+     */
     public List<PurchasedOrder> findByPurchaseOrderByBuyer(Buyer buyer) {
         List<PurchasedOrder> purchasedOrderByBuyer = purchasedOrderRepository.findPurchasedOrderByBuyer(buyer);
         List<PurchasedOrder> purchasedOrdersFinalized = purchasedOrderByBuyer.stream().filter(
