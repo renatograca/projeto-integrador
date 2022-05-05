@@ -15,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface BatchStockRepository extends JpaRepository<BatchStock, Long> {
 
-    Optional<BatchStock> findByProductId(Long id);
 	  List<BatchStock> findAllByInboundOrderSectorId(Long id);
-
 	  List<BatchStock> findAllByProductId(Long id);
 }

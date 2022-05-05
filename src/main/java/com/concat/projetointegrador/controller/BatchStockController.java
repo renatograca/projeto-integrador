@@ -28,6 +28,15 @@ public class BatchStockController {
     @Autowired
     private SectorService sectorService;
 
+    /**
+     * filter the batch stocks by the params below
+     * @param days int - number of days of the intervel to expire a batch stock
+     * @param sectorId Long - sector id
+     * @param category String - category of product
+     * @param asc Integer - sorting as ascendent/descendent (0: desc/ 1: asc/ default: asc)
+     * @return the batch stocks filter by the params above
+     * @throws InvalidParameterException
+     */
     @GetMapping("/duedate")
     public ResponseEntity<List<BatchStockFilterDTO>> filter(
             @RequestParam int days,

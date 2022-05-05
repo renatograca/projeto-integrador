@@ -13,7 +13,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SellerService {
 
-		private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private SellerRepository sellerRepository;
 

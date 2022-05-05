@@ -20,15 +20,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-		private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-		public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-				Optional<User> opt = userRepository.findByUsername(username);
+    /**
+     * search and authenticate a user
+     * @param username String - user name
+     * @return a user authenticcate
+     * @throws UsernameNotFoundException - if you don't find one user
+     */
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> opt = userRepository.findByUsername(username);
 
-				if(opt.isPresent()){
-						User user = opt.get();
-						return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
-				}
-				throw new UsernameNotFoundException("User not found!");
-		}
+        if (opt.isPresent()) {
+            User user = opt.get();
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
+        }
+        throw new UsernameNotFoundException("User not found!");
+    }
 }

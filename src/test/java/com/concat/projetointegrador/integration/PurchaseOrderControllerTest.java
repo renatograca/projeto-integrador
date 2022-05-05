@@ -36,7 +36,7 @@ public class PurchaseOrderControllerTest {
     private MockMvc mockMvc;
 
     private String payload() {
-        return "{\"buyer\":{\"id\":4},\"status\":\"aberto\",\"cart\":[{\"products\":{\"id\": 1},\"quantity\": 5}]}";
+        return "{\"buyer\":{\"id\":4},\"status\":\"aberto\",\"cart\":[{\"product\":{\"id\": 1},\"quantity\": 5}]}";
     }
 
     @Test
