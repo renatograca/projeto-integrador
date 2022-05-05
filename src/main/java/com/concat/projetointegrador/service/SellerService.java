@@ -1,12 +1,14 @@
 package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.model.Seller;
 import com.concat.projetointegrador.repository.SellerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,5 +40,9 @@ public class SellerService {
     public Seller create(Seller seller) {
             seller.setPassword(passwordEncoder.encode(seller.getPassword()));
             return sellerRepository.save(seller);
+    }
+
+    public List<Product> findAllProductsBySeller(Long id) {
+        return sellerRepository.findAllProductsBySeller(id);
     }
 }

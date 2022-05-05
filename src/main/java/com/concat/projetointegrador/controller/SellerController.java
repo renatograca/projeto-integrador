@@ -21,9 +21,10 @@ public class SellerController {
 
 
     /**
-     * @param seller user info
+     * create a seller
+     * @param seller - seller object
      * @param uriComponentsBuilder
-     * @return new seller
+     * @return a new seller
      */
     @PostMapping("/seller")
     public ResponseEntity<SellerDTO> create(@RequestBody @Valid Seller seller, UriComponentsBuilder uriComponentsBuilder) {
@@ -36,18 +37,20 @@ public class SellerController {
 
 
     /**
-     * @param id - long
-     * @return seller
+     * search for a seller by id
+     * @param id Long - seller id
+     * @return a seller
      */
     @GetMapping("/seller/{id}")
-    public ResponseEntity<Seller> findByID(@PathVariable Long id) {
-        Seller seller = sellerService.findByID(id);
+    public ResponseEntity<SellerDTO> findByID(@PathVariable Long id) {
+        SellerDTO seller = SellerDTO.convertToSellerDTO(sellerService.findByID(id));
         return ResponseEntity.ok(seller);
     }
 
-    @GetMapping("/")
+    @GetMapping("/products/{id}")
     public ResponseEntity<SellerResponseDTO> findAllProductsBySeller(@PathVariable Long id) {
-
-        return null;
+        Seller seller = sellerService.findByID(id);
+        SellerResponseDTO sellerResponseDTO = SellerResponseDTO.convertToSellerResponseDTO(seller, sellerService.findAllProductsBySeller(id));
+        return ResponseEntity.ok(sellerResponseDTO);
     }
 }
