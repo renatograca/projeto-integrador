@@ -60,7 +60,7 @@ public class BuyerService {
         List<PurchasedOrder> purchasedOrdersFinalized = purchasedOrderByBuyer.stream().filter(
                 purchasedOrder -> purchasedOrder.getStatus().equalsIgnoreCase("finalizado")).collect(Collectors.toList());
         if (purchasedOrdersFinalized.isEmpty()) {
-            throw new ObjectNotRegistrate("Não existe compras realizadas para esse vendedor!");
+            throw new ObjectNotRegistrate("Não existe compras realizadas para esse comprador!");
         }
         return purchasedOrdersFinalized;
     }
