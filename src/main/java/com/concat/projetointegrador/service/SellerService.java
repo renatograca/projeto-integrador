@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,5 +39,41 @@ public class SellerService {
     public Seller create(Seller seller) {
             seller.setPassword(passwordEncoder.encode(seller.getPassword()));
             return sellerRepository.save(seller);
+    }
+
+    /**
+     * Find all Seller
+     * @return a list of Seller
+     * @throws EntityNotFound if seller is not registered
+     */
+    public List<Seller> findAll() {
+        List<Seller> listSeller = sellerRepository.findAll();
+
+        if (listSeller.isEmpty()) {
+            throw new EntityNotFound("Não existem vendedores cadastrados.");
+        }
+        return listSeller;
+    }
+
+
+    /**
+     * Update seller by id
+     * @param seller - seller object
+     * @param id Long - seller id
+     * @return updated seller
+     */
+    public Seller update(Seller seller, Long id){
+        Optional <Seller> sellerRepo = sellerRepository.findById(id);
+
+        if(sellerRepo.isEmpty()) {
+            throw new EntityNotFound("O vendedor não existe.");
+        }
+        sellerRepo.get().setName(seller.getName());
+        sellerRepo.get().setLastName(seller.getLastName());
+        sellerRepo.get().setCpf(seller.getCpf());
+        sellerRepo.get().setUsername(seller.getUsername());
+        sellerRepo.get().setPassword(seller.getPassword());
+
+        return sellerRepository.save(sellerRepo.get());
     }
 }
