@@ -1,7 +1,7 @@
 package com.concat.projetointegrador.unit;
 
 import com.concat.projetointegrador.exception.EntityNotFound;
-import com.concat.projetointegrador.exception.ProductsNotRegistrate;
+import com.concat.projetointegrador.exception.ObjectNotRegistrate;
 import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.model.Seller;
@@ -83,7 +83,7 @@ public class SellerServiceTest {
     @Test
     public void shouldReturnErrorWhenProductsBySeller() {
         Mockito.when(productRepository.findProductBySeller(Mockito.any())).thenReturn(Mockito.anyList());
-        Throwable exception = assertThrows(ProductsNotRegistrate.class, () -> service.findAllProductsBySeller(seller));
+        Throwable exception = assertThrows(ObjectNotRegistrate.class, () -> service.findAllProductsBySeller(seller));
         assertEquals("Não existe produtos cadastrados para esse vendedor!", exception.getMessage());
     }
 
