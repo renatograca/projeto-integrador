@@ -15,33 +15,31 @@ import java.net.URI;
 @AllArgsConstructor
 public class SellerController {
 
-		private final SellerService sellerService;
+    private final SellerService sellerService;
 
+    /**
+     * create a seller
+     * @param seller - seller object
+     * @param uriComponentsBuilder
+     * @return a new seller
+     */
+    @PostMapping("/seller")
+    public ResponseEntity<SellerDTO> create(@RequestBody @Valid Seller seller, UriComponentsBuilder uriComponentsBuilder) {
+        SellerDTO newSeller = SellerDTO.convertToSellerDTO(sellerService.create(seller));
+        URI uri = uriComponentsBuilder.path("/seller/{id}")
+                .buildAndExpand(newSeller.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(newSeller);
+    }
 
-		/**
-		 *
-		 * @param seller user info
-		 * @param uriComponentsBuilder
-		 * @return new seller
-		 */
-		@PostMapping("/seller")
-		public ResponseEntity<SellerDTO> create(@RequestBody @Valid Seller seller, UriComponentsBuilder uriComponentsBuilder) {
-				SellerDTO newSeller = SellerDTO.convertToSellerDTO(sellerService.create(seller));
-				URI uri = uriComponentsBuilder.path("/seller/{id}")
-								.buildAndExpand(newSeller.getId())
-								.toUri();
-				return ResponseEntity.created(uri).body(newSeller);
-		}
-
-
-		/**
-		 *
-		 * @param id - long
-		 * @return seller
-		 */
-		@GetMapping("/seller/{id}")
-		public ResponseEntity<Seller> findByID(@PathVariable Long id) {
-				Seller seller = sellerService.findByID(id);
-				return ResponseEntity.ok(seller);
-		}
+    /**
+     * search for a seller by id
+     * @param id Long - seller id
+     * @return a seller
+     */
+    @GetMapping("/seller/{id}")
+    public ResponseEntity<SellerDTO> findByID(@PathVariable Long id) {
+        SellerDTO seller = SellerDTO.convertToSellerDTO(sellerService.findByID(id));
+        return ResponseEntity.ok(seller);
+    }
 }
