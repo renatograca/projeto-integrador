@@ -45,6 +45,12 @@ public class SellerService {
             return sellerRepository.save(seller);
     }
 
+    /**
+     * search a list of products by seller
+     * @param seller - object seller
+     * @return returns a list of products if it exists
+     * @throws ProductsNotRegistrate - returns an exception if there are no products
+     */
     public List<Product> findAllProductsBySeller(Seller seller) {
         List<Product> products = productRepository.findProductBySeller(seller);
         if (products.isEmpty()) {

@@ -49,6 +49,11 @@ public class SellerController {
         return ResponseEntity.ok(seller);
     }
 
+    /**
+     * search for products by seller
+     * @param id Long - seller id
+     * @return returns a seller and their products if they exist
+     */
     @GetMapping("/products/{id}")
     public ResponseEntity<SellerResponseDTO> findAllProductsBySeller(@PathVariable Long id) {
         Seller seller = sellerService.findByID(id);
