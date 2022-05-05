@@ -70,11 +70,10 @@ public class ProductController {
                 .productId(product.getId())
                 .build();
         if (build.getBatchStock().isEmpty()) {
-            throw new RuntimeException("Não existe estoque com esse prooduto!");
+            throw new RuntimeException("Não existe estoque com esse produto!");
         }
         return ResponseEntity.ok(build);
     }
-
 
     /**
      * Search all products
