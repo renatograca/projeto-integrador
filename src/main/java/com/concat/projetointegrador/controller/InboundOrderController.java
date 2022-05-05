@@ -42,30 +42,35 @@ public class InboundOrderController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping
+
     /**
+     * search an inboud order list
      * @return returns a list of inbound orders
      */
-    public Collection<InboundOrderDTO> findAllByActiveTrue() {
+    @GetMapping
+    public Collection<InboundOrderDTO> findAllBy() {
         return orderService.findAll().stream().map(InboundOrderDTO::map).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+
     /**
+     * search for an inbound order
      * @param id - Long that represents the unique identifier
      * @return InboundOrder - returns an object with type InboundOrder
      */
-    public InboundOrder findAllByIdAndActiveTrue(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public InboundOrder findAllById(@PathVariable Long id) {
         return orderService.findById(id);
     }
 
-    @PutMapping("/{id}")
+
     /**
-     *
-     * @param id - Long id that represents the inbound order on the database
-     * @param order - object with the data to update
+     * update one inbound order
+     * @param id  - Long id that represents the inbound order on the database
+     * @param dto - object with the data to update
      * @return returns the updated inbound order
      */
+    @PutMapping("/{id}")
     public ResponseEntity<InboundOrderDTO> update(@PathVariable Long id, @RequestBody InboundOrderDTO dto) {
         List<BatchStock> list = dto.getBatchStock()
                 .stream()
@@ -90,8 +95,9 @@ public class InboundOrderController {
     }
 
     /**
+     * create a new inbound order
      * @param dto - object with the data to registrate on database
-     * @return returns the created database
+     * @return returns the created inbound order
      */
     @PostMapping
     public ResponseEntity<InboundOrderDTO> create(@RequestBody InboundOrderDTO dto, UriComponentsBuilder uriBuilder) {
