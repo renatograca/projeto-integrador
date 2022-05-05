@@ -52,7 +52,7 @@ public class SellerController {
     @GetMapping("/products/{id}")
     public ResponseEntity<SellerResponseDTO> findAllProductsBySeller(@PathVariable Long id) {
         Seller seller = sellerService.findByID(id);
-        SellerResponseDTO sellerResponseDTO = SellerResponseDTO.convertToSellerResponseDTO(seller, sellerService.findAllProductsBySeller(id));
+        SellerResponseDTO sellerResponseDTO = SellerResponseDTO.convertToSellerResponseDTO(seller, sellerService.findAllProductsBySeller(seller));
         return ResponseEntity.ok(sellerResponseDTO);
     }
 }

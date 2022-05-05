@@ -3,6 +3,7 @@ package com.concat.projetointegrador.service;
 import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.model.Seller;
+import com.concat.projetointegrador.repository.ProductRepository;
 import com.concat.projetointegrador.repository.SellerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,7 @@ public class SellerService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private SellerRepository sellerRepository;
+    private ProductRepository productRepository;
 
     /**
      * Find a Seller by ID or throw an EntityNotFound Exception
@@ -42,7 +44,11 @@ public class SellerService {
             return sellerRepository.save(seller);
     }
 
-    public List<Product> findAllProductsBySeller(Long id) {
-        return sellerRepository.findAllProductsBySeller(id);
+    public List<Product> findAllProductsBySeller(Seller seller) {
+        List<Product> products = productRepository.findProductBySeller(seller);
+        if (products.isEmpty()) {
+            throw new RuntimeException("Não existe produtos cadastrados para esse vendedor!");
+        }
+        return products;
     }
 }
