@@ -10,5 +10,4 @@ import com.concat.projetointegrador.model.InboundOrder;
 @Repository
 public interface InboundOrderRepository extends JpaRepository<InboundOrder, Long> {
 
-	Optional<InboundOrder> findAllById(Long id);
 }

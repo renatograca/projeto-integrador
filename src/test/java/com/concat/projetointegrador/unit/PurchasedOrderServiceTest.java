@@ -151,7 +151,7 @@ class PurchasedOrderServiceTest {
         cart = Cart.builder()
                 .id(1L)
                 .quantity(1)
-                .products(product)
+                .product(product)
                 .purchasedOrder(purchasedOrderForCarts)
                 .build();
         carts0.add(cart);

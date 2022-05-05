@@ -23,7 +23,6 @@ public class PurchaseOrderController {
 
     /**
      * Save a purchase order
-     *
      * @param purchasedOrder - purchase order object
      * @return the creation of a purchase order with the status code 201 created
      */
@@ -35,7 +34,6 @@ public class PurchaseOrderController {
 
     /**
      * Search for a purchase order by id
-     *
      * @param id Long - purchase order id
      * @return a purchase order with status code 200 ok
      */
@@ -46,7 +44,7 @@ public class PurchaseOrderController {
                 .map(cart -> CartsDTO.builder()
                         .id(cart.getId())
                         .quantity(cart.getQuantity())
-                        .productDTO(ProductDTO.convertToProductDTO(cart.getProducts()))
+                        .productDTO(ProductDTO.convertToProductDTO(cart.getProduct()))
                         .build()).collect(Collectors.toList());
         PurchasedOrderResponseDTO purchasedOrderResponseDTO = PurchasedOrderResponseDTO.builder()
                 .id(purchasedOrder.getId())
@@ -59,7 +57,6 @@ public class PurchaseOrderController {
 
     /**
      * Updates a purchase order to "completed" status
-     *
      * @param id Long - purchase order id
      * @return returns a purchase order with status "completed" and status code 200 ok
      */
@@ -70,7 +67,7 @@ public class PurchaseOrderController {
                 .map(cart -> CartsDTO.builder()
                         .id(cart.getId())
                         .quantity(cart.getQuantity())
-                        .productDTO(ProductDTO.convertToProductDTO(cart.getProducts()))
+                        .productDTO(ProductDTO.convertToProductDTO(cart.getProduct()))
                         .build()).collect(Collectors.toList());
         PurchasedOrderResponseDTO purchasedOrderResponseDTO = PurchasedOrderResponseDTO.builder()
                 .id(updatedPurchasedOrder.getId())

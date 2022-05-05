@@ -25,103 +25,105 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class InboundOrderService {
 
-	private InboundOrderRepository repository;
-	
-	private BatchStockRepository batchStockRepository;
+    private InboundOrderRepository repository;
 
-	private List<Validator> validators;
+    private BatchStockRepository batchStockRepository;
+
+    private List<Validator> validators;
 
 
-		/**
-		 *
-		 * @param order order to be validated
-		 */
-	private void initializeValidators(InboundOrder order) {
-		this.validators = Arrays.asList(
-				new SectorCapacityValidate(order, batchStockRepository),
-				new SectorCategoryMatchValidate(order)
-		);
-	}
+    /**
+	 * instanciate validators
+     * @param order order to be validated
+     */
+    private void initializeValidators(InboundOrder order) {
+        this.validators = Arrays.asList(
+                new SectorCapacityValidate(order, batchStockRepository),
+                new SectorCategoryMatchValidate(order)
+        );
+    }
 
-		/**
-		 *
-		 * @param id id that represents the inbound order on database
-		 * @return returns the inbound order with this id
-		 */
-	private InboundOrder getInboundOrderById(Long id) {
-		Optional<InboundOrder> opt = repository.findById(id);
-		if (opt.isEmpty()) {
-			throw new EntityNotFound("Ordem de entrada não encontrada!");
-		}
-		return opt.get();
-	}
+    /**
+	 * search inbound order id
+     * @param id id that represents the inbound order on database
+     * @return returns the inbound order with this id
+     */
+    private InboundOrder getInboundOrderById(Long id) {
+        Optional<InboundOrder> opt = repository.findById(id);
+        if (opt.isEmpty()) {
+            throw new EntityNotFound("Ordem de entrada não encontrada!");
+        }
+        return opt.get();
+    }
 
-		/**
-		 *
-		 * @param order - object with the data to registrate on database
-		 * @return returns the created database
-		 */
-	public InboundOrder create(InboundOrder order) {
-		initializeValidators(order);
-		validators.forEach(Validator::validate);
+    /**
+	 * create a new inbound order
+     * @param order - object with the data to create on database
+     * @return returns the inbound order created
+     */
+    public InboundOrder create(InboundOrder order) {
+        initializeValidators(order);
+        validators.forEach(Validator::validate);
 
-		InboundOrder newInboundOrder = repository.save(order);
-		order.getBatchStock().forEach(e-> e.setInboundOrder(newInboundOrder));
+        InboundOrder newInboundOrder = repository.save(order);
+        order.getBatchStock().forEach(e -> e.setInboundOrder(newInboundOrder));
 
-		List<BatchStock> newBatchStocks = batchStockRepository.saveAll(newInboundOrder.getBatchStock());
+        List<BatchStock> newBatchStocks = batchStockRepository.saveAll(newInboundOrder.getBatchStock());
 
-		newInboundOrder.setBatchStock(newBatchStocks);
-		repository.save(newInboundOrder);
-		
-	// TODO autenticação supervisor
-		return newInboundOrder;
-	}
+        newInboundOrder.setBatchStock(newBatchStocks);
+        repository.save(newInboundOrder);
 
-		/**
-		 *
-		 * @param id - Long id that represents the inbound order on the database
-		 * @param order - object with the data to update
-		 * @return returns the updated inbound order
-		 */
-	public InboundOrder update(Long id, InboundOrder order) {
-		InboundOrder dbOrder = getInboundOrderById(id);
+        return newInboundOrder;
+    }
 
-		if (order.getBatchStock() != null) {
-			dbOrder.setBatchStock(order.getBatchStock());
-		}
-		
-		if (order.getSector() != null) {
-			dbOrder.setSector(order.getSector());
-		}
+    /**
+	 * updating one inbound order
+     * @param id    - Long id that represents the inbound order on the database
+     * @param order - object with the data to update
+     * @return returns the updated inbound order
+     */
+    public InboundOrder update(Long id, InboundOrder order) {
+        InboundOrder dbOrder = getInboundOrderById(id);
 
-		return repository.save(dbOrder);
-	}
+        if (order.getBatchStock() != null) {
+            dbOrder.setBatchStock(order.getBatchStock());
+        }
 
-		/**
-		 * @param sectorId Long that represents the unique identifier of the sector
-		 * @return List<InboundOrder> returns a list of inbound orders that have this sector
-		 */
-	public List<InboundOrder> findBySectorId(Long sectorId) {
-		return repository
-				.findAll()
-				.stream()
-				.filter(inboundOrder -> inboundOrder.getSector().getId().equals(sectorId))
-				.collect(Collectors.toList());
-	}
+        if (order.getSector() != null) {
+            dbOrder.setSector(order.getSector());
+        }
 
-		/**
-		 * @param id - Long that represents the unique identifier
-		 * @return InboundOrder - returns an object with type InboundOrder
-		 */
-	public InboundOrder findById(Long id) {
-		return this.getInboundOrderById(id);
-	}
+        return repository.save(dbOrder);
+    }
 
-		/**
-		 * @return returns a list of inbound orders
-		 */
-	public List<InboundOrder> findAll() {
-		return repository.findAll();
-	}
+    /**
+	 * search inbound order by sector
+     * @param sectorId Long that represents the unique identifier of the sector
+     * @return List<InboundOrder> returns a list of inbound orders that have this sector
+     */
+    public List<InboundOrder> findBySectorId(Long sectorId) {
+        return repository
+                .findAll()
+                .stream()
+                .filter(inboundOrder -> inboundOrder.getSector().getId().equals(sectorId))
+                .collect(Collectors.toList());
+    }
+
+    /**
+	 * search inbound order by id
+     * @param id - Long that represents the unique identifier
+     * @return InboundOrder - returns an object with type InboundOrder
+     */
+    public InboundOrder findById(Long id) {
+        return this.getInboundOrderById(id);
+    }
+
+    /**
+	 * search all inbound orders
+     * @return returns a list of inbound orders
+     */
+    public List<InboundOrder> findAll() {
+        return repository.findAll();
+    }
 
 }

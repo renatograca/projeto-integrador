@@ -33,9 +33,9 @@ public class PurchasedOrderService {
         List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
         for (Cart cart : purchasedOrder.getCart()) {
-            List<BatchStock> batchStock = batchStockService.findByProductId(cart.getProducts().getId(), cart.getQuantity());
+            List<BatchStock> batchStock = batchStockService.findByProductId(cart.getProduct().getId(), cart.getQuantity());
             total = total.add(batchStock.get(0).getProduct().getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
-            carts.add(Cart.builder().products(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
+            carts.add(Cart.builder().product(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
                     .purchasedOrder(purchasedOrder).build());
         }
         purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
@@ -82,7 +82,7 @@ public class PurchasedOrderService {
 
 
                 purchasedOrder.get().getCart().forEach(cart -> {
-                    List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
+                    List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProduct().getId(), "F");
                     AtomicReference<Integer> quantity = new AtomicReference<>(cart.getQuantity());
                     batchStocks.forEach(batchStock -> {
                         if (batchStock.getCurrentQuantity() >= quantity.get()) {
@@ -107,7 +107,7 @@ public class PurchasedOrderService {
      */
     private void validateQuantityInBatchStock(PurchasedOrder purchasedOrder) {
         for (Cart cart : purchasedOrder.getCart()) {
-            List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProducts().getId(), "F");
+            List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProduct().getId(), "F");
             Integer productQuantityTotal = batchStocks.stream().
                     reduce(0, (acc, e) -> acc + e.getCurrentQuantity(), Integer::sum);
 

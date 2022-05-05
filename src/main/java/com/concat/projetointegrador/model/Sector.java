@@ -14,7 +14,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sector {
-    //TODO add nullable = false em warehouseId
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

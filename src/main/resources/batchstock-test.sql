@@ -62,6 +62,6 @@ VALUES(3, 'CONGELADOS', 1, 2, '2022-05-12', 1, 2, '2022-10-10', '20:20:20', 99, 
 
 insert into purchased_order (id, date, status, "buyer_id") values (1,'2022-04-20', 'aberto', 1);
 
-insert into cart (id, quantity, products_id, purchased_order_id) values (1, 10, 1, 1);
+insert into cart (id, quantity, product_id, purchased_order_id) values (1, 10, 1, 1);
 
 

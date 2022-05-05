@@ -35,7 +35,6 @@ public class ProductController {
 
     /**
      * Search product by id
-     *
      * @param id Long - product id
      * @return a product
      */
@@ -46,8 +45,7 @@ public class ProductController {
 
     /**
      * Fetch a batch stock list by product id
-     *
-     * @param id      - product id
+     * @param id Long- product id
      * @param orderBy - path param
      * @return the product with this id
      */
@@ -80,7 +78,6 @@ public class ProductController {
 
     /**
      * Search all products
-     *
      * @return all searched products
      */
     @GetMapping
@@ -91,7 +88,6 @@ public class ProductController {
 
     /**
      * Searching category products
-     *
      * @param category - product category
      * @return the product linked to the category
      */
@@ -102,7 +98,6 @@ public class ProductController {
 
     /**
      * Create a new product
-     *
      * @param product - an object with data to register in the database
      * @return returns the created database
      */

@@ -24,7 +24,7 @@ public class WarehouseService {
 
     /**
      * Search warehouse by id
-     * @param id
+     * @param id Long - warehouse id
      * @return a warehouse if found
      */
     public WarehouseDTO findById(Long id) {
@@ -38,8 +38,8 @@ public class WarehouseService {
 
     /**
      * Search a products list by warehouse
-     * @param batchProducts
-     * @param inboundOrderService
+     * @param batchProducts - an object list warehouse
+     * @param inboundOrderService - inbound order service
      * @returns a list of products by warehouse
      */
     public List<WarehouseQuantityProductDTO> findAllProductForWarehouse(List<BatchStock> batchProducts, InboundOrderService inboundOrderService) {
