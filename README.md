@@ -46,3 +46,18 @@ URL Base: localhost:8080/api/v1/fresh-products
 - [Renato Graça](https://github.com/renatograca)
 - [Vinícios Fraga](https://github.com/itIsV)
 
+## Requisito 6
+
+O objetivo é buscar os vendedores ordenados pela quantidade de vendas, gerar relatórios sobre estratégias de venda e engajamento.
+
+Endpoints
+Arquivo de rotas do Postman: [postman_collection_requisito_6.json](https://github.com/buskari/projeto-integrador/blob/feat/req6/get-best-sellers/postman/Requisito6Projeto%20Integrador.postman_collection.json)
+
+URL Base: localhost:8080/api/v1/fresh-products
+
+| Tipo   | URI       | Função    | Payload |
+| :---------- | :--------- | :----------------------- |:------------------- |
+| `GET` | `/seller/bests` | Busca os vendedores ordenados pela quantidade de produtos vendidos | --
+
+## Autor
+- [Vinícios Fraga](https://github.com/itIsV)
