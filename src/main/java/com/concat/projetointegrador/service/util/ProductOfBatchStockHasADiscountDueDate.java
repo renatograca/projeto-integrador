@@ -16,10 +16,10 @@ public class ProductOfBatchStockHasADiscountDueDate {
      */
     public static BigDecimal verifyDiscount(BatchStock batchStock) {
         Long dueDays = differenceBetweenDates(LocalDate.now(), batchStock.getDueDate());
-        if (dueDays <= 30) {
+        if (dueDays <= 30 && dueDays >= 21) {
             return discountCalculation(batchStock.getProduct().getPrice(), 0.1);
         }
-        if (dueDays <= 20) {
+        if (dueDays <= 20 && dueDays >= 11) {
             return discountCalculation(batchStock.getProduct().getPrice(), 0.2);
         }
         if (dueDays <= 10) {
@@ -34,7 +34,6 @@ public class ProductOfBatchStockHasADiscountDueDate {
      * @return BigDecimal returns the discounted amount
      */
     private static BigDecimal discountCalculation(BigDecimal price, Double discount) {
-//        BigDecimal divider = BigDecimal.valueOf(100);
         BigDecimal mutiply = BigDecimal.valueOf(discount);
         BigDecimal priceSubtractPorcent = price.subtract(price.multiply(mutiply));
         return priceSubtractPorcent;
