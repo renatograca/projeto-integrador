@@ -105,17 +105,37 @@ public class PurchasedOrderService {
 
     }
 
-    private Long promoByDuedate(BatchStock batchStock) {
+    /**
+     * set price of product with discount
+     * @param batchStock
+     */
+    private void promoByDuedate(BatchStock batchStock) {
         Long dueDays = differenceBetweenDates(LocalDate.now(), batchStock.getDueDate());
-//        Integer dueDaysInt = Math.toIntExact(dueDays);
-        String divider = "100";
         if (dueDays <= 30) {
-            BigDecimal mutiply = BigDecimal.valueOf(0.1);
-            BigDecimal price = batchStock.getProduct().getPrice();
-            BigDecimal priceWithDiscount = price.multiply(mutiply);
-            batchStock.getProduct().setPrice(BigDecimal.valueOf((price.multiply(mutiply))));
+            BigDecimal priceWithDiscount = discountCalculation(batchStock.getProduct().getPrice(), 0.1);
+            batchStock.getProduct().setPrice(priceWithDiscount);
         }
-        return dueDays;
+        if (dueDays <= 20) {
+            BigDecimal priceWithDiscount = discountCalculation(batchStock.getProduct().getPrice(), 0.2);
+            batchStock.getProduct().setPrice(priceWithDiscount);
+        }
+        if (dueDays <= 10) {
+            BigDecimal priceWithDiscount = discountCalculation(batchStock.getProduct().getPrice(), 0.3);
+            batchStock.getProduct().setPrice(priceWithDiscount);
+        }
+    }
+
+    /**
+     *
+     * @param price
+     * @param discount Example: To calculate 10% discount pass the value Double 0.1
+     * @return BigDecimal returns the discounted amount
+     */
+    private BigDecimal discountCalculation(BigDecimal price, Double discount) {
+        BigDecimal divider = BigDecimal.valueOf(100);
+        BigDecimal mutiply = BigDecimal.valueOf(discount);
+        BigDecimal priceWithMultiply = price.multiply(mutiply);
+        return priceWithMultiply.divide(divider);
     }
 
     /**
