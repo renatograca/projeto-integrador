@@ -33,6 +33,7 @@ URL Base: localhost:8080/api/v1/fresh-products
 | `GET` | `/warehouse/{id}` | Obtenha um armazém pelo id|-- |
 | `GET` | `/batchstock/duedate?days=600&sectorId=1` | Obtenha uma lista de lotes dentro do prazo de validade solicitado, que pertencem a uma determinada categoria de produto (FS = FRESCOS, RF = REFRIGERADO, FF = CONGELADO)|-- |
 
+[Clique aqui](https://github.com/buskari/projeto-integrador/tree/develop/script-sql) para acessar o script para popular o banco de dados.
 
 
 
@@ -46,3 +47,17 @@ URL Base: localhost:8080/api/v1/fresh-products
 - [Renato Graça](https://github.com/renatograca)
 - [Vinícios Fraga](https://github.com/itIsV)
 
+## Requisito 6
+---
+O objetivo deste projeto é buscar os produtos com desconto, os descontos são gerados em produtos perto de sua data de validade, assim incentivando a venda de produtos e evitando perdas.
+
+Endpoints Arquivo de rotas do Postman: postman_collection_requisito_6.json
+
+URL Base: localhost:8080/api/v1/fresh-products
+
+| Tipo   | URI       | Função    | Payload |
+| :---------- | :--------- | :----------------------- |:------------------- |
+| `GET` | `/products/discount` | Busca todos os produtos com desconto | --|
+
+Autores
+- Renato Graça
