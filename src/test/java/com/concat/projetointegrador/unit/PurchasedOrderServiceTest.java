@@ -40,6 +40,14 @@ class PurchasedOrderServiceTest {
     private Seller seller;
     private List<Cart> carts;
     private Cart cart;
+    private BatchStock batchStockWithProductExpiring;
+    private List<BatchStock> batchStocksWithProductExpiring;
+    private InboundOrder inboundOrderWithProductExpiring;
+    private List<Cart> cartsWithProductExpiring;
+    private Cart cartWithProductExpiring;
+
+    private PurchasedOrder purchasedOrderWithProductExpiring;
+
 
     @BeforeEach
     private void setUp() {
@@ -54,6 +62,21 @@ class PurchasedOrderServiceTest {
         startWarehouse();
         startSector();
         startBatchStocks();
+    }
+
+    @Test
+    public void shouldReturnProductWithDiscount() {
+        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
+        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductExpiring);
+        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
+
+        BigDecimal thirtyPercent = BigDecimal.valueOf(0.3);
+        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
+        BigDecimal price = purchasedOrderDTO.getPrice();
+        BigDecimal priceWithDiscount = price.subtract(price.multiply(thirtyPercent));
+
+        Assertions.assertEquals(response.getPrice(), priceWithDiscount);
     }
 
     @Test
@@ -157,6 +180,17 @@ class PurchasedOrderServiceTest {
         carts0.add(cart);
         carts.add(cart);
         carts.add(cart);
+
+        cartsWithProductExpiring = new ArrayList<>();
+
+        cartWithProductExpiring = Cart.builder()
+                .id(1L)
+                .quantity(1)
+                .product(product)
+                .purchasedOrder(purchasedOrderForCarts)
+                .build();
+        cartsWithProductExpiring.add(cartWithProductExpiring);
+        cartsWithProductExpiring.add(cartWithProductExpiring);
     }
 
     private void startPurchasedOrder() {
@@ -172,6 +206,13 @@ class PurchasedOrderServiceTest {
                 .buyer(buyer)
                 .cart(carts)
                 .build());
+
+        purchasedOrderWithProductExpiring = PurchasedOrder.builder()
+                .id(2L)
+                .status("aberto")
+                .buyer(buyer)
+                .cart(cartsWithProductExpiring)
+                .build();
     }
 
     private void startPurchasedOrderDTO() {
@@ -223,19 +264,41 @@ class PurchasedOrderServiceTest {
                         .initialTemperature(1)
                         .currentTemperature(1)
                         .product(product)
-                        .dueDate(LocalDate.now())
+                        .dueDate(LocalDate.MAX)
                         .category(Category.CONGELADOS)
                         .inboundOrder(inboundOrder)
                         .manufacturingDate(LocalDate.now())
                         .manufacturingTime(LocalTime.now())
                         .build();
+        inboundOrderWithProductExpiring = InboundOrder
+                .builder()
+                .id(1L)
+                .sector(sector)
+                .batchStock(batchStocks)
+                .build();
+        batchStockWithProductExpiring = BatchStock
+                .builder()
+                .id(1L)
+                .currentQuantity(60)
+                .initialQuantity(60)
+                .initialTemperature(1)
+                .currentTemperature(1)
+                .product(product)
+                .dueDate(LocalDate.now())
+                .category(Category.CONGELADOS)
+                .inboundOrder(inboundOrder)
+                .manufacturingDate(LocalDate.now())
+                .manufacturingTime(LocalTime.now())
+                .build();
     }
 
-    private void startBatchStocks(){
+    private void startBatchStocks() {
 
+        batchStocksWithProductExpiring = new ArrayList<>();
         batchStocks = new ArrayList<>();
         startBatchStock();
 
+        batchStocksWithProductExpiring.add(batchStockWithProductExpiring);
         batchStocks.add(batchStock);
     }
 
