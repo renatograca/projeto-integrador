@@ -75,6 +75,16 @@ public class SellerServiceTest {
 
     }
 
+    @Test
+    public void shouldReturnARuntimeExceptionWhenDontHaveAnyFinishedPurchasedOrders() {
+
+        Mockito.when(purchasedOrderRepository.findAll()).thenReturn(new ArrayList());
+
+        RuntimeException response = Assertions
+                .assertThrows(RuntimeException.class, () -> service.findBestSellers());
+
+        Assertions.assertEquals(response.getMessage(), "Não existem vendas finalizadas");    }
+
     private void startSellersIdWithSalesQuantityHashMap() {
 
         sellersSales = new HashMap();
