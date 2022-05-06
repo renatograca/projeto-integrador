@@ -2,6 +2,7 @@ package com.concat.projetointegrador.unit;
 
 import com.concat.projetointegrador.dto.ProductDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.model.Seller;
@@ -17,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
 
@@ -77,6 +79,14 @@ class ProductServiceTest {
     }
 
     @Test
+    void shouldReturnAllProductsWithDiscount() {
+        Mockito.when(batchStockRepository.findAll()).thenReturn(mockListBatchStock());
+        List<BatchStock> allProductsWithDiscount = service.findAllProductsWithDiscount();
+
+        assertEquals(mockListBatchStock().size(), allProductsWithDiscount.size());
+    }
+
+    @Test
     void shouldReturnGetProductDTOByIdNotFound() {
         Mockito.when(productRepositoryMock.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findById(Mockito.anyLong()));
@@ -120,6 +130,35 @@ class ProductServiceTest {
         Mockito.when(productRepositoryMock.findByCategory(Mockito.any())).thenReturn(new ArrayList<>());
         Throwable exception = assertThrows(EntityNotFound.class, () -> service.findByCategory(Category.CONGELADOS));
         assertEquals("Não existem produtos nesta categoria!", exception.getMessage());
+    }
+
+
+    private List<BatchStock> mockListBatchStock() {
+        return Arrays.asList(
+                BatchStock.builder()
+                        .id(0L)
+                        .category(Category.CONGELADOS)
+                        .currentQuantity(10)
+                        .initialQuantity(10)
+                        .currentTemperature(9)
+                        .initialTemperature(8)
+                        .manufacturingDate(LocalDate.now())
+                        .manufacturingTime(LocalTime.now())
+                        .dueDate(LocalDate.ofEpochDay(LocalDate.now().toEpochDay() + 9))
+                        .product(mockProduct())
+                        .build(),
+                BatchStock.builder()
+                        .id(1L)
+                        .category(Category.CONGELADOS)
+                        .currentQuantity(5)
+                        .initialQuantity(5)
+                        .currentTemperature(9)
+                        .initialTemperature(8)
+                        .manufacturingDate(LocalDate.now())
+                        .manufacturingTime(LocalTime.now())
+                        .dueDate(LocalDate.ofEpochDay(LocalDate.now().toEpochDay() + 9))
+                        .product(mockProduct())
+                        .build());
     }
 
 }
