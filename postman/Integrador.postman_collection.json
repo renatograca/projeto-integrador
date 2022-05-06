@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "876f86cc-7e60-480e-8698-aa0ce9ca1ea7",
+		"_postman_id": "85382bf7-9a45-462e-9d61-d17a93815955",
 		"name": "Projeto Integrador",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -21,7 +21,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "jabcasddasdneto11!",
+									"value": "supervisor",
 									"type": "text"
 								},
 								{
@@ -343,7 +343,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWJjYXNkZGFzZG5ldG8xMSEiLCJ0b2tlbi10eXBlIjoicmVmcmVzaC10b2tlbiIsInJvbGVzIjpbIlN1cGVydmlzb3IiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS92MS9mcmVzaC1wcm9kdWN0cy9sb2dpbiIsImV4cCI6MTY1MTcwNDIwOX0.iog4zXY4aTUShSDcRBnaizOJo4ZXy1VYaRqQOEWmprQ",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlcnZpc29yIiwidG9rZW4tdHlwZSI6InJlZnJlc2gtdG9rZW4iLCJyb2xlcyI6WyJTdXBlcnZpc29yIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvdjEvZnJlc2gtcHJvZHVjdHMvbG9naW4iLCJleHAiOjE2NTE4MDE2NTF9.ssXC8RgocW5CRhD3OkEzJcXuRiVZ9fbmnQbbotNfakY",
 									"type": "string"
 								}
 							]
@@ -359,7 +359,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"sector\": {\n        \"sectorCode\": 1,\n        \"warehouseCode\": 2\n    },\n    \"batchStock\": [\n        {\n            \"category\": \"CONGELADOS\", \n            \"initialQuantity\": 10,\n            \"currentQuantity\": 10,\n            \"initialTemperature\":9,\n            \"manufacturingDate\": \"2022-10-10\",\n            \"manufacturingTime\": \"20:20:20\",\n            \"dueDate\": \"2025-10-10\",\n            \"productId\": 2\n        }\n    ]\n}\n",
+							"raw": "{\n    \"sector\": {\n        \"sectorCode\": 1,\n        \"warehouseCode\": 1\n    },\n    \"batchStock\": [\n        {\n            \"category\": \"CONGELADOS\", \n            \"initialQuantity\": 10,\n            \"currentQuantity\": 10,\n            \"initialTemperature\":9,\n            \"manufacturingDate\": \"2022-10-10\",\n            \"manufacturingTime\": \"20:20:20\",\n            \"dueDate\": \"2025-10-10\",\n            \"productId\": 3\n        }\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -438,7 +438,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWJjYXNkZGFzZG5ldG8xMSEiLCJ0b2tlbi10eXBlIjoicmVmcmVzaC10b2tlbiIsInJvbGVzIjpbIlN1cGVydmlzb3IiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS92MS9mcmVzaC1wcm9kdWN0cy9sb2dpbiIsImV4cCI6MTY1MTcwMjQwM30.5hukCLvYf1qiqfNPt65pxyz1ApqP2GjyI1PHydEInlc",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlcnZpc29yIiwidG9rZW4tdHlwZSI6InJlZnJlc2gtdG9rZW4iLCJyb2xlcyI6WyJTdXBlcnZpc29yIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvdjEvZnJlc2gtcHJvZHVjdHMvbG9naW4iLCJleHAiOjE2NTE4MDk3NDR9.SolVQTF5IUa5SVJQBLtIdpxZ8c46psFQu3cR-P1i7Yk",
 									"type": "string"
 								}
 							]
@@ -447,7 +447,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"buyer\": {\n        \"id\": 1\n    },\n    \"status\": \"aberto\",\n    \"cart\": [\n        {\n            \"products\": {\n                \"id\": 1\n            },\n            \"quantity\": 1\n        }\n    ]\n}",
+							"raw": "{\n    \"buyer\": {\n        \"id\": 1\n    },\n    \"status\": \"aberto\",\n    \"cart\": [\n        {\n            \"product\": {\n                \"id\": 1\n            },\n            \"quantity\": 1\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -481,7 +481,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWJjYXNkZGFzZG5ldG8xMSEiLCJ0b2tlbi10eXBlIjoicmVmcmVzaC10b2tlbiIsInJvbGVzIjpbIlN1cGVydmlzb3IiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2FwaS92MS9mcmVzaC1wcm9kdWN0cy9sb2dpbiIsImV4cCI6MTY1MTcwMjQwM30.5hukCLvYf1qiqfNPt65pxyz1ApqP2GjyI1PHydEInlc",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlcnZpc29yIiwidG9rZW4tdHlwZSI6InJlZnJlc2gtdG9rZW4iLCJyb2xlcyI6WyJTdXBlcnZpc29yIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvdjEvZnJlc2gtcHJvZHVjdHMvbG9naW4iLCJleHAiOjE2NTE3OTMxNTZ9.PJgHB90BKi5lMHnVX8PDBLxELjjmsUBiYTkTjPIlsRI",
 									"type": "string"
 								}
 							]
