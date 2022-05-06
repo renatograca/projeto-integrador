@@ -60,7 +60,15 @@ public class ProductControllerTest {
         String response = result.getResponse().getContentAsString();
         assertEquals("[{\"name\":\"frango\",\"volume\":1,\"price\":20.00,\"category\":\"CONGELADOS\"}]", response);
     }
-
+    @Test
+    public void shouldFindAllProductsWithDiscountAndReturn200() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products/discount")
+                        .with(user("Seller").password("123")))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        assertEquals("[{\"product\":\"carne\",\"price\":20.00,\"priceWithDiscount\":18.000,\"quantity\":10}]", response);
+    }
     @Test
     public void shouldFindAllAndReturn200() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/products")
@@ -68,7 +76,7 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString();
-        assertEquals("[{\"name\":\"frango\",\"volume\":1,\"price\":20.00,\"category\":\"CONGELADOS\"}]", response);
+        assertEquals("[{\"name\":\"frango\",\"volume\":1,\"price\":20.00,\"category\":\"CONGELADOS\"},{\"name\":\"carne\",\"volume\":1,\"price\":20.00,\"category\":\"FRESCOS\"}]", response);
     }
 
     @Test
