@@ -1,13 +1,19 @@
 package com.concat.projetointegrador.service;
 
+import com.concat.projetointegrador.dto.AllSalesDTO;
+import com.concat.projetointegrador.dto.SaleDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.Cart;
+import com.concat.projetointegrador.model.PurchasedOrder;
 import com.concat.projetointegrador.model.Seller;
+import com.concat.projetointegrador.repository.PurchasedOrderRepository;
 import com.concat.projetointegrador.repository.SellerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -16,6 +22,7 @@ public class SellerService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private SellerRepository sellerRepository;
+    private PurchasedOrderRepository purchasedOrderRepository;
 
     /**
      * Find a Seller by ID or throw an EntityNotFound Exception
@@ -39,4 +46,41 @@ public class SellerService {
             seller.setPassword(passwordEncoder.encode(seller.getPassword()));
             return sellerRepository.save(seller);
     }
+
+    public HashMap<Long, Integer> findBestSellers() {
+
+        List<PurchasedOrder> purchasedOrders = purchasedOrderRepository.findAll();
+
+        List<PurchasedOrder> finishedOrders = purchasedOrders.stream()
+                .filter(order -> order.getStatus().equals("fechado")).collect(Collectors.toList());
+
+        if(finishedOrders.isEmpty()) {
+            throw new RuntimeException("Não existem vendas finalizadas");
+        }
+
+            List<Cart> carts = new ArrayList();
+            finishedOrders.stream().forEach(order -> {
+                carts.addAll(order.getCart());
+            });
+
+        AllSalesDTO sales = AllSalesDTO.builder().sales(carts.stream()
+                .map(sale -> SaleDTO.builder().sellerID(sale.getProduct().getSeller().getId())
+                .username(sale.getProduct().getSeller().getUsername())
+                .salesQuantity(sale.getQuantity())
+                .build()).collect(Collectors.toList()))
+                .build();
+
+        Set<Long> sellers = new HashSet();
+        sales.getSales().stream().forEach(sale -> sellers.add(sale.getSellerID()));
+
+        HashMap<Long, Integer> sellersSales = new HashMap();
+        sellers.stream().forEach(seller -> sellersSales.put(seller, sales
+                .getSales().stream()
+                .filter(element -> element.getSellerID().equals(seller))
+                .reduce(0, (acc, curr) -> acc + curr.getSalesQuantity(), Integer::sum)));
+
+        return sellersSales;
+
+}
+
 }

@@ -1,9 +1,10 @@
 package com.concat.projetointegrador.controller;
 
+import com.concat.projetointegrador.dto.BestSellerDTO;
 import com.concat.projetointegrador.dto.SellerDTO;
+import com.concat.projetointegrador.model.PurchasedOrder;
 import com.concat.projetointegrador.model.Seller;
 import com.concat.projetointegrador.service.SellerService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/seller")
@@ -44,4 +50,26 @@ public class SellerController {
         SellerDTO seller = SellerDTO.convertToSellerDTO(sellerService.findByID(id));
         return ResponseEntity.ok(seller);
     }
+
+    @GetMapping("/bests")
+    public ResponseEntity<List<BestSellerDTO>> findBestSellers() {
+
+        HashMap<Long, Integer> sellers = sellerService.findBestSellers();
+
+        List<BestSellerDTO> bestSellers = sellers.entrySet().stream()
+                .map(seller -> BestSellerDTO.builder()
+                .id(seller.getKey())
+                .username(sellerService.findByID(seller.getKey()).getUsername())
+                .quantityOfProductsSale(seller.getValue())
+                .build()).collect(Collectors.toList());
+
+        Comparator<BestSellerDTO> compareByQuantityOfProductsSale = Comparator
+                .comparing(BestSellerDTO::getQuantityOfProductsSale).reversed();
+
+        bestSellers.sort(compareByQuantityOfProductsSale);
+
+        return ResponseEntity.ok(bestSellers);
+
+    }
+
 }
