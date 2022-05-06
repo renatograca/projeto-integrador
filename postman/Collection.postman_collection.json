@@ -1,0 +1,48 @@
+{
+	"info": {
+		"_postman_id": "5675ccb8-c526-4b59-b96f-7b099ffe9d6a",
+		"name": "Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "requisito_6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlcnZpc29yIiwidG9rZW4tdHlwZSI6InJlZnJlc2gtdG9rZW4iLCJyb2xlcyI6WyJTdXBlcnZpc29yIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9hcGkvdjEvZnJlc2gtcHJvZHVjdHMvbG9naW4iLCJleHAiOjE2NTE4MTU3NjJ9.9C4DZEScfL3Ex2njAbat4maimXALWG1UHfve4Kgxv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/fresh-products/products/discount",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"fresh-products",
+						"products",
+						"discount"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
