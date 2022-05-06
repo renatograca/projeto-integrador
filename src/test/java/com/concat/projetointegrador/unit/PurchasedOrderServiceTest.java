@@ -44,7 +44,6 @@ class PurchasedOrderServiceTest {
     private BatchStock batchStockWithProductThirtyDaysToExpire;
     private BatchStock batchStockWithProductTwentyDaysToExpire;
     private BatchStock batchStockWithProductTenDaysToExpire;
-    private List<BatchStock> batchStocksWithProductExpiring;
     private List<BatchStock> batchStocksWithProductThirtyDaysToExpire;
     private List<BatchStock> batchStocksWithProductTwentyDaysToExpire;
     private List<BatchStock> batchStocksWithProductTenDaysToExpire;
@@ -66,60 +65,44 @@ class PurchasedOrderServiceTest {
         startBatchStocks();
     }
 
-//    @Test
-//    public void shouldReturnProductWithThirtyDiscount() {
-//        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
-//        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductTenDaysToExpire);
-//        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
-//        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
-//
-//        BigDecimal thirtyPercent = BigDecimal.valueOf(0.3);
-//        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
-//        BigDecimal price = purchasedOrderDTO.getPrice();
-//        BigDecimal priceWithDiscount = price.subtract(price.multiply(thirtyPercent));
-//
-//        Assertions.assertEquals(response.getPrice(), priceWithDiscount);
-//    }
-//    @Test
-//    public void shouldReturnProductWithTwentyDiscount() {
-//        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
-//        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductTwentyDaysToExpire);
-//        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
-//        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
-//
-//        BigDecimal twentyPercent = BigDecimal.valueOf(0.2);
-//        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
-//        BigDecimal price = purchasedOrderDTO.getPrice();
-//        BigDecimal priceWithDiscount = price.subtract(price.multiply(twentyPercent));
-//
-//        Assertions.assertEquals(response.getPrice(), priceWithDiscount);
-//    }
-//    @Test
-//    public void shouldReturnProductWithTenDiscount() {
-//        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
-//        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductThirtyDaysToExpire);
-//        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
-//        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
-//
-//        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
-//
-//        BigDecimal tenPercent = BigDecimal.valueOf(0.1);
-//        BigDecimal price = purchasedOrderDTO.getPrice();
-//        BigDecimal priceWithDiscount = price.subtract(price.multiply(tenPercent));
-//
-//        Assertions.assertEquals(priceWithDiscount, response.getPrice());
-//    }
-
     @Test
-    public void shouldReturnProductWithDiscount() {
+    public void shouldReturnProductWithThirtyDiscount() {
         Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
-        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductExpiring);
+        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductTenDaysToExpire);
+        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
+
+        BigDecimal thirtyPercent = BigDecimal.valueOf(0.3);
+        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
+        BigDecimal price = purchasedOrderDTO.getPrice();
+        BigDecimal priceWithDiscount = price.subtract(price.multiply(thirtyPercent));
+
+        Assertions.assertEquals(response.getPrice(), priceWithDiscount);
+    }
+    @Test
+    public void shouldReturnProductWithTwentyDiscount() {
+        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
+        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductTwentyDaysToExpire);
+        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
+
+        BigDecimal twentyPercent = BigDecimal.valueOf(0.2);
+        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
+        BigDecimal price = purchasedOrderDTO.getPrice();
+        BigDecimal priceWithDiscount = price.subtract(price.multiply(twentyPercent));
+
+        Assertions.assertEquals(response.getPrice(), priceWithDiscount);
+    }
+    @Test
+    public void shouldReturnProductWithTenDiscount() {
+        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
+        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductThirtyDaysToExpire);
         Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
         Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
 
         PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
 
-        BigDecimal tenPercent = BigDecimal.valueOf(0.2);
+        BigDecimal tenPercent = BigDecimal.valueOf(0.1);
         BigDecimal price = purchasedOrderDTO.getPrice();
         BigDecimal priceWithDiscount = price.subtract(price.multiply(tenPercent));
 
@@ -354,10 +337,7 @@ class PurchasedOrderServiceTest {
         batchStocks = new ArrayList<>();
         startBatchStock();
 
-        batchStocksWithProductExpiring.addAll(Arrays.asList(
-                batchStockWithProductThirtyDaysToExpire,
-                batchStockWithProductTwentyDaysToExpire,
-                batchStockWithProductTenDaysToExpire));
+
         batchStocksWithProductThirtyDaysToExpire.add(batchStockWithProductThirtyDaysToExpire);
         batchStocksWithProductTwentyDaysToExpire.add(batchStockWithProductTwentyDaysToExpire);
         batchStocksWithProductTenDaysToExpire.add(batchStockWithProductTenDaysToExpire);
