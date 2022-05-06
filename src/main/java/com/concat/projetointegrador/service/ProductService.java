@@ -7,7 +7,6 @@ import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.ProductRepository;
-import com.concat.projetointegrador.service.util.ProductsWithDiscount;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -85,8 +84,7 @@ public class ProductService {
        if(batchStocks.isEmpty()) {
            throw new EntityNotFound("Não a produtos com desconto");
        }
-        List<BatchStock> batchStocksWithDiscount = batchStocks.stream().filter(batchStock ->
+        return batchStocks.stream().filter(batchStock ->
             differenceBetweenDates(LocalDate.now(), batchStock.getDueDate()) <= 30).collect(Collectors.toList());
-        return batchStocksWithDiscount;
     }
 }
