@@ -330,7 +330,6 @@ class PurchasedOrderServiceTest {
     }
 
     private void startBatchStocks() {
-        batchStocksWithProductExpiring = new ArrayList<>();
         batchStocksWithProductThirtyDaysToExpire = new ArrayList<>();
         batchStocksWithProductTwentyDaysToExpire = new ArrayList<>();
         batchStocksWithProductTenDaysToExpire = new ArrayList<>();
