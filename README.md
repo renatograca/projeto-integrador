@@ -60,4 +60,5 @@ URL Base: localhost:8080/api/v1/fresh-products
 | `GET` | `/products/discount` | Busca todos os produtos com desconto | --|
 
 Autores
+
 - Renato Graça
