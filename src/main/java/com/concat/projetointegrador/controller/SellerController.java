@@ -51,6 +51,10 @@ public class SellerController {
         return ResponseEntity.ok(seller);
     }
 
+    /**
+     * Search sellers ordered by sales
+     * @return a List of BestSellerDTO ordered by quantity of sales
+     */
     @GetMapping("/bests")
     public ResponseEntity<List<BestSellerDTO>> findBestSellers() {
 

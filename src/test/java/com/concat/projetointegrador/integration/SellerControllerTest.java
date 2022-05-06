@@ -1,5 +1,6 @@
 package com.concat.projetointegrador.integration;
 
+import com.concat.projetointegrador.dto.BestSellerDTO;
 import com.concat.projetointegrador.dto.InboundOrderDTO;
 import com.concat.projetointegrador.dto.SellerDTO;
 import com.concat.projetointegrador.model.InboundOrder;
@@ -91,6 +92,35 @@ public class SellerControllerTest {
 				InboundOrder inboundOrder = objectMapper.readValue(jsonReturned, InboundOrder.class);
 
 				assertEquals(3, inboundOrder.getId());
+
+		}
+
+		@Test
+		public void ShouldReturnAListOfBestSellersDTOOrderedByQuantityOfSales() throws Exception {
+
+			SimpleGrantedAuthority supervisor = new SimpleGrantedAuthority("Supervisor");
+			ArrayList<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+			simpleGrantedAuthorities.add(supervisor);
+
+			MvcResult result = mock.perform(get("/seller/bests")
+					.with(
+							user("Supervisor")
+									.password("123")
+									.authorities(simpleGrantedAuthorities)
+					)
+			)
+					.andExpect(MockMvcResultMatchers.status().isOk())
+					.andReturn();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.registerModule(new JavaTimeModule());
+			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+			objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+
+			String jsonReturned = result.getResponse().getContentAsString();
+			List<BestSellerDTO> bestSellersDTO = objectMapper.readValue(jsonReturned, List.class);
+
+			assertEquals(3, bestSellersDTO.stream().findFirst().get().getQuantityOfProductsSale());
 
 		}
 
