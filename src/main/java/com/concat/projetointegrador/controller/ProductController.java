@@ -46,7 +46,8 @@ public class ProductController {
     @GetMapping("/discount")
     public ResponseEntity<List<PurchasedDiscountDTO>> findProductsWithDiscount() {
         List<BatchStock> allProductsWithDiscount = productService.findAllProductsWithDiscount();
-        return ResponseEntity.ok();
+        List<PurchasedDiscountDTO> PurchasedDiscountDTOs = allProductsWithDiscount.stream().map(PurchasedDiscountDTO::map).collect(Collectors.toList());
+        return ResponseEntity.ok(PurchasedDiscountDTOs);
     }
 
     /**

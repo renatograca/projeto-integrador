@@ -5,6 +5,7 @@ import com.concat.projetointegrador.exception.EntityNotFound;
 import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.model.Seller;
+import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.ProductRepository;
 import com.concat.projetointegrador.service.ProductService;
 import com.concat.projetointegrador.service.SellerService;
@@ -33,9 +34,11 @@ class ProductServiceTest {
     private final ProductRepository productRepositoryMock = Mockito.mock(ProductRepository.class);
     private final SellerService sellerServiceMock = Mockito.mock(SellerService.class);
 
+    private final BatchStockRepository batchStockRepository = Mockito.mock(BatchStockRepository.class);
+
     @BeforeEach
     public void init() {
-        service = new ProductService(productRepositoryMock, sellerServiceMock);
+        service = new ProductService(productRepositoryMock, batchStockRepository, sellerServiceMock);
     }
 
     private Product mockProduct() {

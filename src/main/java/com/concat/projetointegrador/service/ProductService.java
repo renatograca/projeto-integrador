@@ -11,9 +11,12 @@ import com.concat.projetointegrador.service.util.ProductsWithDiscount;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.concat.projetointegrador.service.util.ProductOfBatchStockHasADiscountDueDate.differenceBetweenDates;
 
 @Service
 @AllArgsConstructor
@@ -79,7 +82,11 @@ public class ProductService {
 
     public List<BatchStock> findAllProductsWithDiscount() {
         List<BatchStock> batchStocks = batchStockRepository.findAll();
-        List<BatchStock> batchStocksWithDiscount = batchStocks.stream().map(ProductsWithDiscount::products).collect(Collectors.toList());
+       if(batchStocks.isEmpty()) {
+           throw new EntityNotFound("Não a produtos com desconto");
+       }
+        List<BatchStock> batchStocksWithDiscount = batchStocks.stream().filter(batchStock ->
+            differenceBetweenDates(LocalDate.now(), batchStock.getDueDate()) <= 30).collect(Collectors.toList());
         return batchStocksWithDiscount;
     }
 }
