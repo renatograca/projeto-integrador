@@ -21,7 +21,6 @@ URL Base: localhost:8080/api/v1/fresh-products
 | `POST` | `/inboundorder` | Cadastra um lote | {"sector":{"sectorCode":1,"warehouseCode":1},"batchStock":[{"initialQuantity":100,"currentQuantity": 99,"initialTemperature":2,"currentTemperature": 2,"manufacturingDate":"2022-10-10","manufacturingTime":"20:20:20","dueDate": "2025-10-10","productId": 1}]}|
 | `PUT` | `/inboundorder/{id}` | Altera um lote existente | {"sector":{"sectorCode":1,"warehouseCode":1},"batchStock":[{"initialQuantity":100,"currentQuantity": 99,"initialTemperature":2,"currentTemperature": 2,"manufacturingDate":"2022-10-10","manufacturingTime":"20:20:20","dueDate": "2025-10-10","productId": 1}]}|
 | `GET` | `/products` | Busca todos os produtos | --|
-| `GET` | `/products/discount` | Busca todos os produtos com desconto | --|
 | `GET` | `/products/{id}` | Busca produto por id | --|
 | `GET` | `/products/list/{id}/?orderBy=F` | Veja uma lista de produtos ordenados com todos os lotes onde aparece (L = Lote, C = quantidade atual, F = data de vencimento)| --|
 | `GET` | `products/category/{category}` | Busca produtos por categoria (FRESCOS, REFRIGERADOS, CONGELADOS) | --|
@@ -48,4 +47,17 @@ URL Base: localhost:8080/api/v1/fresh-products
 - [Renato Graça](https://github.com/renatograca)
 - [Vinícios Fraga](https://github.com/itIsV)
 
+## Requisito 6
+---
+O objetivo deste projeto é buscar os produtos com desconto, os descontos são gerados em produtos perto de sua data de validade, assim incentivando a venda de produtos e evitando perdas.
 
+Endpoints Arquivo de rotas do Postman: postman_collection_requisito_6.json
+
+URL Base: localhost:8080/api/v1/fresh-products
+
+| Tipo   | URI       | Função    | Payload |
+| :---------- | :--------- | :----------------------- |:------------------- |
+| `GET` | `/products/discount` | Busca todos os produtos com desconto | --|
+
+Autores
+- Renato Graça
