@@ -2,8 +2,10 @@ package com.concat.projetointegrador.service;
 
 import com.concat.projetointegrador.dto.ProductDTO;
 import com.concat.projetointegrador.exception.EntityNotFound;
+import com.concat.projetointegrador.model.BatchStock;
 import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
+import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import java.util.Optional;
 public class ProductService {
 
     private ProductRepository productRepository;
+
+    private BatchStockRepository batchStockRepository;
     private SellerService sellerService;
 
     /**
@@ -72,8 +76,7 @@ public class ProductService {
     }
 
     public List<ProductDTO> findAllProductsWithDiscount() {
-        List<Product> products = productRepository.findAll();
-        products.stream().filter()
-        return
+        List<BatchStock> batchStocks = batchStockRepository.findAll();
+        return null;
     }
 }
