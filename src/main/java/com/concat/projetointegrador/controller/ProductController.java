@@ -43,6 +43,11 @@ public class ProductController {
         return ResponseEntity.ok(ProductDTO.convertToProductDTO(productService.findById(id)));
     }
 
+    @GetMapping("/discount")
+    public ResponseEntity<List<PurchasedDiscountDTO>> findProductsWithDiscount() {
+        return ResponseEntity.ok(productService.findAllProductsWithDiscount());
+    }
+
     /**
      * Fetch a batch stock list by product id
      * @param id Long- product id

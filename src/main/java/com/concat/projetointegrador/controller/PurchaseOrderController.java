@@ -1,11 +1,9 @@
 package com.concat.projetointegrador.controller;
 
-import com.concat.projetointegrador.dto.CartsDTO;
-import com.concat.projetointegrador.dto.ProductDTO;
-import com.concat.projetointegrador.dto.PurchasedOrderDTO;
-import com.concat.projetointegrador.dto.PurchasedOrderResponseDTO;
+import com.concat.projetointegrador.dto.*;
 import com.concat.projetointegrador.model.PurchasedOrder;
 import com.concat.projetointegrador.service.PurchasedOrderService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +28,6 @@ public class PurchaseOrderController {
     public ResponseEntity<PurchasedOrderDTO> create(@RequestBody PurchasedOrder purchasedOrder) {
         return new ResponseEntity<>(purchaseOrderService.create(purchasedOrder), HttpStatus.CREATED);
     }
-
-
     /**
      * Search for a purchase order by id
      * @param id Long - purchase order id

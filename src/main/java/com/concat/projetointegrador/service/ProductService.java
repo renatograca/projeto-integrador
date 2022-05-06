@@ -70,4 +70,10 @@ public class ProductService {
         List<ProductDTO> productsDTO = ProductDTO.convertToListProductDTO(products);
         return productsDTO;
     }
+
+    public List<ProductDTO> findAllProductsWithDiscount() {
+        List<Product> products = productRepository.findAll();
+        products.stream().filter()
+        return
+    }
 }
