@@ -43,6 +43,10 @@ public class ProductController {
         return ResponseEntity.ok(ProductDTO.convertToProductDTO(productService.findById(id)));
     }
 
+    /**
+     * Find all products with discount
+     * @return List<PurchasedDiscountDTO>
+     */
     @GetMapping("/discount")
     public ResponseEntity<List<PurchasedDiscountDTO>> findProductsWithDiscount() {
         List<BatchStock> allProductsWithDiscount = productService.findAllProductsWithDiscount();

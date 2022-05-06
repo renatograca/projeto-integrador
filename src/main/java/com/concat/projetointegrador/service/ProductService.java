@@ -79,6 +79,10 @@ public class ProductService {
         return productsDTO;
     }
 
+    /**
+     * Find all products with discount
+     * @return List<BatchStock>
+     */
     public List<BatchStock> findAllProductsWithDiscount() {
         List<BatchStock> batchStocks = batchStockRepository.findAll();
        if(batchStocks.isEmpty()) {
