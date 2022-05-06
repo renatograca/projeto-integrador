@@ -7,11 +7,13 @@ import com.concat.projetointegrador.model.Category;
 import com.concat.projetointegrador.model.Product;
 import com.concat.projetointegrador.repository.BatchStockRepository;
 import com.concat.projetointegrador.repository.ProductRepository;
+import com.concat.projetointegrador.service.util.ProductsWithDiscount;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -75,8 +77,9 @@ public class ProductService {
         return productsDTO;
     }
 
-    public List<ProductDTO> findAllProductsWithDiscount() {
+    public List<BatchStock> findAllProductsWithDiscount() {
         List<BatchStock> batchStocks = batchStockRepository.findAll();
-        return null;
+        List<BatchStock> batchStocksWithDiscount = batchStocks.stream().map(ProductsWithDiscount::products).collect(Collectors.toList());
+        return batchStocksWithDiscount;
     }
 }
