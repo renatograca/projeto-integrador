@@ -52,7 +52,7 @@ public class SellerController {
     }
 
     /**
-     * Search sellers ordered by sales
+     * Search sellers
      * @return a List of BestSellerDTO ordered by quantity of sales
      */
     @GetMapping("/bests")

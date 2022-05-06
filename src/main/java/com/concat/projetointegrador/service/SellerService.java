@@ -47,6 +47,10 @@ public class SellerService {
             return sellerRepository.save(seller);
     }
 
+    /**
+     * Search punchased orders and build a hashMap
+     * @return a hashmap with sellersID in keys and quantity of sale in values
+     */
     public HashMap<Long, Integer> findBestSellers() {
 
         List<PurchasedOrder> purchasedOrders = purchasedOrderRepository.findAll();
