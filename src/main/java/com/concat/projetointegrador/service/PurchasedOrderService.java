@@ -8,7 +8,6 @@ import com.concat.projetointegrador.model.PurchasedOrder;
 import com.concat.projetointegrador.repository.CartRepository;
 import com.concat.projetointegrador.repository.PurchasedOrderRepository;
 import com.concat.projetointegrador.service.util.ProductOfBatchStockHasADiscountDueDate;
-import com.concat.projetointegrador.service.validator.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +26,13 @@ public class PurchasedOrderService {
 
 
     /**
-     *
      * @param batchStock
      * @return price with discount or not
      */
     private BigDecimal hasDiscount(BatchStock batchStock) {
         return ProductOfBatchStockHasADiscountDueDate.verifyDiscount(batchStock);
     }
+
     /**
      * Save a PurchasedOrder
      *
@@ -45,10 +44,9 @@ public class PurchasedOrderService {
         List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
         for (Cart cart : purchasedOrder.getCart()) {
-            List<BatchStock> batchStocks = batchStockService.findByProductId(cart.getProduct().getId(), cart.getQuantity());
-
-            total = total.add(hasDiscount(batchStocks.get(0)).multiply(BigDecimal.valueOf(cart.getQuantity())));
-            carts.add(Cart.builder().product(batchStocks.get(0).getProduct()).quantity(cart.getQuantity())
+            List<BatchStock> batchStock = batchStockService.findByProductId(cart.getProduct().getId(), cart.getQuantity());
+            total = total.add(hasDiscount(batchStock.get(0)).multiply(BigDecimal.valueOf(cart.getQuantity())));
+            carts.add(Cart.builder().product(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
                     .purchasedOrder(purchasedOrder).build());
         }
         purchasedOrder = purchasedOrderRepository.save(purchasedOrder);

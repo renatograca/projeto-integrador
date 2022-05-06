@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,13 +41,14 @@ class PurchasedOrderServiceTest {
     private Seller seller;
     private List<Cart> carts;
     private Cart cart;
-    private BatchStock batchStockWithProductExpiring;
+    private BatchStock batchStockWithProductThirtyDaysToExpire;
+    private BatchStock batchStockWithProductTwentyDaysToExpire;
+    private BatchStock batchStockWithProductTenDaysToExpire;
     private List<BatchStock> batchStocksWithProductExpiring;
-    private InboundOrder inboundOrderWithProductExpiring;
-    private List<Cart> cartsWithProductExpiring;
-    private Cart cartWithProductExpiring;
+    private List<BatchStock> batchStocksWithProductThirtyDaysToExpire;
+    private List<BatchStock> batchStocksWithProductTwentyDaysToExpire;
+    private List<BatchStock> batchStocksWithProductTenDaysToExpire;
 
-    private PurchasedOrder purchasedOrderWithProductExpiring;
 
 
     @BeforeEach
@@ -64,6 +66,50 @@ class PurchasedOrderServiceTest {
         startBatchStocks();
     }
 
+//    @Test
+//    public void shouldReturnProductWithThirtyDiscount() {
+//        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
+//        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductTenDaysToExpire);
+//        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+//        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
+//
+//        BigDecimal thirtyPercent = BigDecimal.valueOf(0.3);
+//        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
+//        BigDecimal price = purchasedOrderDTO.getPrice();
+//        BigDecimal priceWithDiscount = price.subtract(price.multiply(thirtyPercent));
+//
+//        Assertions.assertEquals(response.getPrice(), priceWithDiscount);
+//    }
+//    @Test
+//    public void shouldReturnProductWithTwentyDiscount() {
+//        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
+//        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductTwentyDaysToExpire);
+//        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+//        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
+//
+//        BigDecimal twentyPercent = BigDecimal.valueOf(0.2);
+//        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
+//        BigDecimal price = purchasedOrderDTO.getPrice();
+//        BigDecimal priceWithDiscount = price.subtract(price.multiply(twentyPercent));
+//
+//        Assertions.assertEquals(response.getPrice(), priceWithDiscount);
+//    }
+//    @Test
+//    public void shouldReturnProductWithTenDiscount() {
+//        Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
+//        Mockito.when(batchStockService.findByProductId(Mockito.anyLong(), Mockito.anyInt())).thenReturn(batchStocksWithProductThirtyDaysToExpire);
+//        Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
+//        Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
+//
+//        PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
+//
+//        BigDecimal tenPercent = BigDecimal.valueOf(0.1);
+//        BigDecimal price = purchasedOrderDTO.getPrice();
+//        BigDecimal priceWithDiscount = price.subtract(price.multiply(tenPercent));
+//
+//        Assertions.assertEquals(priceWithDiscount, response.getPrice());
+//    }
+
     @Test
     public void shouldReturnProductWithDiscount() {
         Mockito.when(buyerService.findById(Mockito.anyLong())).thenReturn(buyer);
@@ -71,12 +117,13 @@ class PurchasedOrderServiceTest {
         Mockito.when(purchasedOrderRepository.save(Mockito.any())).thenReturn(purchasedOrder);
         Mockito.when(cartRepository.saveAll(Mockito.any())).thenReturn(carts);
 
-        BigDecimal thirtyPercent = BigDecimal.valueOf(0.3);
         PurchasedOrderDTO response = purchasedOrderService.create(purchasedOrder);
-        BigDecimal price = purchasedOrderDTO.getPrice();
-        BigDecimal priceWithDiscount = price.subtract(price.multiply(thirtyPercent));
 
-        Assertions.assertEquals(response.getPrice(), priceWithDiscount);
+        BigDecimal tenPercent = BigDecimal.valueOf(0.2);
+        BigDecimal price = purchasedOrderDTO.getPrice();
+        BigDecimal priceWithDiscount = price.subtract(price.multiply(tenPercent));
+
+        Assertions.assertEquals(priceWithDiscount, response.getPrice());
     }
 
     @Test
@@ -180,17 +227,6 @@ class PurchasedOrderServiceTest {
         carts0.add(cart);
         carts.add(cart);
         carts.add(cart);
-
-        cartsWithProductExpiring = new ArrayList<>();
-
-        cartWithProductExpiring = Cart.builder()
-                .id(1L)
-                .quantity(1)
-                .product(product)
-                .purchasedOrder(purchasedOrderForCarts)
-                .build();
-        cartsWithProductExpiring.add(cartWithProductExpiring);
-        cartsWithProductExpiring.add(cartWithProductExpiring);
     }
 
     private void startPurchasedOrder() {
@@ -206,13 +242,6 @@ class PurchasedOrderServiceTest {
                 .buyer(buyer)
                 .cart(carts)
                 .build());
-
-        purchasedOrderWithProductExpiring = PurchasedOrder.builder()
-                .id(2L)
-                .status("aberto")
-                .buyer(buyer)
-                .cart(cartsWithProductExpiring)
-                .build();
     }
 
     private void startPurchasedOrderDTO() {
@@ -270,13 +299,8 @@ class PurchasedOrderServiceTest {
                         .manufacturingDate(LocalDate.now())
                         .manufacturingTime(LocalTime.now())
                         .build();
-        inboundOrderWithProductExpiring = InboundOrder
-                .builder()
-                .id(1L)
-                .sector(sector)
-                .batchStock(batchStocks)
-                .build();
-        batchStockWithProductExpiring = BatchStock
+
+        batchStockWithProductThirtyDaysToExpire = BatchStock
                 .builder()
                 .id(1L)
                 .currentQuantity(60)
@@ -284,7 +308,37 @@ class PurchasedOrderServiceTest {
                 .initialTemperature(1)
                 .currentTemperature(1)
                 .product(product)
-                .dueDate(LocalDate.now())
+                .dueDate(LocalDate.ofEpochDay(LocalDate.now().toEpochDay() + 29))
+                .category(Category.CONGELADOS)
+                .inboundOrder(inboundOrder)
+                .manufacturingDate(LocalDate.now())
+                .manufacturingTime(LocalTime.now())
+                .build();
+
+        batchStockWithProductTwentyDaysToExpire = BatchStock
+                .builder()
+                .id(1L)
+                .currentQuantity(60)
+                .initialQuantity(60)
+                .initialTemperature(1)
+                .currentTemperature(1)
+                .product(product)
+                .dueDate(LocalDate.ofEpochDay(LocalDate.now().toEpochDay() + 19))
+                .category(Category.CONGELADOS)
+                .inboundOrder(inboundOrder)
+                .manufacturingDate(LocalDate.now())
+                .manufacturingTime(LocalTime.now())
+                .build();
+
+        batchStockWithProductTenDaysToExpire = BatchStock
+                .builder()
+                .id(1L)
+                .currentQuantity(60)
+                .initialQuantity(60)
+                .initialTemperature(1)
+                .currentTemperature(1)
+                .product(product)
+                .dueDate(LocalDate.ofEpochDay(LocalDate.now().toEpochDay() + 9))
                 .category(Category.CONGELADOS)
                 .inboundOrder(inboundOrder)
                 .manufacturingDate(LocalDate.now())
@@ -293,12 +347,20 @@ class PurchasedOrderServiceTest {
     }
 
     private void startBatchStocks() {
-
         batchStocksWithProductExpiring = new ArrayList<>();
+        batchStocksWithProductThirtyDaysToExpire = new ArrayList<>();
+        batchStocksWithProductTwentyDaysToExpire = new ArrayList<>();
+        batchStocksWithProductTenDaysToExpire = new ArrayList<>();
         batchStocks = new ArrayList<>();
         startBatchStock();
 
-        batchStocksWithProductExpiring.add(batchStockWithProductExpiring);
+        batchStocksWithProductExpiring.addAll(Arrays.asList(
+                batchStockWithProductThirtyDaysToExpire,
+                batchStockWithProductTwentyDaysToExpire,
+                batchStockWithProductTenDaysToExpire));
+        batchStocksWithProductThirtyDaysToExpire.add(batchStockWithProductThirtyDaysToExpire);
+        batchStocksWithProductTwentyDaysToExpire.add(batchStockWithProductTwentyDaysToExpire);
+        batchStocksWithProductTenDaysToExpire.add(batchStockWithProductTenDaysToExpire);
         batchStocks.add(batchStock);
     }
 
