@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,6 +26,7 @@ public class PurchasedOrderService {
 
     /**
      * Save a PurchasedOrder
+     *
      * @param purchasedOrder is an object PurchasedOrder to save
      * @return Sum of all products prices in cart, multiplied by yours quantity
      */
@@ -34,6 +36,7 @@ public class PurchasedOrderService {
         BigDecimal total = BigDecimal.ZERO;
         for (Cart cart : purchasedOrder.getCart()) {
             List<BatchStock> batchStock = batchStockService.findByProductId(cart.getProduct().getId(), cart.getQuantity());
+            promoByDuedate(batchStock.get(0));
             total = total.add(batchStock.get(0).getProduct().getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
             carts.add(Cart.builder().product(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
                     .purchasedOrder(purchasedOrder).build());
@@ -48,6 +51,7 @@ public class PurchasedOrderService {
 
     /**
      * Find a PurchaseOrder by id
+     *
      * @param id is a Long property on PurchasedOrder
      * @return a PurchasedOrder or an EntityNotFound Exception
      */
@@ -62,6 +66,7 @@ public class PurchasedOrderService {
 
     /**
      * Change the status on a PurchasedOrder
+     *
      * @param id is a Long property on PurchasedOrder
      * @return the updated status on PurchasedOrder for "finalizado" or an custom exception
      */
@@ -75,34 +80,58 @@ public class PurchasedOrderService {
         }
 
 
-
         validateQuantityInBatchStock(purchasedOrder.get());
         purchasedOrder.get().setStatus("finalizado");
         PurchasedOrder purchasedOrderDB = purchasedOrderRepository.save(purchasedOrder.get());
 
 
-                purchasedOrder.get().getCart().forEach(cart -> {
-                    List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProduct().getId(), "F");
-                    AtomicReference<Integer> quantity = new AtomicReference<>(cart.getQuantity());
-                    batchStocks.forEach(batchStock -> {
-                        if (batchStock.getCurrentQuantity() >= quantity.get()) {
-                            batchStock.setCurrentQuantity(batchStock.getCurrentQuantity() - quantity.get());
-                            quantity.set(0);
-                        } else {
-                            quantity.set(quantity.get() - batchStock.getCurrentQuantity());
-                            batchStock.setCurrentQuantity(0);
-                        }
-                        batchStockService.create(batchStock);
-                    });
-                });
+        purchasedOrder.get().getCart().forEach(cart -> {
+            List<BatchStock> batchStocks = batchStockService.findAllByProductId(cart.getProduct().getId(), "F");
+            AtomicReference<Integer> quantity = new AtomicReference<>(cart.getQuantity());
+            batchStocks.forEach(batchStock -> {
+                if (batchStock.getCurrentQuantity() >= quantity.get()) {
+                    batchStock.setCurrentQuantity(batchStock.getCurrentQuantity() - quantity.get());
+                    quantity.set(0);
+                } else {
+                    quantity.set(quantity.get() - batchStock.getCurrentQuantity());
+                    batchStock.setCurrentQuantity(0);
+                }
+                batchStockService.create(batchStock);
+            });
+        });
 
 
         return purchasedOrderDB;
 
     }
 
+    private Long promoByDuedate(BatchStock batchStock) {
+        Long dueDays = differenceBetweenDates(LocalDate.now(), batchStock.getDueDate());
+//        Integer dueDaysInt = Math.toIntExact(dueDays);
+        String divider = "100";
+        if (dueDays <= 30) {
+            BigDecimal mutiply = BigDecimal.valueOf(0.1);
+            BigDecimal price = batchStock.getProduct().getPrice();
+            BigDecimal priceWithDiscount = price.multiply(mutiply);
+            batchStock.getProduct().setPrice(BigDecimal.valueOf((price.multiply(mutiply))));
+        }
+        return dueDays;
+    }
+
+    /**
+     * returns the difference in days between the dates
+     *
+     * @param startDate
+     * @param endDate
+     * @return Long number of days
+     */
+    public Long differenceBetweenDates(LocalDate startDate, LocalDate endDate) {
+        return endDate.toEpochDay() - startDate.toEpochDay();
+    }
+
     /**
      * Validate if BatchStock has a valid quantity
+     *
      * @param purchasedOrder is an object PurchasedOrder with the BatchStock to validate
      */
     private void validateQuantityInBatchStock(PurchasedOrder purchasedOrder) {
