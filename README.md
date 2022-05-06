@@ -33,6 +33,7 @@ URL Base: localhost:8080/api/v1/fresh-products
 | `GET` | `/warehouse/{id}` | Obtenha um armazém pelo id|-- |
 | `GET` | `/batchstock/duedate?days=600&sectorId=1` | Obtenha uma lista de lotes dentro do prazo de validade solicitado, que pertencem a uma determinada categoria de produto (FS = FRESCOS, RF = REFRIGERADO, FF = CONGELADO)|-- |
 
+[Clique aqui](https://github.com/buskari/projeto-integrador/tree/develop/script-sql) para acessar o script para popular o banco de dados.
 
 
 
