@@ -7,11 +7,12 @@ import com.concat.projetointegrador.model.Cart;
 import com.concat.projetointegrador.model.PurchasedOrder;
 import com.concat.projetointegrador.repository.CartRepository;
 import com.concat.projetointegrador.repository.PurchasedOrderRepository;
+import com.concat.projetointegrador.service.util.ProductOfBatchStockHasADiscountDueDate;
+import com.concat.projetointegrador.service.validator.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -24,6 +25,15 @@ public class PurchasedOrderService {
     private CartRepository cartRepository;
     private BuyerService buyerService;
 
+
+    /**
+     *
+     * @param batchStock
+     * @return price with discount or not
+     */
+    private BigDecimal hasDiscount(BatchStock batchStock) {
+        return ProductOfBatchStockHasADiscountDueDate.verifyDiscount(batchStock);
+    }
     /**
      * Save a PurchasedOrder
      *
@@ -35,10 +45,10 @@ public class PurchasedOrderService {
         List<Cart> carts = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
         for (Cart cart : purchasedOrder.getCart()) {
-            List<BatchStock> batchStock = batchStockService.findByProductId(cart.getProduct().getId(), cart.getQuantity());
-            promoByDuedate(batchStock.get(0));
-            total = total.add(batchStock.get(0).getProduct().getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
-            carts.add(Cart.builder().product(batchStock.get(0).getProduct()).quantity(cart.getQuantity())
+            List<BatchStock> batchStocks = batchStockService.findByProductId(cart.getProduct().getId(), cart.getQuantity());
+
+            total = total.add(hasDiscount(batchStocks.get(0)).multiply(BigDecimal.valueOf(cart.getQuantity())));
+            carts.add(Cart.builder().product(batchStocks.get(0).getProduct()).quantity(cart.getQuantity())
                     .purchasedOrder(purchasedOrder).build());
         }
         purchasedOrder = purchasedOrderRepository.save(purchasedOrder);
@@ -103,50 +113,6 @@ public class PurchasedOrderService {
 
         return purchasedOrderDB;
 
-    }
-
-    /**
-     * set price of product with discount
-     * @param batchStock
-     */
-    private void promoByDuedate(BatchStock batchStock) {
-        Long dueDays = differenceBetweenDates(LocalDate.now(), batchStock.getDueDate());
-        if (dueDays <= 30) {
-            BigDecimal priceWithDiscount = discountCalculation(batchStock.getProduct().getPrice(), 0.1);
-            batchStock.getProduct().setPrice(priceWithDiscount);
-        }
-        if (dueDays <= 20) {
-            BigDecimal priceWithDiscount = discountCalculation(batchStock.getProduct().getPrice(), 0.2);
-            batchStock.getProduct().setPrice(priceWithDiscount);
-        }
-        if (dueDays <= 10) {
-            BigDecimal priceWithDiscount = discountCalculation(batchStock.getProduct().getPrice(), 0.3);
-            batchStock.getProduct().setPrice(priceWithDiscount);
-        }
-    }
-
-    /**
-     *
-     * @param price
-     * @param discount Example: To calculate 10% discount pass the value Double 0.1
-     * @return BigDecimal returns the discounted amount
-     */
-    private BigDecimal discountCalculation(BigDecimal price, Double discount) {
-        BigDecimal divider = BigDecimal.valueOf(100);
-        BigDecimal mutiply = BigDecimal.valueOf(discount);
-        BigDecimal priceWithMultiply = price.multiply(mutiply);
-        return priceWithMultiply.divide(divider);
-    }
-
-    /**
-     * returns the difference in days between the dates
-     *
-     * @param startDate
-     * @param endDate
-     * @return Long number of days
-     */
-    public Long differenceBetweenDates(LocalDate startDate, LocalDate endDate) {
-        return endDate.toEpochDay() - startDate.toEpochDay();
     }
 
     /**
